@@ -270,8 +270,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <i class="bi bi-person-badge" style="position:relative; bottom: -40px;"></i>
             <label for="roleSelect" class="form-label">Account Type</label>
             <select name="role" id="roleSelect" class="form-select" required>
-              <option value="user" selected>Regular User</option>
-              <option value="admin">Administrator</option>
+              <option value="user" selected>Client</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
           
