@@ -24,7 +24,7 @@ $result = $stmt->get_result();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
   <style>
-    :root {
+     :root {
       --primary-color: #4361ee;
       --primary-light: #e0e7ff;
       --secondary-color: #3a0ca3;
@@ -180,10 +180,188 @@ $result = $stmt->get_result();
         width: calc(40% - 1rem);
       }
     }
+    
+    .chat-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin-left: 5px;
+    }
+    
+    .chat-btn.has-unread {
+      position: relative;
+    }
+    
+    .chat-btn.has-unread::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 12px;
+      height: 12px;
+      background-color: #dc3545;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    
+    .chat-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1050;
+    }
+    
+    .chat-dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .chat-header {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 10px 10px 0 0;
+    }
+    
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+    
+    .chat-message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      max-width: 80%;
+      position: relative;
+      word-wrap: break-word;
+    }
+    
+    .admin-message {
+      background-color: #e3f2fd;
+      margin-left: auto;
+      border-top-right-radius: 0;
+    }
+    
+    .user-message {
+      background-color: #f1f1f1;
+      margin-right: auto;
+      border-top-left-radius: 0;
+    }
+    
+    .message-sender {
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      color: var(--primary-color);
+    }
+    
+    .message-time {
+      font-size: 0.75rem;
+      color: #666;
+      text-align: right;
+      margin-top: 5px;
+    }
+    
+    .chat-footer {
+      padding: 15px;
+      border-top: 1px solid #eee;
+      background-color: white;
+      border-radius: 0 0 10px 10px;
+    }
+    
+    .chat-input {
+      border-radius: 20px;
+      padding: 10px 15px;
+      resize: none;
+    }
+    
+    .send-btn {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 10px;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    /* Mobile specific styles */
+    @media (max-width: 768px) {
+      .chat-dialog {
+        width: 95%;
+        height: 85vh;
+        max-height: none;
+      }
+      
+      .chat-message {
+        max-width: 90%;
+      }
+    }
+
+    .chat-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin-left: 5px;
+    }
+    
+    .chat-btn.has-unread {
+      position: relative;
+    }
+    
+    .chat-btn.has-unread::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 12px;
+      height: 12px;
+      background-color: #dc3545;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    
   </style>
 </head>
 <body>
-  <header class="dashboard-header">
+   <header class="dashboard-header">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="h4 mb-0">Complaint Management System</h1>
@@ -209,60 +387,245 @@ $result = $stmt->get_result();
         </div>
       </div>
 
-      <!-- Complaints Section -->
-      <div class="complaint-card">
-        <h4 class="mb-4">Your Complaint History</h4>
-        
-        <?php if ($result->num_rows > 0): ?>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Date Submitted</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php $count = 1; while($row = $result->fetch_assoc()): ?>
-                  <tr>
-                    <td data-label="#"><?= $count++ ?></td>
-                    <td data-label="Type"><?= htmlspecialchars($row['complaint_type']) ?></td>
-                    <td data-label="Description"><?= htmlspecialchars($row['description']) ?></td>
-                    <td data-label="Status">
-                      <?php
-                        $badgeClass = match(strtolower($row['status'])) {
-                          'resolved' => 'success',
-                          'under progress' => 'warning',
-                          'pending', '' => 'secondary',
-                          default => 'info'
-                        };
-                      ?>
-                      <span class="badge bg-<?= $badgeClass ?>">
-                        <?= ucfirst($row['status']) ?>
-                      </span>
-                    </td>
-                    <td data-label="Date Submitted"><?= date('d M Y, h:i A', strtotime($row['created_at'])) ?></td>
-                  </tr>
-                <?php endwhile; ?>
-              </tbody>
-            </table>
-          </div>
-        <?php else: ?>
-          <div class="alert alert-info">
-            <i class="bi bi-info-circle-fill me-2"></i>
-            You haven't submitted any complaints yet.
-          </div>
-        <?php endif; ?>
+  <!-- Complaints Section -->
+  <div class="complaint-card">
+    <h4 class="mb-4">Your Complaint History</h4>
+    
+    <?php if ($result->num_rows > 0): ?>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php $count = 1; while($row = $result->fetch_assoc()): 
+              // Check for unread messages
+              $stmt = $conn->prepare("
+                SELECT COUNT(*) as unread 
+                FROM conversations 
+                WHERE complaint_id = ? 
+                AND sender_id != ? 
+                AND is_read = FALSE
+              ");
+              $stmt->bind_param("ii", $row['id'], $_SESSION['user_id']);
+              $stmt->execute();
+              $unread = $stmt->get_result()->fetch_assoc()['unread'];
+            ?>
+              <tr>
+                <td data-label="#"><?= $count++ ?></td>
+                <td data-label="Type"><?= htmlspecialchars($row['complaint_type']) ?></td>
+                <td data-label="Description"><?= htmlspecialchars($row['description']) ?></td>
+                <td data-label="Status">
+                  <?php
+                    $badgeClass = match(strtolower($row['status'])) {
+                      'resolved' => 'success',
+                      'under progress' => 'warning',
+                      'pending', '' => 'secondary',
+                      default => 'info'
+                    };
+                  ?>
+                  <span class="badge bg-<?= $badgeClass ?>">
+                    <?= ucfirst($row['status']) ?>
+                  </span>
+                </td>
+                <td data-label="Date"><?= date('d M Y, h:i A', strtotime($row['created_at'])) ?></td>
+                <td>
+                  <button class="btn btn-sm btn-info chat-btn <?= $unread > 0 ? 'has-unread' : '' ?>" 
+                          onclick="openChat(<?= $row['id'] ?>, 'Admin')">
+                    <i class="bi bi-chat-left-text"></i>
+                  </button>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php else: ?>
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        You haven't submitted any complaints yet.
+      </div>
+    <?php endif; ?>
+  </div>
+
+  <!-- Chat Modal (same as admin) -->
+  <div id="chatModal" class="chat-modal">
+    <div class="chat-dialog">
+      <div class="chat-header">
+        <h5 class="mb-0" id="chatTitle">Conversation</h5>
+        <button class="close-btn" onclick="closeChat()">&times;</button>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <!-- Messages will be loaded here -->
+      </div>
+      <div class="chat-footer">
+        <div class="d-flex align-items-center">
+          <textarea id="messageInput" class="form-control chat-input" placeholder="Type your message..." rows="1"></textarea>
+          <button id="sendBtn" class="btn btn-primary send-btn">
+            <i class="bi bi-send"></i>
+          </button>
+        </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <!-- Footer -->
-  <?php include '../includes/footer.php'; ?>
+  <div style="margin-top: 50px; padding: 20px; background-color: #f8f9fa; text-align: center; width:100%;">
+    <?php include '../includes/footer.php'; ?>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  // Chat system (same as admin)
+  // Chat system variables
+let currentComplaintId = null;
+let chatRefreshInterval = null;
+
+// Open chat modal
+function openChat(complaintId, userName) {
+    currentComplaintId = complaintId;
+    document.getElementById('chatTitle').textContent = `Conversation with ${userName}`;
+    document.getElementById('chatModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    loadMessages();
+    
+    // Start refreshing messages every 3 seconds
+    chatRefreshInterval = setInterval(loadMessages, 3000);
+}
+
+// Close chat modal
+function closeChat() {
+    document.getElementById('chatModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    clearInterval(chatRefreshInterval);
+    currentComplaintId = null;
+}
+
+// Load messages for current complaint
+function loadMessages() {
+    if (!currentComplaintId) return;
+    
+    const chatBody = document.getElementById('chatBody');
+    chatBody.innerHTML = '<div class="text-center py-3">Loading messages...</div>';
+    
+    fetch(`../admin/chat.php?complaint_id=${currentComplaintId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(messages => {
+            if (messages.error) {
+                chatBody.innerHTML = `<div class="alert alert-danger">${messages.error}</div>`;
+                return;
+            }
+            
+            chatBody.innerHTML = '';
+            
+            if (messages.length === 0) {
+                chatBody.innerHTML = '<div class="text-center text-muted py-3">No messages yet</div>';
+                return;
+            }
+            
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${msg.role === 'admin' ? 'admin-message' : 'user-message'}`;
+                
+                messageDiv.innerHTML = `
+                    <div class="message-sender">${msg.name} (${msg.role})</div>
+                    <div>${msg.message}</div>
+                    <div class="message-time">${formatTime(msg.created_at)}</div>
+                `;
+                
+                chatBody.appendChild(messageDiv);
+            });
+            
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Error loading messages:', error);
+            chatBody.innerHTML = '<div class="alert alert-danger">Error loading messages. Please try again.</div>';
+        });
+}
+
+// Format time for display
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+// Send message
+document.getElementById('sendBtn').addEventListener('click', sendMessage);
+document.getElementById('messageInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (message && currentComplaintId) {
+        // Show sending indicator
+        const sendBtn = document.getElementById('sendBtn');
+        sendBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i>';
+        sendBtn.disabled = true;
+        
+        fetch('../admin/chat.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `complaint_id=${currentComplaintId}&message=${encodeURIComponent(message)}`
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(messages => {
+            if (messages.error) {
+                alert(messages.error);
+                return;
+            }
+            messageInput.value = '';
+            loadMessages();
+        })
+        .catch(error => {
+            console.error('Error sending message:', error);
+            alert('Error sending message. Please try again.');
+        })
+        .finally(() => {
+            sendBtn.innerHTML = '<i class="bi bi-send"></i>';
+            sendBtn.disabled = false;
+        });
+    }
+}
+
+// Auto-resize textarea
+document.getElementById('messageInput').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('chatModal')) {
+        closeChat();
+    }
+});
+  </script>
 </body>
 </html>
