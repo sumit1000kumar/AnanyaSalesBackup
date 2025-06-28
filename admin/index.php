@@ -666,6 +666,28 @@ $result = $conn->query($query);
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- <script>  
+  // Enhance the user experience
+  document.addEventListener('DOMContentLoaded', function() {
+    // Focus search input when search icon is clicked (mobile)
+    document.querySelector('.bi-search').addEventListener('click', function() {
+      document.querySelector('[name="search"]').focus();
+    });
+    
+    // Confirm before changing status to resolved
+    const statusForms = document.querySelectorAll('form[method="POST"]');
+    statusForms.forEach(form => {
+      form.addEventListener('submit', function(e) {
+        const selectedStatus = this.querySelector('select').value;
+        if (selectedStatus === 'Resolved') {
+          if (!confirm('Are you sure you want to mark this complaint as resolved?')) {
+            e.preventDefault();
+          }
+        }
+      });
+    });
+  });
+</script> -->
 <script>
 // Chat system variables
 let currentComplaintId = null;

@@ -482,11 +482,12 @@ $result = $stmt->get_result();
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+  <!-- <script>
   // Chat system (same as admin)
   // Chat system variables
 let currentComplaintId = null;
 let chatRefreshInterval = null;
+
 
 // Open chat modal
 function openChat(complaintId, userName) {
@@ -626,6 +627,236 @@ window.addEventListener('click', function(event) {
         closeChat();
     }
 });
-  </script>
+  </script> -->
+
+  <script>
+// Chat system variables
+let currentComplaintId = null;
+let chatPollingInterval = null;
+let isChatOpen = false;
+let lastMessageTime = null;
+
+// Open chat modal
+function openChat(complaintId, userName) {
+    currentComplaintId = complaintId;
+    document.getElementById('chatTitle').textContent = `Conversation with ${userName}`;
+    document.getElementById('chatModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    isChatOpen = true;
+    
+    // Initial load with loading indicator
+    loadMessages(true);
+    
+    // Start polling for new messages every 2 seconds
+    chatPollingInterval = setInterval(() => loadMessages(), 2000);
+}
+
+// Close chat modal
+function closeChat() {
+    document.getElementById('chatModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    isChatOpen = false;
+    
+    // Clear polling interval
+    if (chatPollingInterval) {
+        clearInterval(chatPollingInterval);
+        chatPollingInterval = null;
+    }
+    
+    currentComplaintId = null;
+    lastMessageTime = null;
+}
+
+// Load messages for current complaint
+function loadMessages(initialLoad = false) {
+    if (!currentComplaintId || !isChatOpen) return;
+    
+    const chatBody = document.getElementById('chatBody');
+    
+    // Only show loading indicator on initial load
+    if (initialLoad) {
+        chatBody.innerHTML = `
+            <div class="text-center py-3">
+                <i class="bi bi-arrow-repeat spinner"></i> Loading messages...
+            </div>
+        `;
+    }
+
+    fetch(`../admin/chat.php?complaint_id=${currentComplaintId}${lastMessageTime ? `&last_update=${lastMessageTime}` : ''}`, {
+        credentials: 'include' // Include cookies for session
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Try to get error message from response
+            return response.json().then(err => {
+                throw new Error(err.error || 'Network response was not ok');
+            }).catch(() => {
+                throw new Error(`Server returned status: ${response.status}`);
+            });
+        }
+        return response.json();
+    })
+    .then(messages => {            
+        if (messages && messages.error) {
+            showError(messages.error);
+            return;
+        }
+        
+        if (!Array.isArray(messages)) {
+            throw new Error('Invalid response format from server');
+        }
+        
+        // Only update if new messages exist or it's initial load
+        if (initialLoad || messages.length > 0) {
+            // Update last message time if we have messages
+            if (messages.length > 0) {
+                lastMessageTime = messages[messages.length-1].created_at;
+            }
+            
+            updateChatUI(messages);
+        }
+    })
+    .catch(error => {
+        console.error('Error loading messages:', error);
+        showError(error.message);
+    });
+}
+
+function updateChatUI(messages) {
+    const chatBody = document.getElementById('chatBody');
+    
+    chatBody.innerHTML = '';
+    
+    if (messages.length === 0) {
+        chatBody.innerHTML = `
+            <div class="text-center text-muted py-3">
+                No messages yet. Start the conversation!
+            </div>
+        `;
+        return;
+    }
+    
+    messages.forEach(msg => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${msg.role === 'admin' ? 'admin-message' : 'user-message'}`;
+        
+        messageDiv.innerHTML = `
+            <div class="message-sender">${msg.name} (${msg.role})</div>
+            <div>${msg.message}</div>
+            <div class="message-time">${formatTime(msg.created_at)}</div>
+        `;
+        
+        chatBody.appendChild(messageDiv);
+    });
+    
+    // Scroll to bottom
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function showError(message) {
+    const chatBody = document.getElementById('chatBody');
+    chatBody.innerHTML = `
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i> 
+            ${message}
+            <button onclick="loadMessages(true)" class="btn btn-sm btn-outline-danger ms-2">
+                <i class="bi bi-arrow-repeat"></i> Retry
+            </button>
+        </div>
+    `;
+}
+
+// Format time for display
+function formatTime(timestamp) {
+    try {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+        console.error('Error formatting time:', e);
+        return '';
+    }
+}
+
+// Send message
+document.getElementById('sendBtn').addEventListener('click', sendMessage);
+document.getElementById('messageInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (message && currentComplaintId) {
+        // Show sending indicator
+        const sendBtn = document.getElementById('sendBtn');
+        sendBtn.innerHTML = '<i class="bi bi-arrow-repeat spinner"></i>';
+        sendBtn.disabled = true;
+        
+        fetch('../admin/chat.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `complaint_id=${currentComplaintId}&message=${encodeURIComponent(message)}`,
+            credentials: 'include'
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw new Error(err.error || 'Failed to send message');
+                });
+            }
+            return response.json();
+        })
+        .then(messages => {
+            if (messages && messages.error) {
+                throw new Error(messages.error);
+            }
+            messageInput.value = '';
+            // Force a refresh of messages after sending
+            loadMessages(true);
+        })
+        .catch(error => {
+            console.error('Error sending message:', error);
+            showError(error.message);
+        })
+        .finally(() => {
+            sendBtn.innerHTML = '<i class="bi bi-send"></i>';
+            sendBtn.disabled = false;
+        });
+    }
+}
+
+// Auto-resize textarea
+document.getElementById('messageInput').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('chatModal')) {
+        closeChat();
+    }
+});
+
+// Add spinner animation style
+const style = document.createElement('style');
+style.textContent = `
+    .spinner {
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+</script>
 </body>
 </html>

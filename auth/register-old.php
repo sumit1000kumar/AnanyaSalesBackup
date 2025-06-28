@@ -7,17 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $role = $_POST['role'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $registration_code_input = $_POST['registration_code'] ?? '';
-    
-    // Define registration codes for each role
-    $admin_code = "Sumit@123";
-    $user_code = "Sumit@456";
+    $admin_code_input = $_POST['admin_code'] ?? '';
+    $secretAdminCode = "Sumit@123";
 
-    // Validate registration code based on role
-    if ($role === 'admin' && $registration_code_input !== $admin_code) {
-        $error = "Invalid admin registration code. Please enter the correct code to register as admin.";
-    } elseif ($role === 'user' && $registration_code_input !== $user_code) {
-        $error = "Invalid user registration code. Please enter the correct code to register as user.";
+    if ($role === 'admin' && $admin_code_input !== $secretAdminCode) {
+        $error = "Invalid admin access code. Please enter the correct code to register as admin.";
     } else {
         $stmt = $conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $name, $email, $password, $role);
@@ -264,22 +258,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="password-strength mt-2">
               <div class="password-strength-bar" id="passwordStrength"></div>
             </div>
+            <!-- <small class="text-muted" style="color: #000;">Minimum 6 characters</small> -->
           </div>
           
           <div class="mb-3 input-icon">
             <i class="bi bi-person-badge" style="position:relative; bottom: -40px;"></i>
             <label for="roleSelect" class="form-label">Account Type</label>
-            <select name="role" id="roleSelect" class="form-select" required>
+            <select name="role" id="roleSelect" class="form-select" required onchange="toggleAdminCode(this.value)">
               <option value="user" selected>Regular User</option>
               <option value="admin">Administrator</option>
             </select>
           </div>
           
-          <div class="mb-3 input-icon">
-            <i class="bi bi-shield-lock" style="position:relative; bottom: -45px;"></i>
-            <label for="registration_code" class="form-label">Registration Code</label>
-            <input type="password" id="registration_code" name="registration_code" class="form-control" placeholder="Enter registration code" required>
-            <small class="text-muted">Contact system administrator to get the registration code</small>
+          <div class="mb-3 d-none" id="adminCodeBlock">
+            <div class="input-icon">
+              <i class="bi bi-shield-lock" style="position:relative; bottom: -45px;"></i>
+              <label for="admin_code" class="form-label">Admin Access Code</label>
+              <input type="password" id="admin_code" name="admin_code" class="form-control" placeholder="Enter secret code">
+            </div>
           </div>
           
           <div class="form-check mb-3">
@@ -307,6 +303,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  // Toggle admin code field - Fixed version
+  function toggleAdminCode(role) {
+    const adminCodeBlock = document.getElementById('adminCodeBlock');
+    if (role === 'admin') {
+      adminCodeBlock.classList.remove('d-none');
+      document.getElementById('admin_code').focus();
+    } else {
+      adminCodeBlock.classList.add('d-none');
+    }
+  }
+
+  // Initialize the admin code block visibility on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set initial state based on current selection
+    const roleSelect = document.getElementById('roleSelect');
+    toggleAdminCode(roleSelect.value);
+    
+    // Auto-focus first field
+    document.getElementById('name').focus();
+  });
+
   // Password strength indicator
   document.getElementById('password').addEventListener('input', function(e) {
     const strengthBar = document.getElementById('passwordStrength');
@@ -333,11 +350,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
       strengthBar.style.backgroundColor = 'var(--success-color)';
     }
-  });
-
-  // Auto-focus first field
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('name').focus();
   });
 </script>
 </body>
