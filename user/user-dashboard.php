@@ -24,7 +24,7 @@ $result = $stmt->get_result();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
   <style>
-     :root {
+    :root {
       --primary-color: #4361ee;
       --primary-light: #e0e7ff;
       --secondary-color: #3a0ca3;
@@ -361,7 +361,7 @@ $result = $stmt->get_result();
   </style>
 </head>
 <body>
-   <header class="dashboard-header">
+  <header class="dashboard-header">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="h4 mb-0">Complaint Management System</h1>
@@ -387,248 +387,112 @@ $result = $stmt->get_result();
         </div>
       </div>
 
-  <!-- Complaints Section -->
-  <div class="complaint-card">
-    <h4 class="mb-4">Your Complaint History</h4>
-    
-    <?php if ($result->num_rows > 0): ?>
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Type</th>
-              <th>Description</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php $count = 1; while($row = $result->fetch_assoc()): 
-              // Check for unread messages
-              $stmt = $conn->prepare("
-                SELECT COUNT(*) as unread 
-                FROM conversations 
-                WHERE complaint_id = ? 
-                AND sender_id != ? 
-                AND is_read = FALSE
-              ");
-              $stmt->bind_param("ii", $row['id'], $_SESSION['user_id']);
-              $stmt->execute();
-              $unread = $stmt->get_result()->fetch_assoc()['unread'];
-            ?>
-              <tr>
-                <td data-label="#"><?= $count++ ?></td>
-                <td data-label="Type"><?= htmlspecialchars($row['complaint_type']) ?></td>
-                <td data-label="Description"><?= htmlspecialchars($row['description']) ?></td>
-                <td data-label="Status">
-                  <?php
-                    $badgeClass = match(strtolower($row['status'])) {
-                      'resolved' => 'success',
-                      'under progress' => 'warning',
-                      'pending', '' => 'secondary',
-                      default => 'info'
-                    };
-                  ?>
-                  <span class="badge bg-<?= $badgeClass ?>">
-                    <?= ucfirst($row['status']) ?>
-                  </span>
-                </td>
-                <td data-label="Date"><?= date('d M Y, h:i A', strtotime($row['created_at'])) ?></td>
-                <td>
-                  <button class="btn btn-sm btn-info chat-btn <?= $unread > 0 ? 'has-unread' : '' ?>" 
-                          onclick="openChat(<?= $row['id'] ?>, 'Admin')">
-                    <i class="bi bi-chat-left-text"></i>
-                  </button>
-                </td>
-              </tr>
-            <?php endwhile; ?>
-          </tbody>
-        </table>
-      </div>
-    <?php else: ?>
-      <div class="alert alert-info">
-        <i class="bi bi-info-circle-fill me-2"></i>
-        You haven't submitted any complaints yet.
-      </div>
-    <?php endif; ?>
-  </div>
+      <!-- Complaints Section -->
+      <div class="complaint-card">
+        <h4 class="mb-4">Your Complaint History</h4>
 
-  <!-- Chat Modal (same as admin) -->
-  <div id="chatModal" class="chat-modal">
-    <div class="chat-dialog">
-      <div class="chat-header">
-        <h5 class="mb-0" id="chatTitle">Conversation</h5>
-        <button class="close-btn" onclick="closeChat()">&times;</button>
+        <?php if ($result->num_rows > 0): ?>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php $count = 1; while($row = $result->fetch_assoc()): 
+                  $stmt = $conn->prepare("
+                    SELECT COUNT(*) as unread 
+                    FROM conversations 
+                    WHERE complaint_id = ? 
+                    AND sender_id != ? 
+                    AND is_read = FALSE
+                  ");
+                  $stmt->bind_param("ii", $row['id'], $_SESSION['user_id']);
+                  $stmt->execute();
+                  $unread = $stmt->get_result()->fetch_assoc()['unread'];
+                ?>
+                  <tr>
+                    <td data-label="#"><?= $count++ ?></td>
+                    <td data-label="Type"><?= htmlspecialchars($row['complaint_type']) ?></td>
+                    <td data-label="Description"><?= htmlspecialchars($row['description']) ?></td>
+                    <td data-label="Status">
+                      <?php
+                        switch (strtolower($row['status'])) {
+                          case 'resolved':
+                            $badgeClass = 'success';
+                            break;
+                          case 'under progress':
+                            $badgeClass = 'warning';
+                            break;
+                          case 'pending':
+                          case '':
+                            $badgeClass = 'secondary';
+                            break;
+                          default:
+                            $badgeClass = 'info';
+                        }
+                      ?>
+                      <span class="badge bg-<?= $badgeClass ?>">
+                        <?= ucfirst($row['status']) ?>
+                      </span>
+                    </td>
+                    <td data-label="Date">
+                      <?php
+                        date_default_timezone_set("Asia/Kolkata");
+                        echo date('d M Y, h:i A', strtotime($row['created_at']));
+                      ?>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-info chat-btn <?= $unread > 0 ? 'has-unread' : '' ?>" 
+                              onclick="openChat(<?= $row['id'] ?>, 'Admin')">
+                        <i class="bi bi-chat-left-text"></i>
+                      </button>
+                    </td>
+                  </tr>
+                <?php endwhile; ?>
+              </tbody>
+            </table>
+          </div>
+        <?php else: ?>
+          <div class="alert alert-info">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            You haven't submitted any complaints yet.
+          </div>
+        <?php endif; ?>
       </div>
-      <div class="chat-body" id="chatBody">
-        <!-- Messages will be loaded here -->
-      </div>
-      <div class="chat-footer">
-        <div class="d-flex align-items-center">
-          <textarea id="messageInput" class="form-control chat-input" placeholder="Type your message..." rows="1"></textarea>
-          <button id="sendBtn" class="btn btn-primary send-btn">
-            <i class="bi bi-send"></i>
-          </button>
+
+      <!-- Chat Modal -->
+      <div id="chatModal" class="chat-modal">
+        <div class="chat-dialog">
+          <div class="chat-header">
+            <h5 class="mb-0" id="chatTitle">Conversation</h5>
+            <button class="close-btn" onclick="closeChat()">&times;</button>
+          </div>
+          <div class="chat-body" id="chatBody"></div>
+          <div class="chat-footer">
+            <div class="d-flex align-items-center">
+              <textarea id="messageInput" class="form-control chat-input" placeholder="Type your message..." rows="1"></textarea>
+              <button id="sendBtn" class="btn btn-primary send-btn">
+                <i class="bi bi-send"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Footer -->
   <div style="margin-top: 50px; padding: 20px; background-color: #f8f9fa; text-align: center; width:100%;">
     <?php include '../includes/footer.php'; ?>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- <script>
-  // Chat system (same as admin)
-  // Chat system variables
-let currentComplaintId = null;
-let chatRefreshInterval = null;
-
-
-// Open chat modal
-function openChat(complaintId, userName) {
-    currentComplaintId = complaintId;
-    document.getElementById('chatTitle').textContent = `Conversation with ${userName}`;
-    document.getElementById('chatModal').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    loadMessages();
-    
-    // Start refreshing messages every 3 seconds
-    chatRefreshInterval = setInterval(loadMessages, 3000);
-}
-
-// Close chat modal
-function closeChat() {
-    document.getElementById('chatModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-    clearInterval(chatRefreshInterval);
-    currentComplaintId = null;
-}
-
-// Load messages for current complaint
-function loadMessages() {
-    if (!currentComplaintId) return;
-    
-    const chatBody = document.getElementById('chatBody');
-    chatBody.innerHTML = '<div class="text-center py-3">Loading messages...</div>';
-    
-    fetch(`../admin/chat.php?complaint_id=${currentComplaintId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(messages => {
-            if (messages.error) {
-                chatBody.innerHTML = `<div class="alert alert-danger">${messages.error}</div>`;
-                return;
-            }
-            
-            chatBody.innerHTML = '';
-            
-            if (messages.length === 0) {
-                chatBody.innerHTML = '<div class="text-center text-muted py-3">No messages yet</div>';
-                return;
-            }
-            
-            messages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `chat-message ${msg.role === 'admin' ? 'admin-message' : 'user-message'}`;
-                
-                messageDiv.innerHTML = `
-                    <div class="message-sender">${msg.name} (${msg.role})</div>
-                    <div>${msg.message}</div>
-                    <div class="message-time">${formatTime(msg.created_at)}</div>
-                `;
-                
-                chatBody.appendChild(messageDiv);
-            });
-            
-            // Scroll to bottom
-            chatBody.scrollTop = chatBody.scrollHeight;
-        })
-        .catch(error => {
-            console.error('Error loading messages:', error);
-            chatBody.innerHTML = '<div class="alert alert-danger">Error loading messages. Please try again.</div>';
-        });
-}
-
-// Format time for display
-function formatTime(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-// Send message
-document.getElementById('sendBtn').addEventListener('click', sendMessage);
-document.getElementById('messageInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-    }
-});
-
-function sendMessage() {
-    const messageInput = document.getElementById('messageInput');
-    const message = messageInput.value.trim();
-    
-    if (message && currentComplaintId) {
-        // Show sending indicator
-        const sendBtn = document.getElementById('sendBtn');
-        sendBtn.innerHTML = '<i class="bi bi-arrow-repeat"></i>';
-        sendBtn.disabled = true;
-        
-        fetch('../admin/chat.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `complaint_id=${currentComplaintId}&message=${encodeURIComponent(message)}`
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(messages => {
-            if (messages.error) {
-                alert(messages.error);
-                return;
-            }
-            messageInput.value = '';
-            loadMessages();
-        })
-        .catch(error => {
-            console.error('Error sending message:', error);
-            alert('Error sending message. Please try again.');
-        })
-        .finally(() => {
-            sendBtn.innerHTML = '<i class="bi bi-send"></i>';
-            sendBtn.disabled = false;
-        });
-    }
-}
-
-// Auto-resize textarea
-document.getElementById('messageInput').addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = (this.scrollHeight) + 'px';
-});
-
-// Close modal when clicking outside
-window.addEventListener('click', function(event) {
-    if (event.target === document.getElementById('chatModal')) {
-        closeChat();
-    }
-});
-  </script> -->
-
   <script>
 // Chat system variables
 let currentComplaintId = null;

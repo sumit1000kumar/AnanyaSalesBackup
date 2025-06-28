@@ -2,8 +2,11 @@
 ```
 Ram_dada_dashboard
 ├─ admin
+│  ├─ chat-old.php
+│  ├─ chat.php
 │  ├─ dashboard.php
 │  ├─ generate-receipt.php
+│  ├─ index-old.php
 │  ├─ index.php
 │  ├─ receipt-list.php
 │  └─ receipt-pdf.php
@@ -12,8 +15,10 @@ Ram_dada_dashboard
 │  ├─ images
 │  └─ js
 ├─ auth
+│  ├─ login-old.php
 │  ├─ login.php
 │  ├─ logout.php
+│  ├─ register-old.php
 │  └─ register.php
 ├─ includes
 │  ├─ db.php
@@ -150,8 +155,14 @@ Ram_dada_dashboard
 │     ├─ tuto6.php
 │     ├─ tuto7.htm
 │     └─ tuto7.php
+├─ README.md
+├─ uploads
+│  └─ 685fcdb622399_9356362161211a72.jpg
 └─ user
    ├─ complaint-form.php
+   ├─ test-dashboard.php
+   ├─ test.php
+   ├─ user-dashboard-old.php
    └─ user-dashboard.php
 
 ```
