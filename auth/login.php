@@ -40,70 +40,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <style>
     :root {
       --primary-color: #4361ee;
+      --primary-light: #e0e7ff;
       --secondary-color: #3a0ca3;
-      --success-color: #28a745;
-      --danger-color: #dc3545;
+      --success-color: #4BB543;
+      --danger-color: #FF3333;
       --light-bg: #f8f9fa;
+      --text-muted: #6c757d;
+      --border-radius: 12px;
     }
     
     body {
       background-color: var(--light-bg);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-    }
-    
-    .login-container {
-      max-width: 500px;
-      width: 100%;
-      margin: 0 auto;
+      margin: 0;
+      display: grid;
+      place-items: center; /* This centers everything both horizontally and vertically */
+      padding: 1rem;
     }
     
     .login-card {
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
       overflow: hidden;
+      width: 100%;
+      max-width: 450px;
     }
     
     .login-header {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      padding: 2rem;
+      padding: 1.75rem;
       text-align: center;
     }
     
+    .login-header h2 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: clamp(1.5rem, 4vw, 1.75rem);
+    }
+    
     .login-body {
-      padding: 2rem;
+      padding: 1.75rem;
       background: white;
     }
     
     .form-control {
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       padding: 0.75rem 1rem;
-      border: 1px solid #dee2e6;
-      transition: all 0.3s;
+      border: 1px solid #e0e0e0;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
     }
     
     .form-control:focus {
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+      box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
     }
     
     .btn-login {
       background-color: var(--primary-color);
       border: none;
       padding: 0.75rem;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       font-weight: 500;
-      letter-spacing: 0.5px;
-      transition: all 0.3s;
+      transition: all 0.2s ease;
+      width: 100%;
     }
     
     .btn-login:hover {
       background-color: var(--secondary-color);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
     
     .input-icon {
@@ -116,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       left: 15px;
       transform: translateY(-50%);
       color: var(--primary-color);
+      font-size: 1.1rem;
     }
     
     .input-icon input {
@@ -126,13 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       display: flex;
       align-items: center;
       margin: 1.5rem 0;
-      color: #6c757d;
+      color: var(--text-muted);
     }
     
     .divider::before, .divider::after {
       content: "";
       flex: 1;
-      border-bottom: 1px solid #dee2e6;
+      border-bottom: 1px solid #e0e0e0;
     }
     
     .divider::before {
@@ -143,7 +152,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       margin-left: 1rem;
     }
     
-    @media (max-width: 576px) {
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
       .login-header {
         padding: 1.5rem;
       }
@@ -152,74 +162,127 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         padding: 1.5rem;
       }
     }
+    
+    @media (max-width: 576px) {
+      body {
+        padding: 0.75rem;
+      }
+      
+      .login-header {
+        padding: 1.25rem;
+      }
+      
+      .login-body {
+        padding: 1.25rem;
+      }
+      
+      .form-control {
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+      }
+      
+      .input-icon i {
+        left: 12px;
+        font-size: 1rem;
+      }
+      
+      .input-icon input {
+        padding-left: 40px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .login-header h2 {
+        font-size: 1.4rem;
+      }
+      
+      .login-header p {
+        font-size: 0.9rem;
+      }
+      
+      .form-label {
+        font-size: 0.9rem;
+      }
+      
+      .form-check-label, .text-primary {
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="login-container">
-    <div class="login-card">
-      <div class="login-header">
-        <h2><i class="bi bi-shield-lock me-2"></i>Welcome Back</h2>
-        <p class="mb-0">Sign in to your account</p>
-      </div>
+  <div class="login-card shadow">
+    <div class="login-header">
+      <h2><i class="bi bi-shield-lock me-2"></i>Welcome Back</h2>
+      <p class="mb-0">Sign in to continue</p>
+    </div>
+    
+    <div class="login-body">
+      <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <div><?= $_SESSION['success']; unset($_SESSION['success']); ?></div>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <?php endif; ?>
       
-      <div class="login-body">
-        <?php if (isset($_SESSION['success'])): ?>
-          <div class="alert alert-success alert-dismissible fade show">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            <?= $_SESSION['success']; unset($_SESSION['success']); ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        <?php endif; ?>
+      <?php if (isset($error)): ?>
+        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <div><?= $error ?></div>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <?php endif; ?>
+      
+      <form method="POST">
+        <div class="mb-3 input-icon">
+          <i class="bi bi-envelope" style="position:relative; bottom: -45px;"></i>
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
+        </div>
         
-        <?php if (isset($error)): ?>
-          <div class="alert alert-danger alert-dismissible fade show">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <?= $error ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        <?php endif; ?>
+        <div class="mb-3 input-icon">
+          <i class="bi bi-lock" style="position:relative; bottom: -45px;"></i>
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Your password" required>
+        </div>
         
-        <form method="POST">
-          <div class="mb-3 input-icon">
-            <i class="bi bi-envelope"></i>
-            <label for="email" class="form-label">Email Address</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="remember">
+            <label class="form-check-label" for="remember">Remember me</label>
           </div>
-          
-          <div class="mb-3 input-icon">
-            <i class="bi bi-lock"></i>
-            <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-          </div>
-          
-          <div class="d-flex justify-content-between mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="remember">
-              <label class="form-check-label" for="remember">Remember me</label>
-            </div>
-            <a href="forgot-password.php" class="text-primary">Forgot password?</a>
-          </div>
-          
-          <button type="submit" class="btn btn-login btn-primary w-100 mb-3">
-            <i class="bi bi-box-arrow-in-right me-2"></i> Login
-          </button>
-          
-          <div class="divider">or</div>
-          
-          <p class="text-center mb-0">Don't have an account? <a href="register.php" class="text-primary">Sign up</a></p>
-        </form>
-      </div>
+          <a href="forgot-password.php" class="text-primary text-decoration-none">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="btn btn-login btn-primary mb-3">
+          <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+        </button>
+        
+        <div class="divider">or</div>
+        
+        <p class="text-center mb-0">Don't have an account? <a href="register.php" class="text-primary text-decoration-none">Sign up</a></p>
+      </form>
     </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Auto-focus email field on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('email').focus();
-  });
-</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Auto-focus email field on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('email').focus();
+    });
+
+    // Add smooth form transitions
+    document.querySelectorAll('.form-control').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = '';
+      });
+    });
+  </script>
 </body>
 </html>

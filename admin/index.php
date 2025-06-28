@@ -291,7 +291,7 @@ $result = $conn->query($query);
       <form method="GET" class="row g-3 align-items-center filter-container">
         <div class="col-md-3">
           <select name="status" class="form-select">
-            <option value="">All Statuses</option>
+            <option value="">All Status</option>
             <option value="New" <?= $filter_status === 'New' ? 'selected' : '' ?>>New</option>
             <option value="Under Progress" <?= $filter_status === 'Under Progress' ? 'selected' : '' ?>>In Progress</option>
             <option value="Resolved" <?= $filter_status === 'Resolved' ? 'selected' : '' ?>>Resolved</option>
@@ -464,8 +464,11 @@ $result = $conn->query($query);
   </div>
 </div>
 
+<!-- Footer -->
+<?php include '../includes/footer.php'; ?>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+<script>  
   // Enhance the user experience
   document.addEventListener('DOMContentLoaded', function() {
     // Focus search input when search icon is clicked (mobile)

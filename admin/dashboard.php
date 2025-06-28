@@ -186,12 +186,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 </div>
 
 <!-- Footer -->
-<footer class="bg-light py-4 mt-5">
-  <div class="container text-center text-muted">
-    <p class="mb-0">Complaint Management System &copy; <?= date('Y') ?></p>
-    <small>v1.0.0</small>
-  </div>
-</footer>
+<?php include '../includes/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
