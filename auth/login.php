@@ -208,6 +208,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         font-size: 0.85rem;
       }
     }
+
+    
+   :root {
+  --primary-color: #e30613;          /* Main red */
+  --secondary-color: #a9030d;        /* Darker red */
+  --accent-color: #ff5964;           /* For user avatars or highlights */
+  --success-color: #198754;          /* Bootstrap green (unchanged) */
+  --warning-color: #f59e0b;          /* Amber */
+  --info-color: #0ea5e9;             /* Light blue */
+  --danger-color: #ef4444;           /* Bright red */
+  --light-bg: #f8f9fa;               /* Light background */
+  --dark-text: #212529;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
   </style>
 </head>
 <body>

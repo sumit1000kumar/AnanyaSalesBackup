@@ -9,13 +9,11 @@
 
 <style>
   .main-footer {
-    background-color:rgb(6, 7, 7);
+    background-color: rgb(6, 7, 7);
     border-top: 1px solid #dee2e6;
     width: 100%;
-    margin-top: 20px
   }
-  .text-muted{
+  .text-muted {
     color: white !important;
-    
   }
 </style>

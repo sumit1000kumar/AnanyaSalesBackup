@@ -39,17 +39,66 @@ if (!empty($search_term)) {
 
 $query .= " ORDER BY created_at DESC";
 
+// Export to CSV
+if (isset($_GET['export'])) {
+    $export_result = $conn->query($query);
+    
+    if ($export_result && $export_result->num_rows > 0) {
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="complaints_export.csv"');
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['ID', 'Name', 'Contact', 'Nature of Visit', 'Equipment', 'Status']); // CSV Header
+
+        while ($row = $export_result->fetch_assoc()) {
+            fputcsv($output, [
+                $row['id'],
+                $row['name'],
+                $row['contact'],
+                $row['complaint_type'],
+                $row['equipment'],
+                $row['status']
+            ]);
+        }
+
+        fclose($output);
+        exit;
+    } else {
+        $_SESSION['success_message'] = "No complaints found to export.";
+        header("Location: index.php");
+        exit;
+    }
+}
+
 $result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Required Meta Tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Complaint Management | Admin Dashboard</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Portal for Complaint Management System">
+  <meta name="author" content="Ananya Sales & Service">
+
+  <!-- Page Title -->
+  <title>Ananya Sales & Service | Complaints</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../assets/images/favicon/site.webmanifest">
+
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
   <style>
     :root {
       --primary-color: #4361ee;
@@ -392,6 +441,21 @@ $result = $conn->query($query);
         max-width: 90%;
       }
     }
+
+   :root {
+  --primary-color: #e30613;          /* Main red */
+  --secondary-color: #a9030d;        /* Darker red */
+  --accent-color: #ff5964;           /* For user avatars or highlights */
+  --success-color: #198754;          /* Bootstrap green (unchanged) */
+  --warning-color: #f59e0b;          /* Amber */
+  --info-color: #0ea5e9;             /* Light blue */
+  --danger-color: #ef4444;           /* Bright red */
+  --light-bg: #f8f9fa;               /* Light background */
+  --dark-text: #212529;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+
   </style>
 </head>
 <body>
@@ -440,7 +504,8 @@ $result = $conn->query($query);
           </select>
         </div>
         
-        <div class="col-md-5 search-box">
+        <div class="col-md-4 col-sm-6 search-box">
+
           <i class="bi bi-search"></i>
           <input type="text" name="search" class="form-control" 
                  placeholder="Search by name, contact or type..." 
@@ -448,16 +513,24 @@ $result = $conn->query($query);
         </div>
         
         <div class="col-md-2">
-          <button type="submit" class="btn btn-primary w-100 filter-btn">
+          <button type="submit" class="btn btn-primary w-100 filter-btn" style="background-color: var(--primary-color); border-color: var(--primary-color);">
             <i class="bi bi-funnel me-1"></i> Filter
           </button>
         </div>
         
-        <div class="col-md-2">
-          <a href="index.php" class="btn btn-outline-secondary w-100">
-            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
-          </a>
-        </div>
+       <div class="col-md-1">
+  <a href="index.php" class="btn btn-outline-secondary w-100" title="Reset">
+    <i class="bi bi-arrow-counterclockwise"></i>
+  </a>
+</div>
+
+        <div class="col-md-1">
+  <button type="submit" name="export" class="btn btn-success w-100" title="Export to Excel">
+    <i class="bi bi-file-earmark-excel"></i>
+  </button>
+</div>
+
+
       </form>
     </div>
   </div>
@@ -467,17 +540,18 @@ $result = $conn->query($query);
 <div class="table-responsive">
   <table class="table table-hover mb-0">
     <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Contact</th>
-        <th>Type</th>
-        <th>Status</th>
-        <th>Date</th>
-        <th>Attachment</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Contact</th>
+    <th>Nature of Visit</th>
+    <th>Equipment</th>
+    <th>Status</th>
+    <th>Attachment</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
     <tbody>
       <?php if ($result && $result->num_rows > 0): ?>
         <?php while ($row = $result->fetch_assoc()): 
@@ -495,9 +569,13 @@ $result = $conn->query($query);
         ?>
           <tr>
             <td><?= $row['id'] ?></td>
-            <td><?= htmlspecialchars($row['name']) ?></td>
-            <td><?= htmlspecialchars($row['contact']) ?></td>
-            <td><?= htmlspecialchars($row['complaint_type']) ?></td>
+            <td><?= htmlspecialchars($row['name'] ?? '') ?></td>
+<td><?= htmlspecialchars($row['contact'] ?? '') ?></td>
+<td><?= htmlspecialchars($row['complaint_type'] ?? '') ?></td>
+<td><?= htmlspecialchars($row['equipment'] ?? '') ?></td>
+
+
+
             <td>
               <span class="badge 
                 <?= $row['status'] === 'Resolved' ? 'badge-resolved' : 
@@ -505,7 +583,6 @@ $result = $conn->query($query);
                 <?= $row['status'] ?>
               </span>
             </td>
-            <td><?= date('d M Y, H:i', strtotime($row['created_at'])) ?></td>
             <td>
               <?php if (!empty($row['attachment'])): ?>
                 <a href="../uploads/<?= $row['attachment'] ?>" target="_blank" class="btn btn-sm btn-outline-primary attachment-btn">
@@ -524,7 +601,7 @@ $result = $conn->query($query);
                     <option value="Under Progress" <?= $row['status'] === 'Under Progress' ? 'selected' : '' ?>>In Progress</option>
                     <option value="Resolved" <?= $row['status'] === 'Resolved' ? 'selected' : '' ?>>Resolved</option>
                   </select>
-                  <button type="submit" name="update_status" class="btn btn-sm btn-primary">
+                  <button type="submit" name="update_status" class="btn btn-sm btn-primary" style="background-color: var(--primary-color); border-color: var(--primary-color);">
                     <i class="bi bi-check-lg"></i>
                     <span class="d-none d-md-inline">Update</span>
                   </button>
@@ -570,7 +647,6 @@ $result = $conn->query($query);
       <div class="complaint-card">
         <div class="complaint-card-header">
           <span class="complaint-id">#<?= $row['id'] ?></span>
-          <span class="complaint-date"><?= date('d M Y, H:i', strtotime($row['created_at'])) ?></span>
         </div>
         
         <div class="complaint-details">
@@ -585,9 +661,15 @@ $result = $conn->query($query);
           </div>
           
           <div class="detail-row">
-            <span class="detail-label">Type:</span>
-            <span class="detail-value"><?= htmlspecialchars($row['complaint_type']) ?></span>
-          </div>
+  <span class="detail-label">Nature:</span>
+  <span class="detail-value"><?= htmlspecialchars($row['complaint_type']) ?></span>
+</div>
+
+<div class="detail-row">
+  <span class="detail-label">Equipment:</span>
+  <span class="detail-value"><?= htmlspecialchars($row['equipment']) ?></span>
+</div>
+
           
           <div class="detail-row">
             <span class="detail-label">Status:</span>

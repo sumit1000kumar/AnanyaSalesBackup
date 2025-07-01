@@ -4,22 +4,37 @@ Ram_dada_dashboard
 ├─ admin
 │  ├─ chat-old.php
 │  ├─ chat.php
+│  ├─ customer-manage.php
 │  ├─ dashboard.php
+│  ├─ engineer-manage.php
 │  ├─ generate-receipt.php
 │  ├─ index-old.php
 │  ├─ index.php
 │  ├─ receipt-list.php
-│  └─ receipt-pdf.php
+│  ├─ receipt-pdf.php
+│  └─ send-receipt-mail.php
 ├─ assets
 │  ├─ css
 │  ├─ images
+│  │  ├─ favicon
+│  │  │  ├─ android-chrome-192x192.png
+│  │  │  ├─ android-chrome-512x512.png
+│  │  │  ├─ apple-touch-icon.png
+│  │  │  ├─ favicon-16x16.png
+│  │  │  ├─ favicon-32x32.png
+│  │  │  ├─ favicon.ico
+│  │  │  └─ site.webmanifest
+│  │  └─ logo
+│  │     └─ logo.jpg
 │  └─ js
 ├─ auth
+│  ├─ forgot-password.php
 │  ├─ login-old.php
 │  ├─ login.php
 │  ├─ logout.php
 │  ├─ register-old.php
-│  └─ register.php
+│  ├─ register.php
+│  └─ reset-password.php
 ├─ includes
 │  ├─ db.php
 │  ├─ footer.php
@@ -32,7 +47,6 @@ Ram_dada_dashboard
 │  │     ├─ PHPMailer.php
 │  │     ├─ POP3.php
 │  │     └─ SMTP.php
-│  ├─ send-receipt-mail.php
 │  └─ session-check.php
 ├─ index.php
 ├─ pdf-lib
@@ -156,12 +170,35 @@ Ram_dada_dashboard
 │     ├─ tuto7.htm
 │     └─ tuto7.php
 ├─ README.md
+├─ receipts
+│  ├─ Service_Receipt_1751370432.pdf
+│  ├─ Service_Receipt_1751370436.pdf
+│  ├─ Service_Receipt_1751370439.pdf
+│  ├─ Service_Receipt_1751370442.pdf
+│  ├─ Service_Receipt_1751371466.pdf
+│  └─ Service_Receipt_1751371565.pdf
 ├─ uploads
-│  └─ 685fcdb622399_9356362161211a72.jpg
+│  ├─ 685fcdb622399_9356362161211a72.jpg
+│  ├─ 685fe02dd04d7_cedc3cbbc3522b24.jpg
+│  ├─ 6862f0b7cd5f2_b45360a062014277.pdf
+│  ├─ 68639fb013c4a_2fff423a4e25f206.pdf
+│  ├─ engineers
+│  │  ├─ 6863b7a06bfbd_testImgForEmail.jpg
+│  │  ├─ 6863cb59093e0_PCPMEmailTemp2.png
+│  │  └─ signature.png
+│  └─ signatures
+│     ├─ cust-1.png
+│     ├─ cust_1751358210_PCPMEmailTemp2.png
+│     ├─ cust_1751365581_PCPMEmailTemp1.png
+│     ├─ cust_1751365697_PCPMEmailTemp1.png
+│     ├─ cust_1751370314_testImgForEmail.jpg
+│     ├─ cust_1751370432_testImgForEmail.jpg
+│     ├─ cust_1751370545_testImgForEmail.jpg
+│     ├─ cust_1751370635_testImgForEmail.jpg
+│     ├─ cust_1751371465_testImgForEmail.jpg
+│     └─ cust_1751371565_testImgForEmail.jpg
 └─ user
    ├─ complaint-form.php
-   ├─ test-dashboard.php
-   ├─ test.php
    ├─ user-dashboard-old.php
    └─ user-dashboard.php
 

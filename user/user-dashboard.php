@@ -18,11 +18,30 @@ $result = $stmt->get_result();
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Required Meta Tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Dashboard | Complaint Management System</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Portal for Complaint Management System">
+  <meta name="author" content="Ananya Sales & Service">
+
+  <!-- Page Title -->
+  <title>Ananya Sales & Service | Complaint Form</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../assets/images/favicon/site.webmanifest">
+
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+  <!-- Inline Styles -->
   <style>
     :root {
       --primary-color: #4361ee;
@@ -358,13 +377,28 @@ $result = $stmt->get_result();
       border: 2px solid white;
     }
     
+    :root {
+  --primary-color: #e30613;          /* Main red */
+  --secondary-color: #a9030d;        /* Darker red */
+  --accent-color: #ff5964;           /* For user avatars or highlights */
+  --success-color: #198754;          /* Bootstrap green (unchanged) */
+  --warning-color: #f59e0b;          /* Amber */
+  --info-color: #0ea5e9;             /* Light blue */
+  --danger-color: #ef4444;           /* Bright red */
+  --light-bg: #f8f9fa;               /* Light background */
+  --dark-text: #212529;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
   </style>
 </head>
 <body>
   <header class="dashboard-header">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
-        <h1 class="h4 mb-0">Complaint Management System</h1>
+        <div class="d-flex align-items-center">
+          <img src="../assets/images/logo/logo.jpg" alt="Logo" style="height:40px; vertical-align:middle; margin-right:10px; padding: 5px; border-radius: 10px; background-color: white;">
+          <h1 class="h4 mb-0 d-inline align-middle">Ananya Sales and Service</h1>
+        </div>
         <a href="../auth/logout.php" class="btn btn-outline-light btn-sm">
           <i class="bi bi-box-arrow-right"></i> Logout
         </a>
@@ -395,66 +429,52 @@ $result = $stmt->get_result();
           <div class="table-responsive">
             <table class="table">
               <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+  <tr>
+    <th>#</th>
+    <th>Type</th>
+    <th>Equipment</th>
+    <th>Status</th>
+    <th>Date</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
               <tbody>
                 <?php $count = 1; while($row = $result->fetch_assoc()): 
-                  $stmt = $conn->prepare("
-                    SELECT COUNT(*) as unread 
-                    FROM conversations 
-                    WHERE complaint_id = ? 
-                    AND sender_id != ? 
-                    AND is_read = FALSE
-                  ");
+                  $stmt = $conn->prepare("SELECT COUNT(*) as unread FROM conversations WHERE complaint_id = ? AND sender_id != ? AND is_read = FALSE");
                   $stmt->bind_param("ii", $row['id'], $_SESSION['user_id']);
                   $stmt->execute();
                   $unread = $stmt->get_result()->fetch_assoc()['unread'];
                 ?>
-                  <tr>
-                    <td data-label="#"><?= $count++ ?></td>
-                    <td data-label="Type"><?= htmlspecialchars($row['complaint_type']) ?></td>
-                    <td data-label="Description"><?= htmlspecialchars($row['description']) ?></td>
-                    <td data-label="Status">
-                      <?php
-                        switch (strtolower($row['status'])) {
-                          case 'resolved':
-                            $badgeClass = 'success';
-                            break;
-                          case 'under progress':
-                            $badgeClass = 'warning';
-                            break;
-                          case 'pending':
-                          case '':
-                            $badgeClass = 'secondary';
-                            break;
-                          default:
-                            $badgeClass = 'info';
-                        }
-                      ?>
-                      <span class="badge bg-<?= $badgeClass ?>">
-                        <?= ucfirst($row['status']) ?>
-                      </span>
-                    </td>
-                    <td data-label="Date">
-                      <?php
-                        date_default_timezone_set("Asia/Kolkata");
-                        echo date('d M Y, h:i A', strtotime($row['created_at']));
-                      ?>
-                    </td>
-                    <td>
-                      <button class="btn btn-sm btn-info chat-btn <?= $unread > 0 ? 'has-unread' : '' ?>" 
-                              onclick="openChat(<?= $row['id'] ?>, 'Admin')">
-                        <i class="bi bi-chat-left-text"></i>
-                      </button>
-                    </td>
-                  </tr>
+                <tr>
+                  <td data-label="#"><?= $count++ ?></td>
+                  <td data-label="Type"><?= htmlspecialchars($row['complaint_type']) ?></td>
+                  <td data-label="Equipment"><?= htmlspecialchars($row['equipment']) ?></td>
+
+                  <td data-label="Status">
+                    <?php
+                      $status = strtolower($row['status']);
+                      $badgeClass = match ($status) {
+                        'resolved' => 'success',
+                        'under progress' => 'warning',
+                        'pending', '' => 'secondary',
+                        default => 'info',
+                      };
+                    ?>
+                    <span class="badge bg-<?= $badgeClass ?>"><?= ucfirst($row['status']) ?></span>
+                  </td>
+                  <td data-label="Date">
+                    <?php
+                      date_default_timezone_set("Asia/Kolkata");
+                      echo date('d M Y, h:i A', strtotime($row['created_at']));
+                    ?>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-info chat-btn <?= $unread > 0 ? 'has-unread' : '' ?>" onclick="openChat(<?= $row['id'] ?>, 'Admin')">
+                      <i class="bi bi-chat-left-text"></i>
+                    </button>
+                  </td>
+                </tr>
                 <?php endwhile; ?>
               </tbody>
             </table>
@@ -488,10 +508,11 @@ $result = $stmt->get_result();
     </div>
   </main>
 
-  <div style="margin-top: 50px; padding: 20px; background-color: #f8f9fa; text-align: center; width:100%;">
+  <footer class="text-center mt-5 py-3 bg-light">
     <?php include '../includes/footer.php'; ?>
-  </div>
+  </footer>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
 // Chat system variables
