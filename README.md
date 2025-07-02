@@ -6,13 +6,19 @@ Ram_dada_dashboard
 │  ├─ chat.php
 │  ├─ customer-manage.php
 │  ├─ dashboard.php
+│  ├─ delete-hospital-reminder.php
 │  ├─ engineer-manage.php
 │  ├─ generate-receipt.php
+│  ├─ generate-reciept-2.php
+│  ├─ hospital-reminders.php
 │  ├─ index-old.php
 │  ├─ index.php
 │  ├─ receipt-list.php
 │  ├─ receipt-pdf.php
-│  └─ send-receipt-mail.php
+│  ├─ reciept-pdf-2.php
+│  ├─ save-hospital-reminder.php
+│  ├─ send-receipt-email.php
+│  └─ send-reminder-emails.php
 ├─ assets
 │  ├─ css
 │  ├─ images
@@ -176,15 +182,21 @@ Ram_dada_dashboard
 │  ├─ Service_Receipt_1751370439.pdf
 │  ├─ Service_Receipt_1751370442.pdf
 │  ├─ Service_Receipt_1751371466.pdf
-│  └─ Service_Receipt_1751371565.pdf
+│  ├─ Service_Receipt_1751371565.pdf
+│  ├─ Service_Receipt_1751440673.pdf
+│  ├─ Service_Receipt_1751441208.pdf
+│  ├─ Service_Receipt_1751442944.pdf
+│  └─ Service_Receipt_1751452162.pdf
 ├─ uploads
 │  ├─ 685fcdb622399_9356362161211a72.jpg
 │  ├─ 685fe02dd04d7_cedc3cbbc3522b24.jpg
 │  ├─ 6862f0b7cd5f2_b45360a062014277.pdf
 │  ├─ 68639fb013c4a_2fff423a4e25f206.pdf
+│  ├─ 6864e3429de5d_1d1cfd9aa2864546.pdf
 │  ├─ engineers
 │  │  ├─ 6863b7a06bfbd_testImgForEmail.jpg
 │  │  ├─ 6863cb59093e0_PCPMEmailTemp2.png
+│  │  ├─ 6864dcf376f93_PCPMEmailTemp1.png
 │  │  └─ signature.png
 │  └─ signatures
 │     ├─ cust-1.png
@@ -196,7 +208,11 @@ Ram_dada_dashboard
 │     ├─ cust_1751370545_testImgForEmail.jpg
 │     ├─ cust_1751370635_testImgForEmail.jpg
 │     ├─ cust_1751371465_testImgForEmail.jpg
-│     └─ cust_1751371565_testImgForEmail.jpg
+│     ├─ cust_1751371565_testImgForEmail.jpg
+│     ├─ cust_1751440673_PCPMEmailTemp2.png
+│     ├─ cust_1751441208_testImgForEmail.jpg
+│     ├─ cust_1751442939_inroBanner-1.png
+│     └─ cust_1751452162_testImgForEmail.jpg
 └─ user
    ├─ complaint-form.php
    ├─ user-dashboard-old.php
