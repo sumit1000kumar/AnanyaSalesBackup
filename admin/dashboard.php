@@ -4,6 +4,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
   header("Location: ../auth/login.php");
   exit;
 }
+include '../includes/db.php';
+
+// 🔔 Check if any reminders are due tomorrow
+$tomorrow = date('Y-m-d', strtotime('+1 day'));
+$notifStmt = $conn->prepare("SELECT COUNT(*) as due_count FROM hospital_reminders WHERE next_due_date = ?");
+$notifStmt->bind_param("s", $tomorrow);
+$notifStmt->execute();
+$notifResult = $notifStmt->get_result()->fetch_assoc();
+$hasReminderDue = $notifResult['due_count'] > 0;
 ?>
 
 <!DOCTYPE html>
@@ -217,9 +226,28 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             <a href="engineer-manage.php" class="text-decoration-none">
               <div class="dashboard-card">
                 <div class="card-body">
-                  <div class="card-icon"><i class="bi bi-people-gear"></i></div>
+                  <div class="card-icon"><i class="bi bi-person-lines-fill"></i></div>
                   <h5 class="card-title">Manage Engineers</h5>
                   <p class="card-description">Add, edit, or delete engineer info & signatures</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Monthly Reminders -->
+          <div class="col-md-6 col-lg-4">
+            <a href="hospital-reminders.php" class="text-decoration-none position-relative">
+              <?php if ($hasReminderDue): ?>
+  <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" style="font-size: 0.75rem;">
+    <?= $notifResult['due_count'] ?>
+  </span>
+<?php endif; ?>
+
+              <div class="dashboard-card">
+                <div class="card-body">
+                  <div class="card-icon"><i class="bi bi-calendar-event-fill"></i></div>
+                  <h5 class="card-title">Service Reminders</h5>
+                  <p class="card-description">Track upcoming hospital service due dates</p>
                 </div>
               </div>
             </a>

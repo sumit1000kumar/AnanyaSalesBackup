@@ -118,20 +118,21 @@ switch (true) {
 <div class="wrapper">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
-        <i class="bi bi-arrow-left me-2"></i> Dashboard
-      </a>
-      <div class="d-flex align-items-center">
-        <?php if (isset($_SESSION['user_name'])): ?>
-          <span class="text-white me-2 d-none d-sm-inline">Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
-          <div class="user-profile"><?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?></div>
-          <a href="../auth/logout.php" class="logout-btn ms-2">Logout</a>
-        <?php endif; ?>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
+            <i class="bi bi-shield-lock me-2"></i> Admin Panel
+        </a>
+        <div class="d-flex align-items-center">
+          <a href="dashboard.php" class="btn btn-outline-light me-2">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+          </a>
+          <a href="../auth/logout.php" class="btn btn-outline-light">
+            <i class="bi bi-box-arrow-right me-1"></i> Logout
+          </a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
   <!-- Header -->
   <div class="container mt-4">

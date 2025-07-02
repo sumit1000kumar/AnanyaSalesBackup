@@ -118,19 +118,21 @@ if (isset($_GET['delete_id'])) {
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
-        <i class="bi bi-shield-lock me-2"></i>
-        <span>Ananya Sales and Service</span>
-      </a>
-      <div class="d-flex align-items-center">
-        <span class="text-white me-2 d-none d-sm-inline">Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?></span>
-        <div class="user-profile"><?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?></div>
-        <a href="../auth/logout.php" class="logout-btn">Logout</a>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
+          <i class="bi bi-shield-lock me-2"></i> Admin Panel
+        </a>
+        <div class="d-flex align-items-center">
+          <a href="dashboard.php" class="btn btn-outline-light me-2">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+          </a>
+          <a href="../auth/logout.php" class="btn btn-outline-light">
+            <i class="bi bi-box-arrow-right me-1"></i> Logout
+          </a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
   <!-- Content -->
   <div class="container my-5">
@@ -144,7 +146,7 @@ if (isset($_GET['delete_id'])) {
 
     <!-- Add Customer Form -->
     <div class="card mb-4">
-      <div class="card-header bg-primary text-white">Add New Customer</div>
+      <div class="card-header text-white" style="background-color: var(--primary-color); border: 1px solid var(--primary-color);">Add New Customer</div>
       <div class="card-body">
         <form method="POST">
           <div class="row g-3">

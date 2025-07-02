@@ -75,7 +75,7 @@ include '../includes/db.php';
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
-          <i class="bi bi-arrow-left me-2"></i> Admin Panel
+          <i class="bi bi-shield-lock me-2"></i> Admin Panel
         </a>
         <div class="d-flex align-items-center">
           <a href="dashboard.php" class="btn btn-outline-light me-2">
