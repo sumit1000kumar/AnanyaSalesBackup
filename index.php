@@ -280,7 +280,7 @@ if (isset($_SESSION['user_id'])) {
   <!-- Hero Section -->
   <section class="hero-section text-center">
     <div class="container">
-      <h1 class="fw-bold mb-3 text-white">Ananya Sales & Service</h1>
+        <h1 class="fw-bold mb-3 text-white"> <img src="assets/images/logo/logo.jpg" alt="Ananya Sales & Service Logo" style="height:64px;width:auto; margin-right: 15px;" >Ananya Sales & Service</h1>
       <p class="lead mb-4 text-white">Specialized Maintenance & Calibration for Blood Bank Equipment</p>
       <div class="d-flex btn-group-responsive justify-content-center">
         <a href="auth/login.php" class="btn btn-primary btn-lg">

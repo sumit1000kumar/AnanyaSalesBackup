@@ -42,13 +42,21 @@ $query .= " ORDER BY created_at DESC";
 // Export to CSV
 if (isset($_GET['export'])) {
     $export_result = $conn->query($query);
-    
-    if ($export_result && $export_result->num_rows > 0) {
+
+    if (!$export_result || $export_result->num_rows === 0) {
+        $_SESSION['success_message'] = "No complaints found to export.";
+        header("Location: index.php");
+        exit;
+    }
+
+    $format = $_GET['export'];
+
+    if ($format === 'excel') {
+        // Export as Excel (CSV)
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="complaints_export.csv"');
-
         $output = fopen('php://output', 'w');
-        fputcsv($output, ['ID', 'Name', 'Contact', 'Nature of Visit', 'Equipment', 'Status']); // CSV Header
+        fputcsv($output, ['ID', 'Name', 'Contact', 'Nature of Visit', 'Equipment', 'Status']);
 
         while ($row = $export_result->fetch_assoc()) {
             fputcsv($output, [
@@ -63,12 +71,47 @@ if (isset($_GET['export'])) {
 
         fclose($output);
         exit;
+
+    } elseif ($format === 'pdf') {
+        // Export as PDF using FPDF
+        require_once '../pdf-lib/fpdf.php';
+
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->Cell(0, 10, 'Complaints Report', 0, 1, 'C');
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(10, 10, 'ID', 1);
+        $pdf->Cell(30, 10, 'Name', 1);
+        $pdf->Cell(30, 10, 'Contact', 1);
+        $pdf->Cell(40, 10, 'Nature', 1);
+        $pdf->Cell(40, 10, 'Equipment', 1);
+        $pdf->Cell(30, 10, 'Status', 1);
+        $pdf->Ln();
+
+        $pdf->SetFont('Arial', '', 10);
+
+        while ($row = $export_result->fetch_assoc()) {
+            $pdf->Cell(10, 10, $row['id'], 1);
+            $pdf->Cell(30, 10, $row['name'], 1);
+            $pdf->Cell(30, 10, $row['contact'], 1);
+            $pdf->Cell(40, 10, $row['complaint_type'], 1);
+            $pdf->Cell(40, 10, $row['equipment'], 1);
+            $pdf->Cell(30, 10, $row['status'], 1);
+            $pdf->Ln();
+        }
+
+        $pdf->Output('D', 'complaints_report.pdf');
+        exit;
+
     } else {
-        $_SESSION['success_message'] = "No complaints found to export.";
+        $_SESSION['success_message'] = "Invalid export format selected.";
         header("Location: index.php");
         exit;
     }
 }
+
 
 $result = $conn->query($query);
 ?>
@@ -524,10 +567,19 @@ $result = $conn->query($query);
   </a>
 </div>
 
-        <div class="col-md-1">
-  <button type="submit" name="export" class="btn btn-success w-100" title="Export to Excel">
-    <i class="bi bi-file-earmark-excel"></i>
-  </button>
+        <!-- <div class="col-md-1"> -->
+  <div class="col-md-2">
+  <div class="dropdown">
+    <button class="btn btn-success dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+      <i class="bi bi-download me-1"></i> Export
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="?export=excel">Excel (.csv)</a></li>
+      <li><a class="dropdown-item" href="?export=pdf">PDF</a></li>
+    </ul>
+  </div>
+<!-- </div> -->
+
 </div>
 
 

@@ -454,12 +454,28 @@ $result = $stmt->get_result();
                   <td data-label="Status">
                     <?php
                       $status = strtolower($row['status']);
-                      $badgeClass = match ($status) {
-                        'resolved' => 'success',
-                        'under progress' => 'warning',
-                        'pending', '' => 'secondary',
-                        default => 'info',
-                      };
+                      // $badgeClass = match ($status) {
+                      //   'resolved' => 'success',
+                      //   'under progress' => 'warning',
+                      //   'pending', '' => 'secondary',
+                      //   default => 'info',
+                      // };
+                      switch ($status) {
+  case 'resolved':
+    $badgeClass = 'success';
+    break;
+  case 'under progress':
+    $badgeClass = 'warning';
+    break;
+  case 'pending':
+  case '':
+    $badgeClass = 'secondary';
+    break;
+  default:
+    $badgeClass = 'info';
+    break;
+}
+
                     ?>
                     <span class="badge bg-<?= $badgeClass ?>"><?= ucfirst($row['status']) ?></span>
                   </td>

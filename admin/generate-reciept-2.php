@@ -1,31 +1,16 @@
 <?php
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 session_start();
 require_once '../includes/db.php';
 
-// Fetch customers with error handling
-$customerQuery = "SELECT id, name, contact, address, designation, email FROM customers ORDER BY name ASC";
-$customerResult = $conn->query($customerQuery);
+// Fetch customers
+$customers = $conn->query("SELECT id, name, contact, address, designation, email FROM customers ORDER BY name ASC")->fetch_all(MYSQLI_ASSOC);
 
-switch (true) {
-  case !$customerResult:
-    die("Customer Query Error: " . $conn->error);
-  default:
-    $customers = $customerResult->fetch_all(MYSQLI_ASSOC);
-}
-
-// Fetch engineers with error handling
-$engineerQuery = "SELECT id, name, signature_path FROM engineers ORDER BY name ASC";
-$engineerResult = $conn->query($engineerQuery);
-
-switch (true) {
-  case !$engineerResult:
-    die("Engineer Query Error: " . $conn->error);
-  default:
-    $engineers = $engineerResult->fetch_all(MYSQLI_ASSOC);
-}
+// Fetch engineers
+$engineers = $conn->query("SELECT id, name, signature_path FROM engineers ORDER BY name ASC")->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -114,6 +99,7 @@ switch (true) {
     }
   </style>
 </head>
+
 <body>
 <div class="wrapper">
 
@@ -141,7 +127,8 @@ switch (true) {
 
     <!-- Form -->
     <div class="form-section">
-      <form id="receiptForm" action="receipt-pdf.php" method="POST" enctype="multipart/form-data">
+      <form action="receipt-pdf.php" method="POST" enctype="multipart/form-data">
+
         <!-- Customer Info -->
         <h5 class="section-title">Customer Information</h5>
         <div class="row g-3 mb-3">
@@ -151,13 +138,13 @@ switch (true) {
               <option value="">-- Select from saved --</option>
               <?php foreach ($customers as $cust): ?>
                 <option value="<?= $cust['id'] ?>"
-                  data-name="<?= htmlspecialchars($cust['name']) ?>"
-                  data-contact="<?= htmlspecialchars($cust['contact']) ?>"
-                  data-address="<?= htmlspecialchars($cust['address']) ?>"
-                  data-designation="<?= htmlspecialchars($cust['designation']) ?>"
-                  data-email="<?= htmlspecialchars($cust['email']) ?>">
-                  <?= htmlspecialchars($cust['name']) ?> (<?= $cust['contact'] ?>)
-                </option>
+  data-name="<?= htmlspecialchars($cust['name']) ?>"
+  data-contact="<?= htmlspecialchars($cust['contact']) ?>"
+  data-address="<?= htmlspecialchars($cust['address']) ?>"
+  data-designation="<?= htmlspecialchars($cust['designation']) ?>"
+  data-email="<?= htmlspecialchars($cust['email']) ?>">
+  <?= htmlspecialchars($cust['name']) ?> (<?= $cust['contact'] ?>)
+</option>
               <?php endforeach; ?>
             </select>
           </div>
@@ -267,34 +254,13 @@ switch (true) {
         </div>
 
         <div class="mt-4 text-end">
-  <button type="reset" class="btn btn-outline-secondary"><i class="bi bi-x-circle me-1"></i> Reset</button>
-  <button type="button" class="btn btn-primary" onclick="previewReport()"><i class="bi bi-eye me-1"></i> Preview Report</button>
-</div>
-
+          <button type="reset" class="btn btn-outline-secondary"><i class="bi bi-x-circle me-1"></i> Reset</button>
+          <button type="submit" class="btn btn-success"><i class="bi bi-file-earmark-pdf me-1"></i> Generate Receipt</button>
+        </div>
 
       </form>
     </div>
   </div>
-
-  <!-- Reciept Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="previewModalLabel"><i class="bi bi-receipt me-2"></i>Service Receipt Preview</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Preview content will go here -->
-        <div id="previewContent" class="px-2"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Edit</button>
-        <button type="submit" class="btn btn-success" form="receiptForm"><i class="bi bi-check-circle me-1"></i> Confirm & Generate</button>
-      </div>
-    </div>
-  </div>
-</div>
 
   <!-- Footer -->
   <footer class="main-footer">
@@ -305,13 +271,14 @@ switch (true) {
 
 <script>
   function populateCustomer(sel) {
-    const opt = sel.options[sel.selectedIndex];
-    document.getElementById('customer_name').value = opt.dataset.name || '';
-    document.getElementById('customer_contact').value = opt.dataset.contact || '';
-    document.getElementById('customer_address').value = opt.dataset.address || '';
-    document.querySelector('[name="designation"]').value = opt.dataset.designation || '';
-    document.querySelector('[name="email"]').value = opt.dataset.email || '';
-  }
+  const opt = sel.options[sel.selectedIndex];
+  document.getElementById('customer_name').value = opt.dataset.name || '';
+  document.getElementById('customer_contact').value = opt.dataset.contact || '';
+  document.getElementById('customer_address').value = opt.dataset.address || '';
+  document.querySelector('[name="designation"]').value = opt.dataset.designation || '';
+  document.querySelector('[name="email"]').value = opt.dataset.email || '';
+}
+
 
   function toggleEngineerInput(sel) {
     const val = sel.value;
@@ -320,67 +287,6 @@ switch (true) {
     document.getElementById('engineerSignature').value = sig;
   }
 </script>
-
-<!-- recipet preview -->
- <script>
-function previewReport() {
-  const form = document.getElementById('receiptForm');
-  const data = new FormData(form);
-
-  let previewHtml = `
-    <h6>Customer Info</h6>
-    <ul>
-      <li><strong>Name:</strong> ${data.get('customer_name')}</li>
-      <li><strong>Designation:</strong> ${data.get('designation')}</li>
-      <li><strong>Address:</strong> ${data.get('address')}</li>
-      <li><strong>Phone:</strong> ${data.get('phone')}</li>
-      <li><strong>Email:</strong> ${data.get('email')}</li>
-    </ul>
-
-    <h6>Service & Equipment</h6>
-    <ul>
-      <li><strong>Nature of Visit:</strong> ${data.get('nature_of_visit')}</li>
-      <li><strong>Equipment:</strong> ${data.get('equipment')}</li>
-      <li><strong>Model No.:</strong> ${data.get('model_no')}</li>
-      <li><strong>Serial No.:</strong> ${data.get('serial_no')}</li>
-    </ul>
-
-    <h6>AMC Checklist</h6>
-    <ul>
-  `;
-
-  document.querySelectorAll('select[name^="checklist"]').forEach(select => {
-    previewHtml += `<li><strong>${select.name.replace('checklist[','').replace(']','')}:</strong> ${select.value}</li>`;
-  });
-
-  previewHtml += `
-    </ul>
-
-    <h6>Remarks</h6>
-    <ul>
-      <li><strong>Our Remarks:</strong> ${data.get('our_remarks')}</li>
-      <li><strong>Spare Parts Used:</strong> ${data.get('spare_parts')}</li>
-      <li><strong>Customer's Remarks:</strong> ${data.get('customer_remarks')}</li>
-    </ul>
-
-    <h6>Service Report</h6>
-    <ul>
-      <li><strong>Engineer:</strong> ${data.get('engineer_id') || data.get('engineer_custom_name')}</li>
-      <li><strong>Service Date:</strong> ${data.get('service_date')}</li>
-      <li><strong>Service Rendered:</strong> ${data.get('service_rendered')}</li>
-    </ul>
-  `;
-
-  document.getElementById('previewContent').innerHTML = previewHtml;
-
-  const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-  previewModal.show();
-}
-</script>
-
-<!-- ✅ Required for modal, dropdowns, etc. -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 
 </body>
 </html>

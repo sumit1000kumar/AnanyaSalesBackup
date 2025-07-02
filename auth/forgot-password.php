@@ -29,31 +29,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update->execute();
 
         // Email sending setup
+//         $mail = new PHPMailer(true);
+//         try {
+//             $mail->SMTPDebug = 2;
+// $mail->Debugoutput = 'html'; 
+
+//             $mail->isSMTP();
+//             $mail->Host       = 'sandbox.smtp.mailtrap.io'; 
+//             $mail->SMTPAuth   = true;
+//             $mail->Username   = '653e31a20734e7';  
+//             $mail->Password   = '6d0a10a903ad2e';  
+//             $mail->Port       = 2525;
+
+//             $mail->setFrom('noreply@yourdomain.com', 'Complaint Management System');
+//             $mail->addAddress($email);
+
+//             $resetLink = "http://localhost/Ram_dada_dashboard/auth/reset-password.php?token=$token";
+
+             // Email sending setup for server
         $mail = new PHPMailer(true);
         try {
             $mail->SMTPDebug = 2; // Add this line
 $mail->Debugoutput = 'html'; // Optional: show debug output as HTML
 
             $mail->isSMTP();
-            $mail->Host       = 'sandbox.smtp.mailtrap.io'; // From Mailtrap
+            $mail->Host       = 'smtp.sumitbuilds.live'; // From Mailtrap
             $mail->SMTPAuth   = true;
-            $mail->Username   = '653e31a20734e7';   // Replace
-            $mail->Password   = '6d0a10a903ad2e';   // Replace
-            $mail->Port       = 2525;
+            $mail->Username   = 'bank@sumitbuilds.live';   // Replace
+            $mail->Password   = 'ramdada@123';   // Replace
+            $mail->Port       = 465 ;
 
-            // Looking to send emails in production? Check out our Email API/SMTP product!
-// $phpmailer = new PHPMailer();
-// $phpmailer->isSMTP();
-// $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
-// $phpmailer->SMTPAuth = true;
-// $phpmailer->Port = 2525;
-// $phpmailer->Username = '653e31a20734e7';
-// $phpmailer->Password = '6d0a10a903ad2e';
-
-            $mail->setFrom('noreply@yourdomain.com', 'Complaint Management System');
+            $mail->setFrom('bank@sumitbuilds.live', 'Ananya Sales & Service');
             $mail->addAddress($email);
 
-            $resetLink = "http://localhost/Ram_dada_dashboard/auth/reset-password.php?token=$token";
+            $resetLink = "https://www.sumitbuilds.live/auth/reset-password.php?token=$token";
+
 
             $mail->isHTML(true);
             $mail->Subject = 'Reset Your Password';

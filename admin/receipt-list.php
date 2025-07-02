@@ -96,6 +96,28 @@ include '../includes/db.php';
       </div>
     </header>
 
+    <!-- Alerts -->
+    <?php if (isset($_GET['mail'])): ?>
+      <div class="container mt-3">
+        <?php if ($_GET['mail'] === 'success'): ?>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            Email sent successfully to the client.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <?php elseif ($_GET['mail'] === 'error'): ?>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Failed to send email.
+            <?php if (!empty($_GET['reason'])): ?>
+              <br><strong>Reason:</strong> <?= htmlspecialchars($_GET['reason']) ?>
+            <?php endif; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
+
     <!-- Main Content -->
     <main class="flex-fill">
       <div class="container mb-5">
@@ -124,23 +146,15 @@ include '../includes/db.php';
                         <td><?= $row['id'] ?></td>
                         <td><?= htmlspecialchars($row['client_name']) ?></td>
                         <td><?= htmlspecialchars($row['phone'] ?? '') ?></td>
-<td><?= htmlspecialchars($row['email'] ?? '') ?></td>
-<td><?= htmlspecialchars($row['service_type'] ?? '') ?></td>
-<td><?= htmlspecialchars($row['engineer'] ?? '') ?></td>
-
+                        <td><?= htmlspecialchars($row['email'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['service_type'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['engineer'] ?? '') ?></td>
                         <td><?= date('d M Y, h:i A', strtotime($row['created_at'])) ?></td>
                         <td>
                           <div class="d-flex gap-2">
-                            <!-- <form action="receipt-pdf.php" method="POST" target="_blank">
-                              <input type="hidden" name="receipt_id" value="<?= $row['id'] ?>">
-                              <button type="submit" class="btn btn-sm btn-view">
-                                <i class="bi bi-eye-fill me-1"></i> View
-                              </button>
-                            </form> -->
                             <a href="../<?= htmlspecialchars($row['pdf_path']) ?>" target="_blank" class="btn btn-sm btn-view">
-  <i class="bi bi-eye-fill me-1"></i> View
-</a>
-
+                              <i class="bi bi-eye-fill me-1"></i> View
+                            </a>
                             <form action="send-receipt-email.php" method="POST">
                               <input type="hidden" name="receipt_id" value="<?= $row['id'] ?>">
                               <button type="submit" class="btn btn-sm btn-email">
@@ -176,5 +190,13 @@ include '../includes/db.php';
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Optional: Auto-hide alert after 5s -->
+  <script>
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) alert.classList.remove('show');
+    }, 5000);
+  </script>
 </body>
 </html>

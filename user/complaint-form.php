@@ -205,14 +205,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           <div class="col-md-6">
             <label class="form-label">Select Equipment</label>
             <select class="form-select" name="equipment" required>
-              <option value="" disabled selected>Select equipment</option>
-              <option value="RO Water Purifier">RO Water Purifier</option>
-              <option value="Washing Machine">Washing Machine</option>
-              <option value="Refrigerator">Refrigerator</option>
-              <option value="Air Conditioner">Air Conditioner</option>
-              <option value="Microwave Oven">Microwave Oven</option>
-              <option value="Other">Other</option>
-            </select>
+  <option value="" disabled selected>Select equipment</option>
+  <option value="Plasma Freezer">Plasma Freezer</option>
+  <option value="Blood Storage Cabinet">Blood Storage Cabinet</option>
+  <option value="Lab Centrifuge">Lab Centrifuge</option>
+  <option value="Components Centrifuge">Components Centrifuge</option>
+  <option value="Tube Sealer">Tube Sealer</option>
+  <option value="Weighing Scale">Weighing Scale</option>
+  <option value="Cryo Freezer">Cryo Freezer</option>
+  <option value="Platelet Incubator">Platelet Incubator</option>
+  <option value="Platelet Agitator">Platelet Agitator</option>
+  <option value="Blood Collection Monitor">Blood Collection Monitor</option>
+  <option value="Laminar Air Flow">Laminar Air Flow</option>
+  <option value="Donor Chair">Donor Chair</option>
+  <option value="Reagent Storage Cabinet">Reagent Storage Cabinet</option>
+  <option value="Water Bath">Water Bath</option>
+  <option value="Lab Incubator">Lab Incubator</option>
+  <option value="Lab Oven">Lab Oven</option>
+  <option value="Autoclave">Autoclave</option>
+  <option value="Rotary Shaker">Rotary Shaker</option>
+  <option value="Plasma Thawing Bath">Plasma Thawing Bath</option>
+  <option value="Data Logger">Data Logger</option>
+  <option value="Other">Other</option>
+</select>
+
           </div>
           <div class="col-12">
             <label class="form-label">Attachment (Optional)</label>
