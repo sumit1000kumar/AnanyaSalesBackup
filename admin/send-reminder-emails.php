@@ -50,11 +50,9 @@ try {
     }
     $body .= "</ul>";
 
-    // Recipients (manual list or fetch from DB)
     $recipients = [
         'sumitkumar9012004@gmail.com' => 'Admin One',
-        'admin2@example.com' => 'Admin Two',
-        'youremail@example.com' => 'You' // Replace with real emails
+        'youremail@example.com' => 'Admin Two' 
     ];
 
     foreach ($recipients as $email => $name) {

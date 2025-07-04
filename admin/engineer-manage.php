@@ -7,6 +7,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 
 include '../includes/db.php';
 
+// ADD ENGINEER
 if (isset($_POST['add_engineer'])) {
   $name = mysqli_real_escape_string($conn, $_POST['name']);
 
@@ -30,6 +31,32 @@ if (isset($_POST['add_engineer'])) {
     $error = "File upload error.";
   }
 }
+
+// DELETE ENGINEER
+if (isset($_POST['delete_engineer'])) {
+  $engineerId = intval($_POST['delete_engineer_id']);
+
+  // Fetch file path
+  $getFileQuery = "SELECT signature_path FROM engineers WHERE id = $engineerId";
+  $fileResult = mysqli_query($conn, $getFileQuery);
+  if ($fileResult && mysqli_num_rows($fileResult) > 0) {
+    $fileData = mysqli_fetch_assoc($fileResult);
+    $filePath = '../' . $fileData['signature_path'];
+
+    // Delete from DB
+    $deleteQuery = "DELETE FROM engineers WHERE id = $engineerId";
+    if (mysqli_query($conn, $deleteQuery)) {
+      if (file_exists($filePath)) {
+        unlink($filePath);
+      }
+      $success = "Engineer deleted successfully.";
+    } else {
+      $error = "Error deleting engineer: " . mysqli_error($conn);
+    }
+  } else {
+    $error = "Engineer not found.";
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -39,11 +66,9 @@ if (isset($_POST['add_engineer'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Engineer Management | Ananya Sales and Service</title>
 
-  <!-- Bootstrap + Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet" />
 
-  <!-- Custom Styles -->
   <style>
     :root {
       --primary-color: #e30613;
@@ -65,18 +90,6 @@ if (isset($_POST['add_engineer'])) {
 
     .navbar {
       background-color: var(--primary-color);
-    }
-
-    .user-profile {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: var(--accent-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
     }
 
     .logout-btn {
@@ -123,21 +136,21 @@ if (isset($_POST['add_engineer'])) {
 
 <body>
   <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
-          <i class="bi bi-shield-lock me-2"></i> Admin Panel
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="dashboard.php">
+        <i class="bi bi-shield-lock me-2"></i> Admin Panel
+      </a>
+      <div class="d-flex align-items-center">
+        <a href="dashboard.php" class="btn btn-outline-light me-2">
+          <i class="bi bi-speedometer2 me-1"></i> Dashboard
         </a>
-        <div class="d-flex align-items-center">
-          <a href="dashboard.php" class="btn btn-outline-light me-2">
-            <i class="bi bi-speedometer2 me-1"></i> Dashboard
-          </a>
-          <a href="../auth/logout.php" class="btn btn-outline-light">
-            <i class="bi bi-box-arrow-right me-1"></i> Logout
-          </a>
-        </div>
+        <a href="../auth/logout.php" class="btn btn-outline-light">
+          <i class="bi bi-box-arrow-right me-1"></i> Logout
+        </a>
       </div>
-    </nav>
+    </div>
+  </nav>
 
   <!-- Page Content -->
   <div class="container my-5">
@@ -171,13 +184,14 @@ if (isset($_POST['add_engineer'])) {
     <div class="card">
       <div class="card-header bg-dark text-white">Engineers List</div>
       <div class="card-body">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped align-middle">
           <thead>
             <tr>
               <th>#</th>
               <th>Name</th>
               <th>Signature</th>
               <th>Added On</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -190,6 +204,14 @@ if (isset($_POST['add_engineer'])) {
                       <td>{$row['name']}</td>
                       <td><img src='../{$row['signature_path']}' alt='Signature' height='40'></td>
                       <td>{$row['created_at']}</td>
+                      <td>
+                        <form method='POST' onsubmit='return confirm(\"Are you sure you want to delete this engineer?\");'>
+                          <input type='hidden' name='delete_engineer_id' value='{$row['id']}' />
+                          <button type='submit' name='delete_engineer' class='btn btn-sm btn-danger'>
+                            <i class='bi bi-trash'></i> Delete
+                          </button>
+                        </form>
+                      </td>
                     </tr>";
               $sn++;
             }

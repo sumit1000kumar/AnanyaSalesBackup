@@ -130,6 +130,16 @@ $hasReminderDue = $notifResult['due_count'] > 0;
       color: white !important;
     }
   </style>
+
+  <!-- web push notifications api - pushalert.co -->
+<!-- <script type="text/javascript">
+        (function(d, t) {
+                var g = d.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+                g.src = "https://cdn.pushalert.co/integrate_004ca555b3f92956ab9cf37d5144df74.js";
+                s.parentNode.insertBefore(g, s);
+        }(document, "script"));
+</script> -->
 </head>
 
 <body>
@@ -269,5 +279,6 @@ $hasReminderDue = $notifResult['due_count'] > 0;
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
 </body>
 </html>
