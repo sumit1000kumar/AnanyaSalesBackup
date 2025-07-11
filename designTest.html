@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Service Report - Ananya Sales & Service</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      margin: 30px;
+      color: #000;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo img {
+      height: 40px;
+      margin-bottom: 4px;
+    }
+
+    .company-name {
+      color: #d35400;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .contact-info {
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .report-no {
+      text-align: right;
+      font-size: 12px;
+    }
+
+    .section {
+      margin-top: 15px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 3px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      padding: 5px;
+      vertical-align: top;
+    }
+
+    .bordered td, .bordered th {
+      border: 1px solid #333;
+    }
+
+    .checkbox-cell {
+      width: 10%;
+    }
+
+    .signature-row td {
+      padding-top: 30px;
+    }
+
+    .remarks-box {
+      height: 60px;
+      border: 1px solid #000;
+      margin-bottom: 5px;
+      padding: 5px;
+    }
+
+    .footer-table td {
+      border-top: 1px solid #000;
+      padding-top: 10px;
+    }
+
+    .checkbox {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 1px solid #000;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <img src="logo.jpg" alt="Logo" />
+      <div class="company-name">Ananya Sales & Service</div>
+      <div class="contact-info">
+        702, The Gold Crest, Plot no.5, Phase 2,<br />
+        Navde Colony, Navde, Panvel - 410206<br />
+        Mob.: 9699555898 | 8104223378<br />
+        Email: ananyasalesservice@gmail.com
+      </div>
+    </div>
+    <div class="report-no">
+      SERVICE REPORT: SER/ASS<br />
+      No.: <strong>1700</strong>
+    </div>
+  </div>
+
+  <!-- Customer Info -->
+  <div class="section">
+    <table>
+      <tr>
+        <td><strong>Customer Name:</strong> John Doe</td>
+        <td><strong>Attended By:</strong> Engineer A</td>
+      </tr>
+      <tr>
+        <td><strong>Address:</strong> 123 ABC Street, Navi Mumbai</td>
+        <td><strong>Date:</strong> 11-07-2025</td>
+      </tr>
+      <tr>
+        <td><strong>Phone No.:</strong> 9876543210</td>
+        <td><strong>Email ID:</strong> john@example.com</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Nature of Visit -->
+  <div class="section">
+    <div><strong>Nature of Visit:</strong> Installation / Warranty Paid Service / Service Contract / Demo / Validation / Inspection / F.S.</div>
+  </div>
+
+  <!-- Equipment Info -->
+  <div class="section">
+    <table class="bordered">
+      <tr>
+        <td><strong>Equipment:</strong> Lab Freezer</td>
+        <td><strong>Model No.:</strong> ABC123</td>
+        <td><strong>Serial No.:</strong> SN456789</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- AMC Checklist + Service Rendered -->
+  <div class="section">
+    <table class="bordered">
+      <tr>
+        <td style="width: 60%;">
+          <strong>AMC Checklist</strong><br/>
+          <div>■ Compressor Current <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Condenser Fan Motor <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ All Electric Connections <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Instrument Temp <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Blower Motor <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Heater <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Carbour Brush <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Centrifuge Rpm <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Recorder <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Agitator Motor <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Cleaning <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ AMC Visit 1 2 3 4 <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+          <div>■ Warranty & Paid Service <span class="checkbox"></span> Yes <span class="checkbox"></span> No</div>
+        </td>
+        <td>
+          <strong>Service Rendered:</strong><br />
+          General maintenance and component replacement.
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Remarks Section -->
+  <div class="section">
+    <div><strong>Our Remarks:</strong></div>
+    <div class="remarks-box">Everything is functioning properly.</div>
+
+    <div><strong>Spares Parts Used:</strong> Fan Motor & Sensor</div>
+    <div><strong>Recommended:</strong> Replace relay in next visit</div>
+
+    <div style="margin-top: 10px;"><strong>Customer's Remarks:</strong></div>
+    <div class="remarks-box">Very professional service, thank you.</div>
+  </div>
+
+  <!-- Footer with Signature -->
+  <div class="section">
+    <table class="footer-table">
+      <tr>
+        <td><strong>Customer's Name:</strong> John Doe</td>
+        <td><strong>Signature:</strong> ___________</td>
+        <td><strong>Engineer Signature:</strong> ___________</td>
+      </tr>
+      <tr>
+        <td><strong>Designation:</strong> Lab Manager</td>
+        <td colspan="2"><strong>Mobile No.:</strong> 9876543210</td>
+      </tr>
+    </table>
+  </div>
+
+</body>
+</html>

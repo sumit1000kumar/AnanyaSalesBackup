@@ -6,7 +6,8 @@ session_start();
 require_once '../includes/db.php';
 
 // Fetch customers with error handling
-$customerQuery = "SELECT id, name, contact, address, designation, email FROM customers ORDER BY name ASC";
+$customerQuery = "SELECT id, name, contact, address, designation, email, saved_signature FROM customers ORDER BY name ASC";
+
 $customerResult = $conn->query($customerQuery);
 
 switch (true) {
@@ -151,14 +152,23 @@ switch (true) {
             <select name="customer_id" class="form-select" onchange="populateCustomer(this)">
               <option value="">-- Select from saved --</option>
               <?php foreach ($customers as $cust): ?>
-                <option value="<?= $cust['id'] ?>"
+                <!-- <option value="<?= $cust['id'] ?>"
                   data-name="<?= htmlspecialchars($cust['name']) ?>"
                   data-contact="<?= htmlspecialchars($cust['contact']) ?>"
                   data-address="<?= htmlspecialchars($cust['address']) ?>"
                   data-designation="<?= htmlspecialchars($cust['designation']) ?>"
                   data-email="<?= htmlspecialchars($cust['email']) ?>">
                   <?= htmlspecialchars($cust['name']) ?> (<?= $cust['contact'] ?>)
-                </option>
+                </option> -->
+                <option value="<?= $cust['id'] ?>"
+  data-name="<?= htmlspecialchars($cust['name']) ?>"
+  data-contact="<?= htmlspecialchars($cust['contact']) ?>"
+  data-address="<?= htmlspecialchars($cust['address']) ?>"
+  data-designation="<?= htmlspecialchars($cust['designation']) ?>"
+  data-email="<?= htmlspecialchars($cust['email']) ?>"
+  data-signature="<?= htmlspecialchars($cust['saved_signature'] ?? '') ?>">
+  <?= htmlspecialchars($cust['name']) ?> (<?= $cust['contact'] ?>)
+</option>
               <?php endforeach; ?>
             </select>
           </div>
@@ -224,6 +234,7 @@ switch (true) {
         <h5 class="section-title">Remarks</h5>
         <div class="mb-3"><textarea name="our_remarks" class="form-control" rows="2" placeholder="Our Remarks"></textarea></div>
         <div class="mb-3"><textarea name="spare_parts" class="form-control" rows="2" placeholder="Spare Parts Used"></textarea></div>
+        <div class="mb-3"><textarea name="recommended" class="form-control" rows="2" placeholder="Recommended (if any)"></textarea></div>
         <div class="mb-3"><textarea name="customer_remarks" class="form-control" rows="2" placeholder="Customer's Remarks"></textarea></div>
 
         <hr class="my-4"/>
@@ -256,7 +267,7 @@ switch (true) {
 
         <!-- Signatures -->
         <h5 class="section-title">Signatures</h5>
-        <div class="row g-3">
+        <!-- <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label">Customer Signature (Upload)</label>
             <input type="file" name="customer_sign_upload" accept="image/*" class="form-control" required>
@@ -265,7 +276,31 @@ switch (true) {
             <label class="form-label">Engineer Signature (auto-selected)</label>
             <input type="text" name="engineer_signature_path" id="engineerSignature" class="form-control" readonly>
           </div>
-        </div>
+        </div> -->
+        <!-- ✅ Customer Signature Drawing Tool -->
+<div class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label">Customer Signature (Upload or Draw)</label>
+    <input type="file" name="customer_sign_upload" accept="image/*" class="form-control mb-2">
+
+    <!-- Canvas for drawing -->
+    <canvas id="signaturePad" width="300" height="120" style="border:1px solid #ccc; border-radius:5px;"></canvas>
+    <input type="hidden" name="customer_sign_data" id="customer_sign_data">
+    <div class="mt-2">
+  <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearSignature()">Clear</button>
+  <label class="ms-3">
+    <input type="checkbox" name="save_signature" value="1"> Save for next receipt
+  </label>
+  <button type="button" class="btn btn-sm btn-outline-primary ms-3" onclick="loadPreviousSignature()">Load Previous Signature</button>
+</div>
+
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Engineer Signature (auto-selected)</label>
+    <input type="text" name="engineer_signature_path" id="engineerSignature" class="form-control" readonly>
+  </div>
+</div>
 
         <div class="mt-4 text-end">
   <button type="reset" class="btn btn-outline-secondary"><i class="bi bi-x-circle me-1"></i> Reset</button>
@@ -301,18 +336,98 @@ switch (true) {
   <footer class="main-footer">
     <div class="container">Built by Sumit Kumar</div>
   </footer>
-
 </div>
+
+<!-- signature pad -->
+<script>
+  const canvas = document.getElementById("signaturePad");
+  const ctx = canvas.getContext("2d");
+  let drawing = false;
+
+  canvas.addEventListener("mousedown", () => drawing = true);
+  canvas.addEventListener("mouseup", () => drawing = false);
+  canvas.addEventListener("mouseout", () => drawing = false);
+  canvas.addEventListener("mousemove", draw);
+
+  function draw(e) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#000";
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  }
+
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("customer_sign_data").value = "";
+  }
+
+  // Save canvas data on form submit
+  document.getElementById("receiptForm").addEventListener("submit", function(e) {
+    const signatureData = canvas.toDataURL("image/png");
+    if (signatureData.includes("data:image/png;base64")) {
+      document.getElementById("customer_sign_data").value = signatureData;
+    }
+  });
+</script>
 
 <script>
   function populateCustomer(sel) {
-    const opt = sel.options[sel.selectedIndex];
-    document.getElementById('customer_name').value = opt.dataset.name || '';
-    document.getElementById('customer_contact').value = opt.dataset.contact || '';
-    document.getElementById('customer_address').value = opt.dataset.address || '';
-    document.querySelector('[name="designation"]').value = opt.dataset.designation || '';
-    document.querySelector('[name="email"]').value = opt.dataset.email || '';
+  const opt = sel.options[sel.selectedIndex];
+  document.getElementById('customer_name').value = opt.dataset.name || '';
+  document.getElementById('customer_contact').value = opt.dataset.contact || '';
+  document.getElementById('customer_address').value = opt.dataset.address || '';
+  document.querySelector('[name="designation"]').value = opt.dataset.designation || '';
+  document.querySelector('[name="email"]').value = opt.dataset.email || '';
+
+  // Load saved signature if available
+  const savedSignPath = opt.dataset.signature;
+  if (savedSignPath) {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous'; // For base64 conversion
+    img.onload = function () {
+      const canvas = document.getElementById("signaturePad");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Set base64 data to hidden input
+      document.getElementById("customer_sign_data").value = canvas.toDataURL("image/png");
+    };
+    img.src = "../" + savedSignPath;
+  } else {
+    clearSignature();
   }
+}
+
+function loadPreviousSignature() {
+  const customerSelect = document.querySelector('[name="customer_id"]');
+  const selectedOption = customerSelect.options[customerSelect.selectedIndex];
+  const savedSignPath = selectedOption.dataset.signature;
+
+  if (!savedSignPath) {
+    alert("No saved signature found for this customer.");
+    return;
+  }
+
+  const img = new Image();
+  img.crossOrigin = 'Anonymous'; // required for base64 conversion
+  img.onload = function () {
+    const canvas = document.getElementById("signaturePad");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Store base64 in hidden input for submission
+    document.getElementById("customer_sign_data").value = canvas.toDataURL("image/png");
+  };
+  img.src = "../" + savedSignPath;
+}
+
 
   function toggleEngineerInput(sel) {
     const val = sel.value;
