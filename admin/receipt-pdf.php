@@ -82,12 +82,12 @@ $engineerSign = $engineerPathInput ? realpath(__DIR__ . '/../' . $engineerPathIn
   <meta charset="UTF-8" />
   <title>Service Report - Ananya Sales & Service</title>
   <style>
-    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; color: #000; }
-    .page { height: 1200px; display: flex; flex-direction: column; justify-content: space-between; }
+    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; margin-bottom: 0; color: #000; }
+    .page { height: 1000px; display: flex; flex-direction: column; justify-content: space-between; }
     .header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; }
     .logo img { height: 50px; margin-bottom: 5px; }
     .company-name { color: red; font-weight: bold; font-size: 20px; }
-    .contact-info { font-size: 10px; margin-top: 4px; }
+    .contact-info { font-size: 12px; margin-top: 4px; }
     .report-no { text-align: right; font-size: 12px; }
     .section { margin-top: 12px; }
     table { width: 100%; border-collapse: collapse; }
@@ -104,6 +104,7 @@ $engineerSign = $engineerPathInput ? realpath(__DIR__ . '/../' . $engineerPathIn
     .checklist-table td:first-child { text-align: left; width: 70%; }
     .checked { display: inline-block; width: 10px; height: 10px; background-color: black; border: 1px solid #000; margin: auto; }
     .unchecked { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; margin: auto; }
+    
   </style>
 </head>
 <body>
