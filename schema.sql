@@ -15,8 +15,8 @@ CREATE TABLE complaints (
   PRIMARY KEY (id)
 );
 
--- for chat option --
-CREATE TABLE complaint_messages (
+--for chat option --conversations
+CREATE TABLE conversations (
   id INT(11) NOT NULL AUTO_INCREMENT,
   complaint_id INT(11) NOT NULL,
   sender_id INT(11) NOT NULL,
