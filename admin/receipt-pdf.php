@@ -69,7 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $engineerId = $data['engineer_id'] ?? '';
   $engineerCustom = $data['engineer_custom_name'] ?? '';
   $engineerName = ($engineerId === 'other') ? $engineerCustom : getEngineerName($conn, $engineerId);
-  $engineerSign = !empty($data['engineer_signature_path']) ? realpath($data['engineer_signature_path']) : '';
+  $engineerPathInput = $data['engineer_signature_path'] ?? '';
+$engineerSign = $engineerPathInput ? realpath(__DIR__ . '/../' . $engineerPathInput) : '';
+
  $logoPath = 'assets/images/logo/logo-report.jpeg';
 
   // Start HTML
@@ -84,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .page { height: 1200px; display: flex; flex-direction: column; justify-content: space-between; }
     .header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; }
     .logo img { height: 50px; margin-bottom: 5px; }
-    .company-name { color: #d35400; font-weight: bold; font-size: 20px; }
+    .company-name { color: red; font-weight: bold; font-size: 20px; }
     .contact-info { font-size: 10px; margin-top: 4px; }
     .report-no { text-align: right; font-size: 12px; }
     .section { margin-top: 12px; }
@@ -111,8 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <!-- Header -->
   <div class="header">
     <div class="logo">
-      <img src="../assets/images/logo/logo.jpg" alt="Logo" />
-      <div class="company-name">Ananya Sales & Service</div>
+      
+      <div class="company-name">
+        <img src="data:image/jpeg;base64,' . base64_encode(file_get_contents('../assets/images/logo/logo.jpg')) . '" style="margin-right:5px; vertical-align:middle;" />
+        Ananya Sales & Service
+      </div>
       <div class="contact-info">
         702, The Gold Crest, Plot no.5, Phase 2,<br />
         Navde Colony, Navde, Panvel - 410206<br />
@@ -200,9 +205,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <tr>
         <td><strong>Customer\'s Name:</strong> ' . htmlspecialchars($data["customer_name"]) . '</td>
         <td><strong>Signature:</strong><br/>' .
-          ($signaturePath && file_exists($signaturePath) ? '<img src="file://' . $signaturePath . '" height="40"/>' : '__________') . '</td>
-        <td><strong>Engineer Signature:</strong><br/>' .
-          ($engineerSign && file_exists($engineerSign) ? '<img src="file://' . $engineerSign . '" height="40"/>' : '__________') . '</td>
+  ($signaturePath && file_exists($signaturePath) ?
+    '<img src="data:image/' . pathinfo($signaturePath, PATHINFO_EXTENSION) . ';base64,' . base64_encode(file_get_contents($signaturePath)) . '" height="40"/>' :
+    '__________') . '</td>
+
+<td><strong>Engineer Signature:</strong><br/>' .
+  ($engineerSign && file_exists($engineerSign) ?
+    '<img src="data:image/' . pathinfo($engineerSign, PATHINFO_EXTENSION) . ';base64,' . base64_encode(file_get_contents($engineerSign)) . '" height="40"/>' :
+    '__________') . '</td>
+
+
       </tr>
       <tr>
         <td><strong>Designation:</strong> ' . htmlspecialchars($data["designation"]) . '</td>
