@@ -6,31 +6,59 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 }
 
 include '../includes/db.php';
-
 // ADD ENGINEER
 if (isset($_POST['add_engineer'])) {
   $name = mysqli_real_escape_string($conn, $_POST['name']);
+  $relativePath = '';
 
-  if ($_FILES['signature']['error'] === 0) {
+  if ($_POST['signature_type'] === 'upload' && $_FILES['signature']['error'] === 0) {
     $uploadDir = '../uploads/engineers/';
     $filename = uniqid() . '_' . basename($_FILES['signature']['name']);
     $uploadPath = $uploadDir . $filename;
 
     if (move_uploaded_file($_FILES['signature']['tmp_name'], $uploadPath)) {
       $relativePath = 'uploads/engineers/' . $filename;
-      $query = "INSERT INTO engineers (name, signature_path) VALUES ('$name', '$relativePath')";
-      if (mysqli_query($conn, $query)) {
-        $success = "Engineer added successfully!";
-      } else {
-        $error = "Database error: " . mysqli_error($conn);
-      }
     } else {
       $error = "Failed to upload signature.";
     }
+
+  } elseif ($_POST['signature_type'] === 'draw' && !empty($_POST['drawn_signature'])) {
+    $uploadDir = '../uploads/engineers/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+    $base64 = $_POST['drawn_signature'];
+    if (preg_match('/^data:image\/(\w+);base64,/', $base64, $type)) {
+      $base64 = substr($base64, strpos($base64, ',') + 1);
+      $decoded = base64_decode($base64);
+      $ext = strtolower($type[1]);
+
+      $filename = uniqid() . '_drawn.' . $ext;
+      $uploadPath = $uploadDir . $filename;
+
+      if (file_put_contents($uploadPath, $decoded)) {
+        $relativePath = 'uploads/engineers/' . $filename;
+      } else {
+        $error = "Failed to save drawn signature.";
+      }
+    } else {
+      $error = "Invalid drawn signature format.";
+    }
+
   } else {
-    $error = "File upload error.";
+    $error = "No signature provided.";
+  }
+
+  // Save engineer if no errors
+  if (!isset($error)) {
+    $query = "INSERT INTO engineers (name, signature_path) VALUES ('$name', '$relativePath')";
+    if (mysqli_query($conn, $query)) {
+      $success = "Engineer added successfully!";
+    } else {
+      $error = "Database error: " . mysqli_error($conn);
+    }
   }
 }
+
 
 // DELETE ENGINEER
 if (isset($_POST['delete_engineer'])) {
@@ -163,22 +191,46 @@ if (isset($_POST['delete_engineer'])) {
     <?php endif; ?>
 
     <!-- Add Engineer Form -->
-    <div class="card mb-4">
-      <div class="card-header text-white" style="background-color: var(--primary-color); border: 1px solid var(--primary-color);">Add New Engineer</div>
-      <div class="card-body">
-        <form action="" method="POST" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label for="name" class="form-label">Engineer Name</label>
-            <input type="text" name="name" class="form-control" required />
-          </div>
-          <div class="mb-3">
-            <label for="signature" class="form-label">Signature Image</label>
-            <input type="file" name="signature" class="form-control" accept="image/*" required />
-          </div>
-          <button type="submit" name="add_engineer" class="btn btn-success">Add Engineer</button>
-        </form>
+<div class="card mb-4">
+  <div class="card-header text-white" style="background-color: var(--primary-color); border: 1px solid var(--primary-color);">
+    Add New Engineer
+  </div>
+  <div class="card-body">
+    <form action="" method="POST" enctype="multipart/form-data" onsubmit="return handleSignatureSubmit();">
+      <div class="mb-3">
+        <label for="name" class="form-label">Engineer Name</label>
+        <input type="text" name="name" class="form-control" required />
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label class="form-label">Signature Option</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="signature_type" id="uploadOption" value="upload" checked>
+          <label class="form-check-label" for="uploadOption">Upload Signature</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="signature_type" id="drawOption" value="draw">
+          <label class="form-check-label" for="drawOption">Draw Signature</label>
+        </div>
+      </div>
+
+      <div id="uploadContainer" class="mb-3">
+        <label for="signature" class="form-label">Upload Image</label>
+        <input type="file" name="signature" class="form-control" accept="image/*" />
+      </div>
+
+      <div id="drawContainer" class="mb-3" style="display: none;">
+        <label class="form-label">Draw Signature</label>
+        <canvas id="signaturePad" width="400" height="120" style="border:1px solid #ccc;"></canvas><br>
+        <button type="button" class="btn btn-sm btn-warning my-2" onclick="clearSignature()">Clear</button>
+        <input type="hidden" name="drawn_signature" id="drawn_signature">
+      </div>
+
+      <button type="submit" name="add_engineer" class="btn btn-success">Add Engineer</button>
+    </form>
+  </div>
+</div>
+
 
     <!-- Engineer List Table -->
     <div class="card">
@@ -228,6 +280,58 @@ if (isset($_POST['delete_engineer'])) {
       <span class="text-muted">Built by Sumit Kumar</span>
     </div>
   </footer>
+
+  <!-- signature pad -->
+  <script>
+  const uploadOption = document.getElementById('uploadOption');
+  const drawOption = document.getElementById('drawOption');
+  const uploadContainer = document.getElementById('uploadContainer');
+  const drawContainer = document.getElementById('drawContainer');
+
+  uploadOption.addEventListener('change', () => {
+    uploadContainer.style.display = 'block';
+    drawContainer.style.display = 'none';
+  });
+
+  drawOption.addEventListener('change', () => {
+    uploadContainer.style.display = 'none';
+    drawContainer.style.display = 'block';
+  });
+
+  // Canvas Drawing
+  const canvas = document.getElementById('signaturePad');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  canvas.addEventListener('mousedown', () => drawing = true);
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseout', () => drawing = false);
+  canvas.addEventListener('mousemove', draw);
+
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000';
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+  }
+
+  function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function handleSignatureSubmit() {
+    if (drawOption.checked) {
+      const dataURL = canvas.toDataURL('image/png');
+      document.getElementById('drawn_signature').value = dataURL;
+    }
+    return true;
+  }
+</script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
