@@ -6,6 +6,43 @@ session_start();
 require_once '../includes/db.php';
 require_once '../vendor/autoload.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $saveData = [];
+    if (!empty($_POST['customer_id'])) {
+        $customerId = (int) $_POST['customer_id'];
+
+        if (!empty($_POST['save_equipment'])) {
+            $saveData['saved_equipment'] = $_POST['equipment'];
+        }
+        if (!empty($_POST['save_model_no'])) {
+            $saveData['saved_model_no'] = $_POST['model_no'];
+        }
+        if (!empty($_POST['save_serial_no'])) {
+            $saveData['saved_serial_no'] = $_POST['serial_no'];
+        }
+        if (!empty($_POST['save_service_rendered'])) {
+            $saveData['saved_service_rendered'] = $_POST['service_rendered'];
+        }
+
+        // Always save latest remarks
+        $saveData['last_our_remarks'] = $_POST['our_remarks'] ?? null;
+        $saveData['last_spare_parts'] = $_POST['spare_parts'] ?? null;
+        $saveData['last_recommended'] = $_POST['recommended'] ?? null;
+        $saveData['last_customer_remarks'] = $_POST['customer_remarks'] ?? null;
+
+        if (!empty($saveData)) {
+            $updateSql = "UPDATE customers SET ";
+            $updateSql .= implode(", ", array_map(fn($key) => "$key = ?", array_keys($saveData)));
+            $updateSql .= " WHERE id = ?";
+            $stmt = $conn->prepare($updateSql);
+            $params = array_merge(array_values($saveData), [$customerId]);
+            $types = str_repeat("s", count($saveData)) . "i";
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+        }
+    }
+}
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -34,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   // Upload customer signature (drawn or uploaded)
   $signaturePath = '';
-  $savedSignaturePath = '';
   $uploadDir = realpath('../uploads/signatures') . DIRECTORY_SEPARATOR;
   if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
@@ -43,55 +79,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $target = $uploadDir . $filename;
     if (move_uploaded_file($_FILES['customer_sign_upload']['tmp_name'], $target)) {
       $signaturePath = $target;
-      $savedSignaturePath = 'uploads/signatures/' . $filename;
     }
   } elseif (!empty($_POST['customer_sign_data'])) {
     $base64 = $_POST['customer_sign_data'];
     if (preg_match('/^data:image\/(\w+);base64,/', $base64, $type)) {
       $base64 = substr($base64, strpos($base64, ',') + 1);
       $type = strtolower($type[1]);
+
       if (in_array($type, ['png', 'jpg', 'jpeg'])) {
         $decoded = base64_decode($base64);
         if ($decoded !== false) {
           $filename = 'cust_drawn_' . time() . '.' . $type;
           $signaturePath = $uploadDir . $filename;
           file_put_contents($signaturePath, $decoded);
-          $savedSignaturePath = 'uploads/signatures/' . $filename;
+
+          // Save drawn signature for next receipt
+          if (!empty($data['save_signature']) && !empty($data['customer_id']) && is_numeric($data['customer_id'])) {
+  $relative = 'uploads/signatures/' . $filename;
+  $stmt = $conn->prepare("UPDATE customers SET saved_signature = ? WHERE id = ?");
+  $stmt->bind_param("si", $relative, $data['customer_id']);
+  $stmt->execute();
+}
+
         }
       }
     }
-  }
-
-  // Auto-save customer data
-  if (!empty($data['customer_id'])) {
-    $cid = intval($data['customer_id']);
-
-    $saveStmt = $conn->prepare("UPDATE customers SET 
-      saved_equipment = ?, 
-      saved_model_no = ?, 
-      saved_serial_no = ?, 
-      saved_service_rendered = ?, 
-      last_our_remarks = ?, 
-      last_spare_parts = ?, 
-      last_recommended = ?, 
-      last_customer_remarks = ?, 
-      saved_signature = ? 
-      WHERE id = ?");
-
-    $saveStmt->bind_param(
-      "sssssssssi",
-      $data['equipment'],
-      $data['model_no'],
-      $data['serial_no'],
-      $data['service_rendered'],
-      $data['our_remarks'],
-      $data['spare_parts'],
-      $data['recommended'],
-      $data['customer_remarks'],
-      $savedSignaturePath,
-      $cid
-    );
-    $saveStmt->execute();
   }
 
   // Engineer info
@@ -99,10 +111,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $engineerCustom = $data['engineer_custom_name'] ?? '';
   $engineerName = ($engineerId === 'other') ? $engineerCustom : getEngineerName($conn, $engineerId);
   $engineerPathInput = $data['engineer_signature_path'] ?? '';
-  $engineerSign = $engineerPathInput ? realpath(__DIR__ . '/../' . $engineerPathInput) : '';
-  $logoPath = 'assets/images/logo/logo-report.jpeg';
+$engineerSign = $engineerPathInput ? realpath(__DIR__ . '/../' . $engineerPathInput) : '';
 
-  ob_start();
+ $logoPath = 'assets/images/logo/logo-report.jpeg';
+
+  // Start HTML
   $html = '
 <!DOCTYPE html>
 <html lang="en">
@@ -232,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="section">
     <table class="footer-table">
       <tr>
-        <td><strong>Technician\ Name:</strong> ' . htmlspecialchars($data["current_technician_name"]) . '</td>
+        <td><strong>Customer\'s Name:</strong> ' . htmlspecialchars($data["customer_name"]) . '</td>
         <td><strong>Signature:</strong><br/>' .
   ($signaturePath && file_exists($signaturePath) ?
     '<img src="data:image/' . pathinfo($signaturePath, PATHINFO_EXTENSION) . ';base64,' . base64_encode(file_get_contents($signaturePath)) . '" height="40"/>' :
@@ -246,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       </tr>
       <tr>
-        <td><strong>Technician Designation:</strong> ' . htmlspecialchars($data["current_technician_designation"]) . '</td>
+        <td><strong>Designation:</strong> ' . htmlspecialchars($data["designation"]) . '</td>
         <td colspan="2"><strong>Mobile No.:</strong> ' . htmlspecialchars($data["phone"]) . '</td>
       </tr>
     </table>
@@ -258,12 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </html>
 ';
 
-  // Insert generated report no so it's available in template
-  $data['generated_report_no'] = $reportNo;
-  $data['engineer_name'] = $engineerName;
-  $data['customer_signature_path'] = $signaturePath;
-  $data['engineer_signature_path'] = $engineerSign;
-
+  // Generate PDF
   $options = new Options();
   $options->set('isRemoteEnabled', true);
   $options->set('defaultFont', 'Arial');
@@ -293,8 +301,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   );
   $stmt->execute();
 
-  // $dompdf->stream("service_receipt_{$currentReportNo}.pdf", ["Attachment" => false]);
-  // exit;
-  header("Location: receipt-list.php?pdf=" . urlencode($pdfRelativePath)); exit;
+  // Output to browser
+  $dompdf->stream("service_receipt_{$currentReportNo}.pdf", ["Attachment" => false]);
+  exit;
 }
 ?>

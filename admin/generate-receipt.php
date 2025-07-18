@@ -6,7 +6,8 @@ session_start();
 require_once '../includes/db.php';
 
 // Fetch customers with error handling
-$customerQuery = "SELECT id, name, contact, address, designation, email, saved_signature FROM customers ORDER BY name ASC";
+$customerQuery = "SELECT id, name, contact, address, designation, email, saved_signature, saved_equipment, saved_model_no, saved_serial_no, saved_service_rendered, last_our_remarks, last_spare_parts, last_recommended, last_customer_remarks FROM customers ORDER BY name ASC";
+
 
 $customerResult = $conn->query($customerQuery);
 
@@ -166,9 +167,19 @@ switch (true) {
   data-address="<?= htmlspecialchars($cust['address']) ?>"
   data-designation="<?= htmlspecialchars($cust['designation']) ?>"
   data-email="<?= htmlspecialchars($cust['email']) ?>"
-  data-signature="<?= htmlspecialchars($cust['saved_signature'] ?? '') ?>">
+  data-signature="<?= htmlspecialchars($cust['saved_signature'] ?? '') ?>"
+  data-equipment="<?= htmlspecialchars($cust['saved_equipment'] ?? '') ?>"
+  data-model_no="<?= htmlspecialchars($cust['saved_model_no'] ?? '') ?>"
+  data-serial_no="<?= htmlspecialchars($cust['saved_serial_no'] ?? '') ?>"
+  data-service_rendered="<?= htmlspecialchars($cust['saved_service_rendered'] ?? '') ?>"
+  data-our_remarks="<?= htmlspecialchars($cust['last_our_remarks'] ?? '') ?>"
+  data-spare_parts="<?= htmlspecialchars($cust['last_spare_parts'] ?? '') ?>"
+  data-recommended="<?= htmlspecialchars($cust['last_recommended'] ?? '') ?>"
+  data-customer_remarks="<?= htmlspecialchars($cust['last_customer_remarks'] ?? '') ?>"
+>
   <?= htmlspecialchars($cust['name']) ?> (<?= $cust['contact'] ?>)
 </option>
+
               <?php endforeach; ?>
             </select>
           </div>
@@ -185,25 +196,47 @@ switch (true) {
         <hr class="my-4"/>
 
         <!-- Equipment -->
-        <h5 class="section-title">Service & Equipment Details</h5>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <select name="nature_of_visit" class="form-select" required>
-              <option value="">Nature of Visit</option>
-              <option>Installation</option>
-              <option>Warranty</option>
-              <option>Paid Service</option>
-              <option>Service Contract</option>
-              <option>Demo</option>
-              <option>Validation</option>
-              <option>Inspection</option>
-              <option>F.S.</option>
-            </select>
-          </div>
-          <div class="col-md-6"><input name="equipment" class="form-control" placeholder="Equipment"></div>
-          <div class="col-md-6"><input name="model_no" class="form-control" placeholder="Model No."></div>
-          <div class="col-md-6"><input name="serial_no" class="form-control" placeholder="Serial No."></div>
-        </div>
+<h5 class="section-title">Service & Equipment Details</h5>
+<div class="row g-3">
+  <div class="col-md-6">
+    <select name="nature_of_visit" class="form-select" required>
+      <option value="">Nature of Visit</option>
+      <option>Installation</option>
+      <option>Warranty</option>
+      <option>Paid Service</option>
+      <option>Service Contract</option>
+      <option>Demo</option>
+      <option>Validation</option>
+      <option>Inspection</option>
+      <option>F.S.</option>
+    </select>
+  </div>
+
+  <div class="col-md-6">
+    <input name="equipment" class="form-control" placeholder="Equipment">
+    <div class="form-check mt-1">
+      <input class="form-check-input" type="checkbox" name="save_equipment" value="1" id="save_equipment">
+      <label class="form-check-label" for="save_equipment">Save Equipment</label>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <input name="model_no" class="form-control" placeholder="Model No.">
+    <div class="form-check mt-1">
+      <input class="form-check-input" type="checkbox" name="save_model_no" value="1" id="save_model_no">
+      <label class="form-check-label" for="save_model_no">Save Model No.</label>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <input name="serial_no" class="form-control" placeholder="Serial No.">
+    <div class="form-check mt-1">
+      <input class="form-check-input" type="checkbox" name="save_serial_no" value="1" id="save_serial_no">
+      <label class="form-check-label" for="save_serial_no">Save Serial No.</label>
+    </div>
+  </div>
+</div>
+
 
         <hr class="my-4"/>
 
@@ -230,12 +263,21 @@ switch (true) {
 
         <hr class="my-4"/>
 
-        <!-- Remarks -->
-        <h5 class="section-title">Remarks</h5>
-        <div class="mb-3"><textarea name="our_remarks" class="form-control" rows="2" placeholder="Our Remarks"></textarea></div>
-        <div class="mb-3"><textarea name="spare_parts" class="form-control" rows="2" placeholder="Spare Parts Used"></textarea></div>
-        <div class="mb-3"><textarea name="recommended" class="form-control" rows="2" placeholder="Recommended (if any)"></textarea></div>
-        <div class="mb-3"><textarea name="customer_remarks" class="form-control" rows="2" placeholder="Customer's Remarks"></textarea></div>
+        <h5 class="section-title mt-4">Remarks</h5>
+
+<div class="mb-3">
+  <textarea name="our_remarks" class="form-control" rows="2" placeholder="Our Remarks"></textarea>
+</div>
+<div class="mb-3">
+  <textarea name="spare_parts" class="form-control" rows="2" placeholder="Spare Parts Used"></textarea>
+</div>
+<div class="mb-3">
+  <textarea name="recommended" class="form-control" rows="2" placeholder="Recommended (if any)"></textarea>
+</div>
+<div class="mb-3">
+  <textarea name="customer_remarks" class="form-control" rows="2" placeholder="Customer's Remarks"></textarea>
+</div>
+
 
         <hr class="my-4"/>
 
@@ -261,6 +303,18 @@ switch (true) {
           </div>
           <div class="col-md-6"><input type="date" name="service_date" class="form-control" value="<?= date('Y-m-d') ?>" required></div>
           <div class="col-md-6"><input name="service_rendered" class="form-control" placeholder="Service Rendered"></div>
+          <div class="form-check mt-1">
+          <input class="form-check-input" type="checkbox" name="save_service_rendered" value="1" id="save_service_rendered">
+          <label class="form-check-label" for="save_service_rendered">Save Service Rendered</label>
+          <div class="col-md-6">
+  <input name="current_technician_name" class="form-control" placeholder="Name of Current Technician">
+</div>
+<div class="col-md-6">
+  <input name="current_technician_designation" class="form-control" placeholder="Designation of Current Technician">
+</div>
+
+        </div>
+
         </div>
 
         <hr class="my-4"/>
@@ -441,24 +495,32 @@ switch (true) {
 <script>
   function populateCustomer(sel) {
   const opt = sel.options[sel.selectedIndex];
+
   document.getElementById('customer_name').value = opt.dataset.name || '';
   document.getElementById('customer_contact').value = opt.dataset.contact || '';
   document.getElementById('customer_address').value = opt.dataset.address || '';
   document.querySelector('[name="designation"]').value = opt.dataset.designation || '';
   document.querySelector('[name="email"]').value = opt.dataset.email || '';
 
-  // Load saved signature if available
+  document.querySelector('[name="equipment"]').value = opt.dataset.equipment || '';
+  document.querySelector('[name="model_no"]').value = opt.dataset.model_no || '';
+  document.querySelector('[name="serial_no"]').value = opt.dataset.serial_no || '';
+  document.querySelector('[name="service_rendered"]').value = opt.dataset.service_rendered || '';
+  document.querySelector('[name="our_remarks"]').value = opt.dataset.our_remarks || '';
+  document.querySelector('[name="spare_parts"]').value = opt.dataset.spare_parts || '';
+  document.querySelector('[name="recommended"]').value = opt.dataset.recommended || '';
+  document.querySelector('[name="customer_remarks"]').value = opt.dataset.customer_remarks || '';
+
+  // Signature restore
   const savedSignPath = opt.dataset.signature;
   if (savedSignPath) {
     const img = new Image();
-    img.crossOrigin = 'Anonymous'; // For base64 conversion
+    img.crossOrigin = 'Anonymous';
     img.onload = function () {
       const canvas = document.getElementById("signaturePad");
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      // Set base64 data to hidden input
       document.getElementById("customer_sign_data").value = canvas.toDataURL("image/png");
     };
     img.src = "../" + savedSignPath;
@@ -466,6 +528,7 @@ switch (true) {
     clearSignature();
   }
 }
+
 
 function loadPreviousSignature() {
   const customerSelect = document.querySelector('[name="customer_id"]');
@@ -543,11 +606,14 @@ function previewReport() {
     </ul>
 
     <h6>Service Report</h6>
-    <ul>
-      <li><strong>Engineer:</strong> ${data.get('engineer_id') || data.get('engineer_custom_name')}</li>
-      <li><strong>Service Date:</strong> ${data.get('service_date')}</li>
-      <li><strong>Service Rendered:</strong> ${data.get('service_rendered')}</li>
-    </ul>
+<ul>
+  <li><strong>Engineer:</strong> ${data.get('engineer_id') || data.get('engineer_custom_name')}</li>
+  <li><strong>Service Date:</strong> ${data.get('service_date')}</li>
+  <li><strong>Service Rendered:</strong> ${data.get('service_rendered')}</li>
+  <li><strong>Technician Name:</strong> ${data.get('current_technician_name')}</li>
+  <li><strong>Technician Designation:</strong> ${data.get('current_technician_designation')}</li>
+</ul>
+
   `;
 
   document.getElementById('previewContent').innerHTML = previewHtml;
