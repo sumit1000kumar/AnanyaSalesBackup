@@ -567,6 +567,15 @@ $result = $conn->query($query);
   </a>
 </div>
 
+<?php
+// Preserve current filters in export links
+$exportBase = "export=";
+$queryString = http_build_query(array_filter([
+  'status' => $filter_status,
+  'search' => $search_term,
+]));
+$baseQuery = $queryString ? "$queryString&" : "";
+?>
         <!-- <div class="col-md-1"> -->
   <div class="col-md-2">
   <div class="dropdown">
@@ -574,8 +583,8 @@ $result = $conn->query($query);
       <i class="bi bi-download me-1"></i> Export
     </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="?export=excel">Excel (.csv)</a></li>
-      <li><a class="dropdown-item" href="?export=pdf">PDF</a></li>
+      <li><a class="dropdown-item" href="?<?= $baseQuery ?>export=excel">Excel (.csv)</a></li>
+      <li><a class="dropdown-item" href="?<?= $baseQuery ?>export=pdf">PDF</a></li>
     </ul>
   </div>
 <!-- </div> -->
