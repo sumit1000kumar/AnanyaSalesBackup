@@ -27,11 +27,11 @@ if (isset($_SESSION['user_id'])) {
   <title>Ananya Sales & Service | Blood Bank Equipment Specialists</title>
 
   <!-- Favicon -->
-  <link rel="icon" href="../assets/images/favicon/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon/favicon-16x16.png">
-  <link rel="manifest" href="../assets/images/favicon/site.webmanifest">
+  <link rel="icon" href="assets/images/favicon/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="assets/images/favicon/site.webmanifest">
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -290,7 +290,7 @@ if (isset($_SESSION['user_id'])) {
   <!-- Hero Section -->
   <section class="hero-section text-center">
     <div class="container">
-        <h1 class="fw-bold mb-3 text-white"> <img src="assets/images/logo/logo.jpg" alt="Ananya Sales & Service Logo" style="height:64px;width:auto; margin-right: 15px;" >Ananya Sales & Service</h1>
+        <h1 class="fw-bold mb-3 text-white"> <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" style="height:64px;width:auto; margin-right: 15px; background-color: transparent;" >Ananya Sales & Service</h1>
       <p class="lead mb-4 text-white">Specialized Maintenance & Calibration for Blood Bank Equipment</p>
       <div class="d-flex btn-group-responsive justify-content-center">
         <a href="auth/login.php" class="btn btn-primary btn-lg">

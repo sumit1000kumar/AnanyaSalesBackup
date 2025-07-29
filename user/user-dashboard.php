@@ -396,7 +396,7 @@ $result = $stmt->get_result();
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-          <img src="../assets/images/logo/logo.jpg" alt="Logo" style="height:40px; vertical-align:middle; margin-right:10px; padding: 5px; border-radius: 10px; background-color: white;">
+          <img src="../assets/images/logo/logo-noBg.png" alt="Logo" style="height:40px; vertical-align:middle; margin-right:10px; padding: 5px; border-radius: 10px; background-color: white;">
           <h1 class="h4 mb-0 d-inline align-middle">Ananya Sales and Service</h1>
         </div>
         <a href="../auth/logout.php" class="btn btn-outline-light btn-sm">

@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="logo">
       
       <div class="company-name">
-        <img src="data:image/jpeg;base64,' . base64_encode(file_get_contents('../assets/images/logo/logo.jpg')) . '" style="margin-right:5px; vertical-align:middle;" />
+        <img src="data:image/jpeg;base64,' . base64_encode(file_get_contents('../assets/images/logo/logo-noBg.png')) . '" style="margin-right:5px; vertical-align:middle;" />
         Ananya Sales & Service
       </div>
       <div class="contact-info">

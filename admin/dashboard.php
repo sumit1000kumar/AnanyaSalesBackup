@@ -164,7 +164,7 @@ $hasReminderDue = $notifResult['due_count'] > 0;
     <div class="dashboard-header">
       <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
         <div class="d-flex align-items-center mb-3 mb-md-0">
-          <img src="../assets/images/logo/logo.jpg" alt="Logo" width="50" class="me-3" style="border-radius: 10px; background-color: white; padding: 5px;">
+          <img src="../assets/images/logo/logo-noBg.png" alt="Logo" width="50" class="me-3" style="border-radius: 10px; background-color: white; padding: 5px;">
           <h2 class="mb-0 fw-bold">Ananya Sales and Service</h2>
         </div>
         <div class="text-end">
