@@ -31,7 +31,9 @@ if (isset($_SESSION['user_id'])) {
   <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
-  <link rel="manifest" href="assets/images/favicon/site.webmanifest">
+  <!-- <link rel="manifest" href="assets/images/favicon/site.webmanifest"> -->
+  <link rel="manifest" href="/manifest.json">
+
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -274,6 +276,20 @@ if (isset($_SESSION['user_id'])) {
         margin-bottom: 0;
       }
     }
+
+    #installApp{
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 10px 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
   </style>
   
   <!-- web push notifications api - pushalert.co -->
@@ -287,6 +303,8 @@ if (isset($_SESSION['user_id'])) {
 </script> -->
 </head>
 <body>
+  <button id="installApp" style="display:none;">Install App</button>
+
   <!-- Hero Section -->
   <section class="hero-section text-center">
     <div class="container">
@@ -657,6 +675,30 @@ if (isset($_SESSION['user_id'])) {
       </div>
     </div>
   </footer>
+
+  <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+    .catch(err => console.error('❌ SW registration failed:', err));
+}
+</script>
+  
+<script>
+  let deferredPrompt;
+const installBtn = document.getElementById('installApp');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'block';
+
+  installBtn.addEventListener('click', () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+  });
+});
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
