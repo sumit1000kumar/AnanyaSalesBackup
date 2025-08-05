@@ -55,167 +55,366 @@ if (isset($_SESSION['user_id'])) {
       --danger-color: #ef4444;           /* Bright red */
       --light-bg: #f8f9fa;               /* Light background */
       --dark-text: #212529;
-      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
     }
     
     body {
-      background-color: var(--light-bg);
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       font-family: 'Open Sans', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       color: var(--dark-text);
+      position: relative;
+    }
+
+    /* Animated background elements */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(227, 6, 19, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 89, 100, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(169, 3, 13, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
     
     /* Hero Section */
     .hero-section {
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background: linear-gradient(135deg, rgba(227, 6, 19, 0.95), rgba(169, 3, 13, 0.95)), 
+                  url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
       background-size: cover;
       background-position: center;
+      background-attachment: fixed;
       color: white;
-      padding: 3rem 0;
-      margin-bottom: 2rem;
+      padding: 4rem 0;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-logo {
+      height: 80px;
+      width: auto;
+      margin-right: 20px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
     }
     
     @media (min-width: 768px) {
       .hero-section {
-        padding: 5rem 0;
-        margin-bottom: 3rem;
+        padding: 6rem 0;
+        margin-bottom: 4rem;
       }
     }
     
     /* Service Cards */
     .service-card {
       border: none;
-      border-radius: 8px;
+      border-radius: 20px;
       box-shadow: var(--card-shadow);
-      transition: transform 0.3s;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       height: 100%;
-      background-color: white;
-      margin-bottom: 1.5rem;
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
     }
     
     .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(227, 6, 19, 0.2);
+    }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.2) rotate(10deg);
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     
     .service-icon {
-      font-size: 2rem;
+      font-size: 3rem;
       color: var(--primary-color);
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      display: inline-block;
     }
     
     @media (min-width: 768px) {
       .service-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
       }
     }
     
     /* Buttons */
     .btn-primary {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-      padding: 0.5rem 1.25rem;
-      font-weight: 500;
-      font-size: 0.9rem;
+      background: var(--gradient-primary);
+      border: none;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(227, 6, 19, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
     }
     
     @media (min-width: 768px) {
       .btn-primary {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
       }
     }
     
     .btn-primary:hover {
-      background-color: var(--secondary-color);
-      border-color: var(--secondary-color);
+      background: var(--gradient-secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(227, 6, 19, 0.4);
     }
     
     .btn-outline-primary {
       color: var(--primary-color);
-      border-color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+      border-radius: 50px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
     }
     
     .btn-outline-primary:hover {
-      background-color: var(--primary-color);
+      background: var(--gradient-primary);
       color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(227, 6, 19, 0.3);
+    }
+
+    .btn-outline-light {
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-outline-light:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: white;
+      transform: translateY(-2px);
     }
     
     /* Typography */
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--dark-text);
     }
     
     h1 {
-      font-size: 1.75rem;
+      font-size: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
     
     h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
     }
     
     @media (min-width: 768px) {
       h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
       }
       h2 {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
+        font-size: 3rem;
+        margin-bottom: 2rem;
       }
     }
     
     .lead {
-      font-size: 1rem;
+      font-size: 1.1rem;
       color: var(--dark-text);
+      opacity: 0.8;
     }
     
     @media (min-width: 768px) {
       .lead {
-        font-size: 1.25rem;
+        font-size: 1.3rem;
       }
     }
     
     /* Sections */
     section {
-      padding: 2rem 0;
+      padding: 3rem 0;
+      position: relative;
     }
     
     @media (min-width: 768px) {
       section {
-        padding: 3rem 0;
+        padding: 4rem 0;
       }
+    }
+
+    /* Enhanced section backgrounds */
+    .bg-light {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+      position: relative;
+    }
+
+    .bg-light::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(227, 6, 19, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(255, 89, 100, 0.05) 0%, transparent 50%);
+      pointer-events: none;
     }
     
     /* Feature Box */
     .feature-box {
-      background-color: white;
-      border-radius: 8px;
-      padding: 1.5rem;
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
       box-shadow: var(--card-shadow);
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .feature-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 30%, rgba(227, 6, 19, 0.05) 50%, transparent 70%);
+      transform: rotate(45deg);
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
+
+    .feature-box:hover::before {
+      opacity: 1;
+      animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(45deg); }
+      to { transform: rotate(405deg); }
+    }
+
+    .feature-box:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(227, 6, 19, 0.15);
     }
     
     /* Client Portal */
     .client-portal {
-      background-color: var(--primary-color);
+      background: var(--gradient-primary);
       color: white;
-      padding: 2rem 0;
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .client-portal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
     
     /* Footer */
     .main-footer {
-      background-color: var(--dark-text);
+      background: linear-gradient(135deg, #1a1a1a 0%, var(--dark-text) 100%);
       color: white;
       position: relative;
       overflow: hidden;
-      padding: 2rem 0;
+      padding: 3rem 0 2rem 0;
     }
     
     .main-footer::before {
@@ -224,23 +423,44 @@ if (isset($_SESSION['user_id'])) {
       top: 0;
       left: 0;
       width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      height: 6px;
+      background: var(--gradient-primary);
+    }
+
+    .main-footer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M20 20c0-11.046-8.954-20-20-20v20h20z'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
     }
     
     .text-white-50 {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.7) !important;
     }
     
     .hover-text-white:hover {
       color: white !important;
+      transform: translateX(5px);
+      transition: all 0.3s ease;
     }
     
     /* Responsive adjustments */
     .responsive-img {
       width: 100%;
       height: auto;
-      margin-top: 1.5rem;
+      margin-top: 2rem;
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+    }
+
+    .responsive-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
     
     @media (min-width: 768px) {
@@ -252,23 +472,41 @@ if (isset($_SESSION['user_id'])) {
     /* Button groups */
     .btn-group-responsive {
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1rem;
     }
     
     @media (min-width: 576px) {
       .btn-group-responsive {
         flex-direction: row;
+        gap: 1.5rem;
       }
     }
     
     /* Testimonial cards */
     .testimonial-card {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .star-rating {
+      margin-bottom: 1rem;
+    }
+
+    .star-rating i {
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover .star-rating i {
+      transform: scale(1.2);
     }
     
     /* Footer columns */
     .footer-column {
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
     }
     
     @media (min-width: 768px) {
@@ -277,18 +515,90 @@ if (isset($_SESSION['user_id'])) {
       }
     }
 
-    #installApp{
+    /* Install App Button */
+    #installApp {
       position: fixed;
       bottom: 20px;
       right: 20px;
       z-index: 1000;
-      padding: 10px 20px;
-      background-color: red;
+      padding: 12px 24px;
+      background: var(--gradient-primary);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 50px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 8px 25px rgba(227, 6, 19, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    #installApp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(227, 6, 19, 0.4);
+    }
+
+    /* Loading animation for cards */
+    .card-loading {
+      animation: cardLoad 0.6s ease-out forwards;
+    }
+
+    @keyframes cardLoad {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Scroll animations */
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .scroll-animate.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Enhanced social buttons */
+    .social-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      transform: scale(0);
+      transition: transform 0.3s ease;
+    }
+
+    .social-btn:hover::before {
+      transform: scale(1);
+    }
+
+    .social-btn i {
+      position: relative;
+      z-index: 1;
     }
   </style>
   
@@ -308,68 +618,69 @@ if (isset($_SESSION['user_id'])) {
   <!-- Hero Section -->
   <section class="hero-section text-center">
     <div class="container">
-        <h1 class="fw-bold mb-3 text-white"> <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" style="height:64px;width:auto; margin-right: 15px; background-color: transparent;" >Ananya Sales & Service</h1>
-      <p class="lead mb-4 text-white">Specialized Maintenance & Calibration for Blood Bank Equipment</p>
-      <div class="d-flex btn-group-responsive justify-content-center">
-        <a href="auth/login.php" class="btn btn-primary btn-lg">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Portal Login
-        </a>
-        <a href="tel:+919876543210" class="btn btn-outline-light btn-lg">
-          <i class="bi bi-telephone me-2"></i>Emergency Service
-        </a>
+      <div class="hero-content">
+        <h1 class="fw-bold mb-4 text-white"> 
+          <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" class="hero-logo" >
+          Ananya Sales & Service
+        </h1>
+        <p class="lead mb-5 text-white">Specialized Maintenance & Calibration for Blood Bank Equipment</p>
+        <div class="d-flex btn-group-responsive justify-content-center">
+          <a href="auth/login.php" class="btn btn-primary btn-lg">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Portal Login
+          </a>
+          <a href="tel:+919876543210" class="btn btn-outline-light btn-lg">
+            <i class="bi bi-telephone me-2"></i>Emergency Service
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Services Section -->
-  <section class="container">
-    <div class="text-center mb-4">
+  <section class="container scroll-animate">
+    <div class="text-center mb-5">
       <h2>Our Specialized Services</h2>
       <p class="lead">Precision calibration and maintenance for critical blood bank equipment</p>
     </div>
     
     <div class="row g-4">
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-3">
+        <div class="card service-card text-center p-4 card-loading">
           <div class="service-icon">
             <i class="bi bi-snow"></i>
           </div>
-          <h4 class="text-primary">Plasma Freezers</h4>
+          <h4 class="text-primary mb-3">Plasma Freezers</h4>
           <p class="mb-3">Precision calibration and maintenance for optimal temperature control</p>
-          <!-- <a href="#" class="text-accent">Learn more <i class="bi bi-arrow-right"></i></a> -->
         </div>
       </div>
       
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-3">
+        <div class="card service-card text-center p-4 card-loading">
           <div class="service-icon">
             <i class="bi bi-droplet"></i>
           </div>
-          <h4 class="text-primary">Blood Storage</h4>
+          <h4 class="text-primary mb-3">Blood Storage</h4>
           <p class="mb-3">Comprehensive servicing of blood storage refrigerators and systems</p>
-          <!-- <a href="#" class="text-accent">Learn more <i class="bi bi-arrow-right"></i></a> -->
         </div>
       </div>
       
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-3">
+        <div class="card service-card text-center p-4 card-loading">
           <div class="service-icon">
             <i class="bi bi-arrow-repeat"></i>
           </div>
-          <h4 class="text-primary">Component Centrifuge</h4>
+          <h4 class="text-primary mb-3">Component Centrifuge</h4>
           <p class="mb-3">Expert calibration and repair services for blood separation equipment</p>
-          <!-- <a href="#" class="text-accent">Learn more <i class="bi bi-arrow-right"></i></a> -->
         </div>
       </div>
       
       <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-3">
+        <div class="card service-card text-center p-4 card-loading">
           <div class="service-icon">
             <i class="bi bi-thermometer-snow"></i>
           </div>
-          <h4 class="text-primary">Walking Chambers</h4>
+          <h4 class="text-primary mb-3">Walking Chambers</h4>
           <p class="mb-3">Maintenance and temperature validation for blood bank walk-ins</p>
-          <!-- <a href="#" class="text-accent">Learn more <i class="bi bi-arrow-right"></i></a> -->
         </div>
       </div>
     </div>
@@ -517,25 +828,25 @@ if (isset($_SESSION['user_id'])) {
   </section>
 
   <!-- Testimonials Section -->
-  <section class="container">
-    <div class="text-center mb-4">
+  <section class="container scroll-animate">
+    <div class="text-center mb-5">
       <h2>What Our Clients Say</h2>
       <p class="lead">Trusted by leading healthcare institutions</p>
     </div>
     
     <div class="row g-4">
       <div class="col-md-4">
-        <div class="card service-card p-3 testimonial-card">
-          <div class="d-flex mb-3">
+        <div class="card service-card p-4 testimonial-card">
+          <div class="star-rating mb-3">
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning"></i>
           </div>
-          <p>"Ananya's technicians resolved our plasma freezer issue within 2 hours of calling. Their expertise is unmatched."</p>
+          <p class="mb-4">"Ananya's technicians resolved our plasma freezer issue within 2 hours of calling. Their expertise is unmatched."</p>
           <div class="d-flex align-items-center mt-3">
-            <i class="bi bi-person-circle text-primary me-2" style="font-size: 1.5rem;"></i>
+            <i class="bi bi-person-circle text-primary me-3" style="font-size: 2rem;"></i>
             <div>
               <h6 class="mb-0 text-primary">Dr. Sharma</h6>
               <small class="text-muted">Delhi Blood Bank</small>
@@ -545,17 +856,17 @@ if (isset($_SESSION['user_id'])) {
       </div>
       
       <div class="col-md-4">
-        <div class="card service-card p-3 testimonial-card">
-          <div class="d-flex mb-3">
+        <div class="card service-card p-4 testimonial-card">
+          <div class="star-rating mb-3">
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning"></i>
           </div>
-          <p>"Their AMC program has saved us thousands in unexpected repair costs. Highly recommended for blood banks."</p>
+          <p class="mb-4">"Their AMC program has saved us thousands in unexpected repair costs. Highly recommended for blood banks."</p>
           <div class="d-flex align-items-center mt-3">
-            <i class="bi bi-person-circle text-primary me-2" style="font-size: 1.5rem;"></i>
+            <i class="bi bi-person-circle text-primary me-3" style="font-size: 2rem;"></i>
             <div>
               <h6 class="mb-0 text-primary">Ms. Patel</h6>
               <small class="text-muted">Mumbai Medical Center</small>
@@ -565,17 +876,17 @@ if (isset($_SESSION['user_id'])) {
       </div>
       
       <div class="col-md-4">
-        <div class="card service-card p-3 testimonial-card">
-          <div class="d-flex mb-3">
+        <div class="card service-card p-4 testimonial-card">
+          <div class="star-rating mb-3">
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-fill text-warning me-1"></i>
             <i class="bi bi-star-half text-warning"></i>
           </div>
-          <p>"The calibration certificates provided meet all NABH requirements. One less thing to worry about."</p>
+          <p class="mb-4">"The calibration certificates provided meet all NABH requirements. One less thing to worry about."</p>
           <div class="d-flex align-items-center mt-3">
-            <i class="bi bi-person-circle text-primary me-2" style="font-size: 1.5rem;"></i>
+            <i class="bi bi-person-circle text-primary me-3" style="font-size: 2rem;"></i>
             <div>
               <h6 class="mb-0 text-primary">Mr. Kumar</h6>
               <small class="text-muted">Bangalore Hospital</small>
@@ -598,13 +909,13 @@ if (isset($_SESSION['user_id'])) {
           <p class="text-white-50">Specialists in blood bank equipment maintenance, calibration, and service contracts.</p>
           
           <div class="d-flex gap-3 mt-4">
-            <a href="#" class="btn btn-sm btn-outline-light rounded-circle p-2">
+            <a href="#" class="btn btn-outline-light social-btn">
               <i class="bi bi-facebook"></i>
             </a>
-            <a href="#" class="btn btn-sm btn-outline-light rounded-circle p-2">
+            <a href="#" class="btn btn-outline-light social-btn">
               <i class="bi bi-linkedin"></i>
             </a>
-            <a href="#" class="btn btn-sm btn-outline-light rounded-circle p-2">
+            <a href="#" class="btn btn-outline-light social-btn">
               <i class="bi bi-instagram"></i>
             </a>
           </div>
@@ -698,6 +1009,140 @@ window.addEventListener('beforeinstallprompt', (e) => {
     deferredPrompt.prompt();
   });
 });
+</script>
+
+<script>
+// Scroll Animation
+function isInViewport(element) {
+  const rect = element.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
+function handleScrollAnimation() {
+  const elements = document.querySelectorAll('.scroll-animate');
+  elements.forEach(element => {
+    if (isInViewport(element) || element.getBoundingClientRect().top < window.innerHeight * 0.8) {
+      element.classList.add('animate');
+    }
+  });
+}
+
+// Staggered card animation
+function animateCards() {
+  const cards = document.querySelectorAll('.card-loading');
+  cards.forEach((card, index) => {
+    setTimeout(() => {
+      card.style.animationDelay = `${index * 0.1}s`;
+      card.classList.add('animate');
+    }, index * 100);
+  });
+}
+
+// Enhanced button hover effects
+function addButtonEffects() {
+  const buttons = document.querySelectorAll('.btn-primary, .btn-outline-primary');
+  buttons.forEach(button => {
+    button.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-2px) scale(1.05)';
+    });
+    
+    button.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) scale(1)';
+    });
+  });
+}
+
+// Parallax effect for hero section
+function addParallaxEffect() {
+  const hero = document.querySelector('.hero-section');
+  if (hero) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * -0.5;
+      hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+    });
+  }
+}
+
+// Smooth scroll for anchor links
+function addSmoothScroll() {
+  const links = document.querySelectorAll('a[href^="#"]');
+  links.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+}
+
+// Initialize all animations and effects
+document.addEventListener('DOMContentLoaded', function() {
+  // Initial check for elements in viewport
+  handleScrollAnimation();
+  
+  // Animate cards on load
+  setTimeout(animateCards, 500);
+  
+  // Add button effects
+  addButtonEffects();
+  
+  // Add parallax effect
+  addParallaxEffect();
+  
+  // Add smooth scroll
+  addSmoothScroll();
+  
+  // Add scroll event listener with throttling
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        handleScrollAnimation();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+  
+  // Add loading animation to page
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.5s ease-in-out';
+  setTimeout(() => {
+    document.body.style.opacity = '1';
+  }, 100);
+});
+
+// Add intersection observer for better performance
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.scroll-animate').forEach(el => {
+      observer.observe(el);
+    });
+  });
+}
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
