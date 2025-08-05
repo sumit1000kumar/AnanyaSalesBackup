@@ -48,15 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['receipt_id'])) {
 
             // // Email settings
             // $mail->setFrom('info@ananyasaleservice.in', 'Ananya Sales & Service');
-            $mail->Host       = 'smtp.sumitbuilds.live'; 
+            $mail->Host       = 'smtp.ananyasales.in'; 
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'bank@sumitbuilds.live';
-            $mail->Password   = 'ramdada@123';
+            $mail->Username   = 'info@ananyasales.in';
+            $mail->Password   = 'Ananya#135';
             $mail->SMTPSecure = 'ssl';
             $mail->Port       = 465;
 
             // Email settings
-            $mail->setFrom('bank@sumitbuilds.live', 'Ananya Sales & Service');
+            $mail->setFrom('info@ananyasales.in', 'Ananya Sales & Service');
             $mail->addAddress($email, $client_name);
             $mail->addAttachment($pdfPath);
 

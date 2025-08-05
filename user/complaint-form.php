@@ -13,6 +13,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $complaint_type = filter_input(INPUT_POST, 'complaint_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS); // nature of visit
     $equipment = filter_input(INPUT_POST, 'equipment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    
+    // Handle "Other" selections
+    if ($complaint_type === 'Other') {
+        $other_complaint_type = filter_input(INPUT_POST, 'other_complaint_type_text', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!empty($other_complaint_type)) {
+            $complaint_type = 'Other: ' . $other_complaint_type;
+        }
+    }
+    
+    if ($equipment === 'Other') {
+        $other_equipment = filter_input(INPUT_POST, 'other_equipment_text', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (!empty($other_equipment)) {
+            $equipment = 'Other: ' . $other_equipment;
+        }
+    }
 
     // File upload handling
     $attachment_path = '';
@@ -193,7 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           </div>
           <div class="col-md-6">
             <label class="form-label">Nature of Visit</label>
-            <select class="form-select" name="complaint_type" required>
+            <select class="form-select" name="complaint_type" id="complaint_type" onchange="toggleOtherInput('complaint_type', 'other_complaint_type')" required>
               <option value="" disabled selected>Select nature of visit</option>
               <option value="Installation">Installation</option>
               <option value="Service">Service</option>
@@ -201,10 +216,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
               <option value="Inspection">Inspection</option>
               <option value="Other">Other</option>
             </select>
+            <div id="other_complaint_type" class="mt-2" style="display: none;">
+              <input type="text" class="form-control" name="other_complaint_type_text" placeholder="Please specify (max 50 characters)" maxlength="50" />
+            </div>
           </div>
           <div class="col-md-6">
             <label class="form-label">Select Equipment</label>
-            <select class="form-select" name="equipment" required>
+            <select class="form-select" name="equipment" id="equipment" onchange="toggleOtherInput('equipment', 'other_equipment')" required>
   <option value="" disabled selected>Select equipment</option>
   <option value="Plasma Freezer">Plasma Freezer</option>
   <option value="Blood Storage Cabinet">Blood Storage Cabinet</option>
@@ -228,7 +246,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <option value="Data Logger">Data Logger</option>
   <option value="Other">Other</option>
 </select>
-
+            <div id="other_equipment" class="mt-2" style="display: none;">
+              <input type="text" class="form-control" name="other_equipment_text" placeholder="Please specify equipment (max 50 characters)" maxlength="50" />
+            </div>
           </div>
           <div class="col-12">
             <label class="form-label">Attachment (Optional)</label>
@@ -247,5 +267,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <?php include '../includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function toggleOtherInput(selectId, inputDivId) {
+    const select = document.getElementById(selectId);
+    const inputDiv = document.getElementById(inputDivId);
+    const input = inputDiv.querySelector('input');
+    
+    if (select.value === 'Other') {
+      inputDiv.style.display = 'block';
+      input.required = true;
+    } else {
+      inputDiv.style.display = 'none';
+      input.required = false;
+      input.value = '';
+    }
+  }
+</script>
 </body>
 </html>

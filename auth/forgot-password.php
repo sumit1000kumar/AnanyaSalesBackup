@@ -53,16 +53,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $mail->Debugoutput = 'html'; // Optional: show debug output as HTML
 
             $mail->isSMTP();
-            $mail->Host       = 'smtp.sumitbuilds.live'; // From Mailtrap
+            $mail->Host       = 'smtp.ananyasales.in'; // From Mailtrap
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'bank@sumitbuilds.live';   // Replace
-            $mail->Password   = 'ramdada@123';   // Replace
+            $mail->Username   = 'info@ananyasales.in';   // Replace
+            $mail->Password   = 'Ananya#135';   // Replace
             $mail->Port       = 465 ;
 
-            $mail->setFrom('bank@sumitbuilds.live', 'Ananya Sales & Service');
+            $mail->setFrom('info@ananyasales.in', 'Ananya Sales & Service');
             $mail->addAddress($email);
 
-            $resetLink = "https://www.sumitbuilds.live/auth/reset-password.php?token=$token";
+            $resetLink = "https://www.ananyasales.in/auth/reset-password.php?token=$token";
 
 
             $mail->isHTML(true);

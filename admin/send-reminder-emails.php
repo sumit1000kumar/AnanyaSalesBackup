@@ -17,15 +17,15 @@ $mail = new PHPMailer(true);
 try {
     // SMTP config
     $mail->isSMTP();
-    $mail->Host       = 'smtp.sumitbuilds.live';
+    $mail->Host       = 'smtp.ananyasales.in';
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'bank@sumitbuilds.live';
-    $mail->Password   = 'ramdada@123';
+    $mail->Username   = 'info@ananyasales.in';
+    $mail->Password   = 'Ananya#135';
     $mail->SMTPSecure = 'ssl';
     $mail->Port       = 465;
 
     // Sender
-    $mail->setFrom('bank@sumitbuilds.live', 'Ananya Sales & Service');
+    $mail->setFrom('info@ananyasales.in', 'Ananya Sales & Service');
     $mail->isHTML(true);
 
     // Fetch reminders due tomorrow

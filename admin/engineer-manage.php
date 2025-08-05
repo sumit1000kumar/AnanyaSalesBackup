@@ -159,6 +159,26 @@ if (isset($_POST['delete_engineer'])) {
       border-radius: 6px;
       padding: 2px;
     }
+
+    .signature-container {
+      overflow-x: auto;
+    }
+
+    #signaturePad {
+      cursor: crosshair;
+    }
+
+    @media (max-width: 768px) {
+      #signaturePad {
+        width: 100%;
+        height: 120px;
+        max-width: 350px;
+      }
+      
+      .signature-container {
+        padding: 10px 0;
+      }
+    }
   </style>
 </head>
 
@@ -221,8 +241,11 @@ if (isset($_POST['delete_engineer'])) {
 
       <div id="drawContainer" class="mb-3" style="display: none;">
         <label class="form-label">Draw Signature</label>
-        <canvas id="signaturePad" width="400" height="120" style="border:1px solid #ccc;"></canvas><br>
+        <div class="signature-container" style="text-align: center;">
+          <canvas id="signaturePad" width="400" height="120" style="border:2px solid #ccc; border-radius: 6px; background-color: #fff; touch-action: none; max-width: 100%;"></canvas>
+        </div>
         <button type="button" class="btn btn-sm btn-warning my-2" onclick="clearSignature()">Clear</button>
+        <div class="form-text">Draw your signature above using mouse or finger</div>
         <input type="hidden" name="drawn_signature" id="drawn_signature">
       </div>
 
@@ -303,20 +326,114 @@ if (isset($_POST['delete_engineer'])) {
   const ctx = canvas.getContext('2d');
   let drawing = false;
 
-  canvas.addEventListener('mousedown', () => drawing = true);
-  canvas.addEventListener('mouseup', () => drawing = false);
-  canvas.addEventListener('mouseout', () => drawing = false);
+  // Set canvas size based on screen size
+  function resizeCanvas() {
+    const container = canvas.parentElement;
+    const containerWidth = container.offsetWidth;
+    const maxWidth = Math.min(400, containerWidth - 40);
+    
+    canvas.width = maxWidth;
+    canvas.height = 120;
+    
+    // Re-apply styles after resizing
+    canvas.style.border = '2px solid #ccc';
+    canvas.style.borderRadius = '6px';
+    canvas.style.backgroundColor = '#fff';
+  }
+
+  // Initialize canvas size
+  resizeCanvas();
+  
+  // Resize on window resize
+  window.addEventListener('resize', resizeCanvas);
+
+  // Mouse Events
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
   canvas.addEventListener('mousemove', draw);
+
+  // Touch Events for Mobile
+  canvas.addEventListener('touchstart', handleTouch);
+  canvas.addEventListener('touchend', stopDrawing);
+  canvas.addEventListener('touchcancel', stopDrawing);
+  canvas.addEventListener('touchmove', handleTouch);
+
+  // Prevent scrolling when touching the canvas
+  document.body.addEventListener('touchstart', function(e) {
+    if (e.target === canvas) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  document.body.addEventListener('touchend', function(e) {
+    if (e.target === canvas) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  document.body.addEventListener('touchmove', function(e) {
+    if (e.target === canvas) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  function startDrawing() {
+    drawing = true;
+  }
+
+  function stopDrawing() {
+    drawing = false;
+    ctx.beginPath();
+  }
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function getTouchPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.touches[0].clientX - rect.left,
+      y: e.touches[0].clientY - rect.top
+    };
+  }
 
   function draw(e) {
     if (!drawing) return;
+    const pos = getPos(e);
+    
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.strokeStyle = '#000';
-    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(e.offsetX, e.offsetY);
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function handleTouch(e) {
+    e.preventDefault();
+    
+    if (e.type === 'touchstart') {
+      drawing = true;
+    }
+    
+    if (drawing && e.touches.length > 0) {
+      const pos = getTouchPos(e);
+      
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#000';
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
   }
 
   function clearSignature() {

@@ -273,11 +273,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $dompdf->render();
 
   // Save to file
-  $receiptDir = realpath(__DIR__ . '/../receipts');
-  if (!is_dir($receiptDir)) mkdir($receiptDir, 0777, true);
+  $receiptDir = __DIR__ . '/../receipts';
+  if (!is_dir($receiptDir)) {
+    if (!mkdir($receiptDir, 0777, true)) {
+      error_log("Failed to create receipts directory: " . $receiptDir);
+      die("Error: Could not create receipts directory");
+    }
+  }
+  $receiptDir = realpath($receiptDir); // Get absolute path after ensuring directory exists
   $receiptFilename = "receipt_{$currentReportNo}.pdf";
   $receiptPath = $receiptDir . DIRECTORY_SEPARATOR . $receiptFilename;
-  file_put_contents($receiptPath, $dompdf->output());
+  
+  if (file_put_contents($receiptPath, $dompdf->output()) === false) {
+    error_log("Failed to save PDF file: " . $receiptPath);
+    die("Error: Could not save PDF file");
+  }
 
   // Log receipt record
   $stmt = $conn->prepare("INSERT INTO receipts (client_name, phone, email, service_type, engineer, pdf_path, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");

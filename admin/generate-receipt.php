@@ -114,6 +114,27 @@ switch (true) {
       padding: 15px 0;
       margin-top: auto;
     }
+    
+    .signature-container {
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+    
+    #signaturePad {
+      cursor: crosshair;
+    }
+    
+    @media (max-width: 768px) {
+      #signaturePad {
+        width: 100%;
+        height: 120px;
+        max-width: 280px;
+      }
+      
+      .signature-container {
+        padding: 15px 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -338,7 +359,10 @@ switch (true) {
     <input type="file" name="customer_sign_upload" accept="image/*" class="form-control mb-2">
 
     <!-- Canvas for drawing -->
-    <canvas id="signaturePad" width="300" height="120" style="border:1px solid #ccc; border-radius:5px;"></canvas>
+    <div class="signature-container" style="text-align: center;">
+      <canvas id="signaturePad" width="300" height="120" style="border:2px solid #ccc; border-radius:5px; background-color: #fff; touch-action: none; max-width: 100%; cursor: crosshair;"></canvas>
+    </div>
+    <div class="form-text">Draw signature above using mouse or finger</div>
     <input type="hidden" name="customer_sign_data" id="customer_sign_data">
     <div class="mt-2">
   <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearSignature()">Clear</button>
@@ -432,6 +456,27 @@ switch (true) {
   const canvas = document.getElementById("signaturePad");
   const ctx = canvas.getContext("2d");
   let drawing = false;
+
+  // Set canvas size based on screen size
+  function resizeCanvas() {
+    const container = canvas.parentElement;
+    const containerWidth = container.offsetWidth;
+    const maxWidth = Math.min(300, containerWidth - 40);
+    
+    canvas.width = maxWidth;
+    canvas.height = 120;
+    
+    // Re-apply styles after resizing
+    canvas.style.border = '2px solid #ccc';
+    canvas.style.borderRadius = '5px';
+    canvas.style.backgroundColor = '#fff';
+  }
+
+  // Initialize canvas size
+  resizeCanvas();
+  
+  // Resize on window resize
+  window.addEventListener('resize', resizeCanvas);
 
   // Mouse events
   canvas.addEventListener("mousedown", startDrawing);
