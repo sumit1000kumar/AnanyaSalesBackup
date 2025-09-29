@@ -31,9 +31,7 @@ if (isset($_SESSION['user_id'])) {
   <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
-  <!-- <link rel="manifest" href="assets/images/favicon/site.webmanifest"> -->
   <link rel="manifest" href="/manifest.json">
-
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -61,31 +59,17 @@ if (isset($_SESSION['user_id'])) {
     }
     
     body {
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       font-family: 'Open Sans', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       color: var(--dark-text);
-      position: relative;
+      scroll-behavior: smooth;
     }
 
-    /* Animated background elements */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(227, 6, 19, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 89, 100, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(169, 3, 13, 0.03) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
     }
-    
+
+
     /* Hero Section */
     .hero-section {
       background: linear-gradient(135deg, rgba(227, 6, 19, 0.95), rgba(169, 3, 13, 0.95)), 
@@ -94,8 +78,7 @@ if (isset($_SESSION['user_id'])) {
       background-position: center;
       background-attachment: fixed;
       color: white;
-      padding: 4rem 0;
-      margin-bottom: 3rem;
+      padding: 8rem 0 6rem;
       position: relative;
       overflow: hidden;
     }
@@ -122,9 +105,9 @@ if (isset($_SESSION['user_id'])) {
     }
 
     .hero-logo {
-      height: 80px;
+      height: 100px;
       width: auto;
-      margin-right: 20px;
+      margin-bottom: 20px;
       filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
       animation: float 3s ease-in-out infinite;
     }
@@ -133,22 +116,48 @@ if (isset($_SESSION['user_id'])) {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
     }
-    
-    @media (min-width: 768px) {
-      .hero-section {
-        padding: 6rem 0;
-        margin-bottom: 4rem;
-      }
+
+    /* Section Styling */
+    section {
+      padding: 5rem 0;
     }
-    
-    /* Service Cards */
+
+    .section-title {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+    }
+
+    /* About Section */
+    .about-img {
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s;
+    }
+
+    .about-img:hover {
+      transform: scale(1.02);
+    }
+
+    /* Services Section */
     .service-card {
       border: none;
-      border-radius: 20px;
+      border-radius: 15px;
       box-shadow: var(--card-shadow);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.3s ease;
       height: 100%;
-      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      background: white;
       margin-bottom: 2rem;
       position: relative;
       overflow: hidden;
@@ -165,74 +174,91 @@ if (isset($_SESSION['user_id'])) {
     }
     
     .service-card:hover {
-      transform: translateY(-15px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(227, 6, 19, 0.2);
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(227, 6, 19, 0.15);
     }
 
-    .service-card:hover .service-icon {
-      transform: scale(1.2) rotate(10deg);
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
     .service-icon {
       font-size: 3rem;
       color: var(--primary-color);
       margin-bottom: 1rem;
       transition: all 0.3s ease;
-      display: inline-block;
     }
-    
-    @media (min-width: 768px) {
-      .service-icon {
-        font-size: 3.5rem;
-        margin-bottom: 1.5rem;
-      }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.2);
     }
-    
+
+    /* Products Section */
+    .product-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      height: 100%;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-img {
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .product-card:hover .product-img {
+      transform: scale(1.05);
+    }
+
+    /* Testimonials Section */
+    .testimonial-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .client-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-color);
+    }
+
+    .star-rating i {
+      color: var(--warning-color);
+    }
+
     /* Buttons */
     .btn-primary {
       background: var(--gradient-primary);
       border: none;
       padding: 0.75rem 2rem;
       font-weight: 600;
-      font-size: 1rem;
       border-radius: 50px;
       box-shadow: 0 4px 15px rgba(227, 6, 19, 0.3);
       transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
     }
 
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s;
-    }
-
-    .btn-primary:hover::before {
-      left: 100%;
-    }
-    
-    @media (min-width: 768px) {
-      .btn-primary {
-        padding: 1rem 2.5rem;
-        font-size: 1.1rem;
-      }
-    }
-    
     .btn-primary:hover {
       background: var(--gradient-secondary);
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(227, 6, 19, 0.4);
     }
-    
+
     .btn-outline-primary {
       color: var(--primary-color);
       border: 2px solid var(--primary-color);
@@ -249,172 +275,12 @@ if (isset($_SESSION['user_id'])) {
       box-shadow: 0 8px 25px rgba(227, 6, 19, 0.3);
     }
 
-    .btn-outline-light {
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      border-radius: 50px;
-      padding: 0.75rem 2rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-outline-light:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: white;
-      transform: translateY(-2px);
-    }
-    
-    /* Typography */
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      color: var(--dark-text);
-    }
-    
-    h1 {
-      font-size: 2rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-    
-    h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: var(--gradient-primary);
-      border-radius: 2px;
-    }
-    
-    @media (min-width: 768px) {
-      h1 {
-        font-size: 3rem;
-      }
-      h2 {
-        font-size: 3rem;
-        margin-bottom: 2rem;
-      }
-    }
-    
-    .lead {
-      font-size: 1.1rem;
-      color: var(--dark-text);
-      opacity: 0.8;
-    }
-    
-    @media (min-width: 768px) {
-      .lead {
-        font-size: 1.3rem;
-      }
-    }
-    
-    /* Sections */
-    section {
-      padding: 3rem 0;
-      position: relative;
-    }
-    
-    @media (min-width: 768px) {
-      section {
-        padding: 4rem 0;
-      }
-    }
-
-    /* Enhanced section backgrounds */
-    .bg-light {
-      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
-      position: relative;
-    }
-
-    .bg-light::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 10% 20%, rgba(227, 6, 19, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(255, 89, 100, 0.05) 0%, transparent 50%);
-      pointer-events: none;
-    }
-    
-    /* Feature Box */
-    .feature-box {
-      background: linear-gradient(145deg, #ffffff, #f8f9fa);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
-      box-shadow: var(--card-shadow);
-      margin-bottom: 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .feature-box::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent 30%, rgba(227, 6, 19, 0.05) 50%, transparent 70%);
-      transform: rotate(45deg);
-      transition: all 0.3s ease;
-      opacity: 0;
-    }
-
-    .feature-box:hover::before {
-      opacity: 1;
-      animation: rotate 2s linear infinite;
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(45deg); }
-      to { transform: rotate(405deg); }
-    }
-
-    .feature-box:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(227, 6, 19, 0.15);
-    }
-    
-    /* Client Portal */
-    .client-portal {
-      background: var(--gradient-primary);
-      color: white;
-      padding: 4rem 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .client-portal::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    
     /* Footer */
     .main-footer {
       background: linear-gradient(135deg, #1a1a1a 0%, var(--dark-text) 100%);
       color: white;
       position: relative;
       overflow: hidden;
-      padding: 3rem 0 2rem 0;
     }
     
     .main-footer::before {
@@ -427,134 +293,54 @@ if (isset($_SESSION['user_id'])) {
       background: var(--gradient-primary);
     }
 
-    .main-footer::after {
+    .footer-column h5 {
+      position: relative;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .footer-column h5::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
       bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M20 20c0-11.046-8.954-20-20-20v20h20z'/%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-    
-    .text-white-50 {
-      color: rgba(255, 255, 255, 0.7) !important;
-    }
-    
-    .hover-text-white:hover {
-      color: white !important;
-      transform: translateX(5px);
-      transition: all 0.3s ease;
-    }
-    
-    /* Responsive adjustments */
-    .responsive-img {
-      width: 100%;
-      height: auto;
-      margin-top: 2rem;
-      border-radius: 20px;
-      box-shadow: var(--card-shadow);
-      transition: all 0.3s ease;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--primary-color);
     }
 
-    .responsive-img:hover {
-      transform: scale(1.05);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    }
-    
-    @media (min-width: 768px) {
-      .responsive-img {
-        margin-top: 0;
-      }
-    }
-    
-    /* Button groups */
-    .btn-group-responsive {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    @media (min-width: 576px) {
-      .btn-group-responsive {
-        flex-direction: row;
-        gap: 1.5rem;
-      }
-    }
-    
-    /* Testimonial cards */
-    .testimonial-card {
-      margin-bottom: 2rem;
-      transition: all 0.3s ease;
+    .footer-link {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s;
+      display: block;
+      margin-bottom: 8px;
     }
 
-    .testimonial-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .star-rating {
-      margin-bottom: 1rem;
-    }
-
-    .star-rating i {
-      transition: all 0.3s ease;
-    }
-
-    .testimonial-card:hover .star-rating i {
-      transform: scale(1.2);
-    }
-    
-    /* Footer columns */
-    .footer-column {
-      margin-bottom: 3rem;
-    }
-    
-    @media (min-width: 768px) {
-      .footer-column {
-        margin-bottom: 0;
-      }
-    }
-
-    /* Install App Button */
-    #installApp {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
-      padding: 12px 24px;
-      background: var(--gradient-primary);
+    .footer-link:hover {
       color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-      box-shadow: 0 8px 25px rgba(227, 6, 19, 0.3);
-      transition: all 0.3s ease;
+      transform: translateX(5px);
     }
 
-    #installApp:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(227, 6, 19, 0.4);
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      transition: all 0.3s;
+      margin-right: 10px;
     }
 
-    /* Loading animation for cards */
-    .card-loading {
-      animation: cardLoad 0.6s ease-out forwards;
+    .social-btn:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px);
     }
 
-    @keyframes cardLoad {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Scroll animations */
+    /* Animations */
     .scroll-animate {
       opacity: 0;
       transform: translateY(30px);
@@ -566,245 +352,312 @@ if (isset($_SESSION['user_id'])) {
       transform: translateY(0);
     }
 
-    /* Enhanced social buttons */
-    .social-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .social-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--gradient-primary);
-      border-radius: 50%;
-      transform: scale(0);
-      transition: transform 0.3s ease;
-    }
-
-    .social-btn:hover::before {
-      transform: scale(1);
-    }
-
-    .social-btn i {
-      position: relative;
-      z-index: 1;
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 6rem 0 4rem;
+        text-align: center;
+      }
+      
+      section {
+        padding: 3rem 0;
+      }
     }
   </style>
-  
-  <!-- web push notifications api - pushalert.co -->
-<!-- <script type="text/javascript">
-        (function(d, t) {
-                var g = d.createElement(t),
-                s = d.getElementsByTagName(t)[0];
-                g.src = "https://cdn.pushalert.co/integrate_004ca555b3f92956ab9cf37d5144df74.js";
-                s.parentNode.insertBefore(g, s);
-        }(document, "script"));
-</script> -->
 </head>
 <body>
-  <button id="installApp" style="display:none;">Install App</button>
-
+  <?php include 'includes/navbar.php'; ?>
   <!-- Hero Section -->
-  <section class="hero-section text-center">
+  <section id="home" class="hero-section">
     <div class="container">
-      <div class="hero-content">
-        <h1 class="fw-bold mb-4 text-white"> 
-          <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" class="hero-logo" >
-          Ananya Sales & Service
-        </h1>
-        <p class="lead mb-5 text-white">Specialized Maintenance & Calibration for Blood Bank Equipment</p>
-        <div class="d-flex btn-group-responsive justify-content-center">
-          <a href="auth/login.php" class="btn btn-primary btn-lg">
-            <i class="bi bi-box-arrow-in-right me-2"></i>Portal Login
-          </a>
-          <a href="tel:+919876543210" class="btn btn-outline-light btn-lg">
-            <i class="bi bi-telephone me-2"></i>Emergency Service
-          </a>
+      <div class="row align-items-center">
+        <div class="col-lg-8 mx-auto text-center hero-content">
+          <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service" class="hero-logo">
+          <h1 class="display-4 fw-bold mb-4">Ananya Sales & Service</h1>
+          <p class="lead mb-5">Specialized Maintenance & Calibration for Blood Bank Equipment</p>
+          <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+            <a href="#services" class="btn btn-primary btn-lg">
+              <i class="bi bi-tools me-2"></i>Our Services
+            </a>
+            <a href="tel:+919876543210" class="btn btn-outline-light btn-lg">
+              <i class="bi bi-telephone me-2"></i>Emergency Service
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="bg-light scroll-animate">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h2 class="section-title text-center text-lg-start">About Us</h2>
+          <p class="lead">Ananya Sales & Service is a premier provider of specialized maintenance and calibration services for blood bank equipment across India.</p>
+          <p>With over 15 years of experience in the healthcare equipment industry, we have established ourselves as trusted partners for blood banks, hospitals, and medical institutions.</p>
+          <p>Our team of certified technicians undergoes regular training to stay updated with the latest technologies and regulatory requirements, ensuring that your critical blood bank equipment operates at peak performance.</p>
+          <div class="mt-4">
+            <a href="#contact" class="btn btn-primary me-3">Contact Us</a>
+            <a href="#services" class="btn btn-outline-primary">Our Services</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row g-3">
+            <div class="col-6">
+              <img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a7b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                   alt="Blood bank equipment" class="img-fluid about-img">
+            </div>
+            <div class="col-6">
+              <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                   alt="Technician at work" class="img-fluid about-img">
+            </div>
+            <div class="col-6 mt-4">
+              <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                   alt="Medical equipment" class="img-fluid about-img">
+            </div>
+            <div class="col-6 mt-4">
+              <img src="https://images.unsplash.com/photo-1576671414122-03789e8f8a3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                   alt="Laboratory" class="img-fluid about-img">
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Services Section -->
-  <section class="container scroll-animate">
-    <div class="text-center mb-5">
-      <h2>Our Specialized Services</h2>
-      <p class="lead">Precision calibration and maintenance for critical blood bank equipment</p>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-4 card-loading">
-          <div class="service-icon">
-            <i class="bi bi-snow"></i>
-          </div>
-          <h4 class="text-primary mb-3">Plasma Freezers</h4>
-          <p class="mb-3">Precision calibration and maintenance for optimal temperature control</p>
-        </div>
-      </div>
-      
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-4 card-loading">
-          <div class="service-icon">
-            <i class="bi bi-droplet"></i>
-          </div>
-          <h4 class="text-primary mb-3">Blood Storage</h4>
-          <p class="mb-3">Comprehensive servicing of blood storage refrigerators and systems</p>
-        </div>
-      </div>
-      
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-4 card-loading">
-          <div class="service-icon">
-            <i class="bi bi-arrow-repeat"></i>
-          </div>
-          <h4 class="text-primary mb-3">Component Centrifuge</h4>
-          <p class="mb-3">Expert calibration and repair services for blood separation equipment</p>
-        </div>
-      </div>
-      
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card service-card text-center p-4 card-loading">
-          <div class="service-icon">
-            <i class="bi bi-thermometer-snow"></i>
-          </div>
-          <h4 class="text-primary mb-3">Walking Chambers</h4>
-          <p class="mb-3">Maintenance and temperature validation for blood bank walk-ins</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Service Contracts Section -->
-  <section class="bg-light">
+  <section id="services" class="scroll-animate">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 mb-4 mb-lg-0">
-          <h2 class="mb-3">Service Contracts</h2>
-          <p class="lead mb-4">Ensure uninterrupted operation with our comprehensive maintenance contracts</p>
-          <ul class="list-unstyled mb-4">
-            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Annual Maintenance Contracts (AMC)</li>
-            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Comprehensive Maintenance Contracts (CMC)</li>
-            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Emergency breakdown support</li>
-            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Preventive maintenance programs</li>
-            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Regulatory compliance documentation</li>
-          </ul>
-          <div class="alert alert-info">
-            <i class="bi bi-info-circle-fill me-2"></i> All contracts include priority service and discounted rates.
+      <h2 class="section-title text-center">Our Services</h2>
+      <p class="lead text-center mb-5">Comprehensive maintenance and calibration solutions for all your blood bank equipment</p>
+      
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="card service-card text-center p-4">
+            <div class="service-icon">
+              <i class="bi bi-snow"></i>
+            </div>
+            <h4 class="mb-3">Plasma Freezers</h4>
+            <p>Precision calibration and maintenance for optimal temperature control and reliability.</p>
+            <a href="#" class="btn btn-outline-primary btn-sm mt-3">Learn More</a>
           </div>
-          <a href="tel:+919876543210" class="btn btn-primary mt-3">
-            <i class="bi bi-telephone me-2"></i>Request a Quote
-          </a>
         </div>
-        <div class="col-lg-6">
-          <img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a7b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
-               alt="Blood bank equipment maintenance" 
-               class="img-fluid rounded shadow responsive-img">
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="card service-card text-center p-4">
+            <div class="service-icon">
+              <i class="bi bi-droplet"></i>
+            </div>
+            <h4 class="mb-3">Blood Storage</h4>
+            <p>Comprehensive servicing of blood storage refrigerators and temperature monitoring systems.</p>
+            <a href="#" class="btn btn-outline-primary btn-sm mt-3">Learn More</a>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="card service-card text-center p-4">
+            <div class="service-icon">
+              <i class="bi bi-arrow-repeat"></i>
+            </div>
+            <h4 class="mb-3">Centrifuge Calibration</h4>
+            <p>Expert calibration and repair services for blood separation and component equipment.</p>
+            <a href="#" class="btn btn-outline-primary btn-sm mt-3">Learn More</a>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="card service-card text-center p-4">
+            <div class="service-icon">
+              <i class="bi bi-thermometer-snow"></i>
+            </div>
+            <h4 class="mb-3">Walking Chambers</h4>
+            <p>Maintenance and temperature validation for blood bank walk-in chambers and cold rooms.</p>
+            <a href="#" class="btn btn-outline-primary btn-sm mt-3">Learn More</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card bg-primary text-white p-4">
+              <div class="card-body">
+                <h3 class="card-title mb-3">Service Contracts</h3>
+                <p class="card-text mb-4">Ensure uninterrupted operation with our comprehensive maintenance contracts including AMC and CMC options with priority service and discounted rates.</p>
+                <a href="tel:+919876543210" class="btn btn-light">Request a Quote</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Why Choose Us Section -->
-  <section class="container">
-    <div class="text-center mb-4">
-      <h2>Why Choose Ananya Sales & Service?</h2>
-      <p class="lead">Trusted by blood banks across the region</p>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="feature-box">
-          <i class="bi bi-award-fill display-5  mb-3" style="color: var(--primary-color);"></i>
-          <h4   style="color: var(--primary-color);">Certified Technicians</h4>
-          <p>Our team holds manufacturer certifications and specialized training in blood bank equipment</p>
-        </div>
-      </div>
+  <!-- Products Section -->
+  <section id="products" class="bg-light scroll-animate">
+    <div class="container">
+      <h2 class="section-title text-center">Our Products</h2>
+      <p class="lead text-center mb-5">High-quality blood bank equipment and supplies from trusted manufacturers</p>
       
-      <div class="col-md-4">
-        <div class="feature-box">
-          <i class="bi bi-speedometer2 display-5  mb-3" style="color: var(--primary-color);"></i>
-          <h4   style="color: var(--primary-color);">Rapid Response</h4>
-          <p>24/7 emergency service to minimize equipment downtime in critical situations</p>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card product-card">
+            <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                 class="card-img-top product-img" alt="Blood Bank Refrigerator">
+            <div class="card-body">
+              <h5 class="card-title">Blood Bank Refrigerators</h5>
+              <p class="card-text">Temperature-controlled refrigerators specifically designed for safe blood storage with digital monitoring.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-primary fw-bold">From ₹85,000</span>
+                <a href="#" class="btn btn-primary btn-sm">Inquire</a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="feature-box">
-          <i class="bi bi-file-earmark-medical-fill display-5  mb-3" style="color: var(--primary-color);"></i>
-          <h4   style="color: var(--primary-color);">Compliance Ready</h4>
-          <p>Detailed service reports meeting all regulatory requirements for blood bank equipment</p>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card product-card">
+            <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                 class="card-img-top product-img" alt="Plasma Freezer">
+            <div class="card-body">
+              <h5 class="card-title">Plasma Freezers</h5>
+              <p class="card-text">Ultra-low temperature freezers for plasma storage with precise temperature control and alarm systems.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-primary fw-bold">From ₹1,20,000</span>
+                <a href="#" class="btn btn-primary btn-sm">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card product-card">
+            <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                 class="card-img-top product-img" alt="Laboratory Centrifuge">
+            <div class="card-body">
+              <h5 class="card-title">Laboratory Centrifuges</h5>
+              <p class="card-text">High-speed centrifuges for blood component separation with programmable settings and safety features.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-primary fw-bold">From ₹65,000</span>
+                <a href="#" class="btn btn-primary btn-sm">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card product-card">
+            <img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a7b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                 class="card-img-top product-img" alt="Blood Bank Monitors">
+            <div class="card-body">
+              <h5 class="card-title">Temperature Monitors</h5>
+              <p class="card-text">Digital temperature monitoring systems with remote alerts and data logging capabilities.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-primary fw-bold">From ₹15,000</span>
+                <a href="#" class="btn btn-primary btn-sm">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card product-card">
+            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                 class="card-img-top product-img" alt="Blood Bank Analyzers">
+            <div class="card-body">
+              <h5 class="card-title">Blood Bank Analyzers</h5>
+              <p class="card-text">Automated analyzers for blood grouping and cross-matching with high accuracy and efficiency.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-primary fw-bold">From ₹2,50,000</span>
+                <a href="#" class="btn btn-primary btn-sm">Inquire</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="card product-card">
+            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                 class="card-img-top product-img" alt="Blood Storage Cabinets">
+            <div class="card-body">
+              <h5 class="card-title">Blood Storage Cabinets</h5>
+              <p class="card-text">Specialized cabinets for organized blood product storage with inventory management features.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-primary fw-bold">From ₹45,000</span>
+                <a href="#" class="btn btn-primary btn-sm">Inquire</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Instrument Calibration Services Section -->
-  <section class="container">
-    <div class="text-center mb-4">
-      <h2>Instrument Calibration Services</h2>
-      <p class="lead">Precision calibration for accurate and reliable equipment performance</p>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-md-6">
-        <div class="card service-card h-100">
-          <div class="card-body p-3">
-            <div class="d-flex align-items-center mb-3">
-              <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
-                <i class="bi bi-tools display-5" style="color: var(--primary-color);"></i>
-              </div>
-              <h4 class="mb-0"  style="color: var(--primary-color);">AMC Calibration Service</h4>
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="scroll-animate">
+    <div class="container">
+      <h2 class="section-title text-center">Client Testimonials</h2>
+      <p class="lead text-center mb-5">What our valued clients say about our services</p>
+      
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="testimonial-card">
+            <div class="star-rating mb-3">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
             </div>
-            <p>Our Annual Maintenance Contract includes comprehensive calibration services to ensure your blood bank instruments maintain optimal accuracy throughout the year.</p>
-            <ul class="list-unstyled mb-3">
-              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Regular scheduled calibrations</li>
-              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> NABL accredited procedures</li>
-              <li class="bi bi-check-circle-fill text-success me-2"></i> Traceable certification</li>
-            </ul>
-            <a href="#" class="btn btn-outline-primary">Learn More</a>
+            <p class="mb-4">"Ananya's technicians resolved our plasma freezer issue within 2 hours of calling. Their expertise is unmatched and their emergency service is truly reliable."</p>
+            <div class="d-flex align-items-center">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Sharma" class="client-img me-3">
+              <div>
+                <h6 class="mb-0">Dr. Sharma</h6>
+                <small class="text-muted">Delhi Blood Bank</small>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="col-md-6">
-        <div class="card service-card h-100">
-          <div class="card-body p-3">
-            <div class="d-flex align-items-center mb-3">
-              <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
-                <i class="bi bi-clipboard2-pulse display-5" style="color: var(--primary-color);"></i>
-              </div>
-              <h4 class="mb-0"  style="color: var(--primary-color);">Comprehensive Calibration</h4>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="testimonial-card">
+            <div class="star-rating mb-3">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
             </div>
-            <p>We calibrate all critical blood bank equipment including:</p>
-            <div class="row">
-              <div class="col-6">
-                <ul class="list-unstyled">
-                  <li class="mb-2"><i class="bi bi-check text-accent me-2"></i> Temperature monitors</li>
-                  <li class="mb-2"><i class="bi bi-check text-accent me-2"></i> Centrifuges</li>
-                  <li class="mb-2"><i class="bi bi-check text-accent me-2"></i> Blood agitators</li>
-                </ul>
-              </div>
-              <div class="col-6">
-                <ul class="list-unstyled">
-                  <li class="mb-2"><i class="bi bi-check text-accent me-2"></i> Platelet incubators</li>
-                  <li class="mb-2"><i class="bi bi-check text-accent me-2"></i> Blood bank refrigerators</li>
-                  <li class="mb-2"><i class="bi bi-check text-accent me-2"></i> Plasma freezers</li>
-                </ul>
+            <p class="mb-4">"Their AMC program has saved us thousands in unexpected repair costs. The preventive maintenance approach ensures our equipment is always in optimal condition."</p>
+            <div class="d-flex align-items-center">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Ms. Patel" class="client-img me-3">
+              <div>
+                <h6 class="mb-0">Ms. Patel</h6>
+                <small class="text-muted">Mumbai Medical Center</small>
               </div>
             </div>
-            <a href="#" class="btn btn-outline-primary mt-3">View Full List</a>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="testimonial-card">
+            <div class="star-rating mb-3">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-half"></i>
+            </div>
+            <p class="mb-4">"The calibration certificates provided meet all NABH requirements. Their documentation is thorough and has made our regulatory compliance much easier."</p>
+            <div class="d-flex align-items-center">
+              <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Mr. Kumar" class="client-img me-3">
+              <div>
+                <h6 class="mb-0">Mr. Kumar</h6>
+                <small class="text-muted">Bangalore Hospital</small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -812,339 +665,191 @@ if (isset($_SESSION['user_id'])) {
   </section>
 
   <!-- Client Portal Section -->
-  <section class="client-portal">
-    <div class="container text-center">
-      <h2 class="mb-3 text-white">Client Portal</h2>
-      <p class="lead mb-4 text-white">Access your service history, request support, and manage contracts</p>
-      <div class="d-flex btn-group-responsive justify-content-center">
-        <a href="auth/login.php" class="btn btn-light btn-lg">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Login
-        </a>
-        <a href="auth/register.php" class="btn btn-outline-light btn-lg">
-          <i class="bi bi-person-plus me-2"></i>Register
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials Section -->
-  <section class="container scroll-animate">
-    <div class="text-center mb-5">
-      <h2>What Our Clients Say</h2>
-      <p class="lead">Trusted by leading healthcare institutions</p>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card service-card p-4 testimonial-card">
-          <div class="star-rating mb-3">
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-          </div>
-          <p class="mb-4">"Ananya's technicians resolved our plasma freezer issue within 2 hours of calling. Their expertise is unmatched."</p>
-          <div class="d-flex align-items-center mt-3">
-            <i class="bi bi-person-circle text-primary me-3" style="font-size: 2rem;"></i>
-            <div>
-              <h6 class="mb-0 text-primary">Dr. Sharma</h6>
-              <small class="text-muted">Delhi Blood Bank</small>
-            </div>
-          </div>
+  <section class="bg-primary text-white">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-8 text-center text-lg-start">
+          <h3 class="mb-3">Client Portal Access</h3>
+          <p class="mb-0">Manage your service contracts, view service history, and request support through our client portal.</p>
         </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="card service-card p-4 testimonial-card">
-          <div class="star-rating mb-3">
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning"></i>
-          </div>
-          <p class="mb-4">"Their AMC program has saved us thousands in unexpected repair costs. Highly recommended for blood banks."</p>
-          <div class="d-flex align-items-center mt-3">
-            <i class="bi bi-person-circle text-primary me-3" style="font-size: 2rem;"></i>
-            <div>
-              <h6 class="mb-0 text-primary">Ms. Patel</h6>
-              <small class="text-muted">Mumbai Medical Center</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-md-4">
-        <div class="card service-card p-4 testimonial-card">
-          <div class="star-rating mb-3">
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-fill text-warning me-1"></i>
-            <i class="bi bi-star-half text-warning"></i>
-          </div>
-          <p class="mb-4">"The calibration certificates provided meet all NABH requirements. One less thing to worry about."</p>
-          <div class="d-flex align-items-center mt-3">
-            <i class="bi bi-person-circle text-primary me-3" style="font-size: 2rem;"></i>
-            <div>
-              <h6 class="mb-0 text-primary">Mr. Kumar</h6>
-              <small class="text-muted">Bangalore Hospital</small>
-            </div>
-          </div>
+        <div class="col-lg-4 text-center text-lg-end mt-4 mt-lg-0">
+          <a href="auth/login.php" class="btn btn-light me-3">Client Login</a>
+          <a href="auth/register.php" class="btn btn-outline-light">Register</a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="main-footer">
-    <div class="container py-4">
+  <footer class="main-footer pt-5">
+    <div class="container">
       <div class="row g-4">
         <!-- Company Info -->
         <div class="col-lg-4 col-md-6 footer-column">
-          <div class="d-flex align-items-center mb-3">
-            <h4 class="mb-0 text-white">Ananya Sales & Service</h4>
-          </div>
-          <p class="text-white-50">Specialists in blood bank equipment maintenance, calibration, and service contracts.</p>
-          
-          <div class="d-flex gap-3 mt-4">
-            <a href="#" class="btn btn-outline-light social-btn">
-              <i class="bi bi-facebook"></i>
-            </a>
-            <a href="#" class="btn btn-outline-light social-btn">
-              <i class="bi bi-linkedin"></i>
-            </a>
-            <a href="#" class="btn btn-outline-light social-btn">
-              <i class="bi bi-instagram"></i>
-            </a>
+          <h5>Ananya Sales & Service</h5>
+          <p class="mt-3">Specialists in blood bank equipment maintenance, calibration, and service contracts with over 15 years of trusted service.</p>
+          <div class="d-flex mt-4">
+            <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
           </div>
         </div>
 
         <!-- Quick Links -->
         <div class="col-lg-2 col-md-6 footer-column">
-          <h5 class="text-white mb-3">Quick Links</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="auth/login.php" class="text-white-50 text-decoration-none hover-text-white"><i class="bi bi-chevron-right me-1"></i> Admin Login</a></li>
-            <li class="mb-2"><a href="auth/login.php" class="text-white-50 text-decoration-none hover-text-white"><i class="bi bi-chevron-right me-1"></i> Client Login</a></li>
-          </ul>
+          <h5>Quick Links</h5>
+          <a href="#home" class="footer-link">Home</a>
+          <a href="#about" class="footer-link">About Us</a>
+          <a href="#services" class="footer-link">Services</a>
+          <a href="#products" class="footer-link">Products</a>
+          <a href="#testimonials" class="footer-link">Testimonials</a>
         </div>
 
         <!-- Services -->
         <div class="col-lg-3 col-md-6 footer-column">
-          <h5 class="text-white mb-3">Our Services</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none hover-text-white"><i class="bi bi-chevron-right me-1"></i> Plasma Freezers</a></li>
-            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none hover-text-white"><i class="bi bi-chevron-right me-1"></i> Blood Storage</a></li>
-            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none hover-text-white"><i class="bi bi-chevron-right me-1"></i> Centrifuge Calibration</a></li>
-            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none hover-text-white"><i class="bi bi-chevron-right me-1"></i> AMC Contracts</a></li>
-            <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none hover-text-white"><i class="bi bi-chevron-right me-1"></i> Emergency Repairs</a></li>
-          </ul>
+          <h5>Our Services</h5>
+          <a href="#" class="footer-link">Plasma Freezers</a>
+          <a href="#" class="footer-link">Blood Storage</a>
+          <a href="#" class="footer-link">Centrifuge Calibration</a>
+          <a href="#" class="footer-link">AMC Contracts</a>
+          <a href="#" class="footer-link">Emergency Repairs</a>
         </div>
 
         <!-- Contact Info -->
         <div class="col-lg-3 col-md-6 footer-column">
-          <h5 class="text-white mb-3">Contact Us</h5>
-          <ul class="list-unstyled text-white-50">
-            <li class="mb-3 d-flex">
-              <i class="bi bi-geo-alt-fill text-primary me-2 mt-1"></i>
-              <span>123 Medical Equipment Plaza, New Delhi 110001, India</span>
-            </li>
-            <li class="mb-3 d-flex">
-              <i class="bi bi-telephone-fill text-primary me-2 mt-1"></i>
-              <div>
-                <div>+91 98765 43210</div>
-                <div>+91 11 2345 6789</div>
-              </div>
-            </li>
-            <li class="mb-3 d-flex">
-              <i class="bi bi-envelope-fill text-primary me-2 mt-1"></i>
-              <span>service@ananyasales.com</span>
-            </li>
-            <li class="d-flex">
-              <i class="bi bi-clock-fill text-primary me-2 mt-1"></i>
-              <div>
-                <div>Monday-Saturday: 8AM-8PM</div>
-                <div>Emergency: 24/7 Support</div>
-              </div>
-            </li>
-          </ul>
+          <h5>Contact Us</h5>
+          <div class="d-flex mb-3">
+            <i class="bi bi-geo-alt-fill text-primary me-3 mt-1"></i>
+            <span>123 Medical Equipment Plaza, New Delhi 110001, India</span>
+          </div>
+          <div class="d-flex mb-3">
+            <i class="bi bi-telephone-fill text-primary me-3 mt-1"></i>
+            <div>
+              <div>+91 98765 43210</div>
+              <div>+91 11 2345 6789</div>
+            </div>
+          </div>
+          <div class="d-flex mb-3">
+            <i class="bi bi-envelope-fill text-primary me-3 mt-1"></i>
+            <span>service@ananyasales.com</span>
+          </div>
+          <div class="d-flex">
+            <i class="bi bi-clock-fill text-primary me-3 mt-1"></i>
+            <div>
+              <div>Monday-Saturday: 8AM-8PM</div>
+              <div>Emergency: 24/7 Support</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <hr class="my-4 border-secondary">
 
-      <div class="row align-items-center">
+      <div class="row align-items-center py-3">
         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-          <p class="mb-0 text-white-50">&copy; <?php echo date('Y'); ?> Ananya Sales & Service. All rights reserved.</p>
+          <p class="mb-0">&copy; <?php echo date('Y'); ?> Ananya Sales & Service. All rights reserved.</p>
         </div>
         <div class="col-md-6 text-center text-md-end">
-          <div class="d-flex justify-content-md-end justify-content-center gap-3">
-            <a href="https://www.meetsumit.xyz" class="text-white-50 hover-text-white text-decoration-none">Developed by <span class="text-warning">Sumit Kumar</span></a>
+          <div class="d-flex justify-content-md-end justify-content-center">
+            <a href="https://www.meetsumit.xyz" class="footer-link">Developed by Sumit Kumar</a>
           </div>
         </div>
       </div>
     </div>
   </footer>
 
-  <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
-    .then(reg => console.log('✅ Service Worker registered:', reg.scope))
-    .catch(err => console.error('❌ SW registration failed:', err));
-}
-</script>
-  
-<script>
-  let deferredPrompt;
-const installBtn = document.getElementById('installApp');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block';
-
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
-  });
-});
-</script>
-
-<script>
-// Scroll Animation
-function isInViewport(element) {
-  const rect = element.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-}
-
-function handleScrollAnimation() {
-  const elements = document.querySelectorAll('.scroll-animate');
-  elements.forEach(element => {
-    if (isInViewport(element) || element.getBoundingClientRect().top < window.innerHeight * 0.8) {
-      element.classList.add('animate');
-    }
-  });
-}
-
-// Staggered card animation
-function animateCards() {
-  const cards = document.querySelectorAll('.card-loading');
-  cards.forEach((card, index) => {
-    setTimeout(() => {
-      card.style.animationDelay = `${index * 0.1}s`;
-      card.classList.add('animate');
-    }, index * 100);
-  });
-}
-
-// Enhanced button hover effects
-function addButtonEffects() {
-  const buttons = document.querySelectorAll('.btn-primary, .btn-outline-primary');
-  buttons.forEach(button => {
-    button.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-2px) scale(1.05)';
-    });
-    
-    button.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0) scale(1)';
-    });
-  });
-}
-
-// Parallax effect for hero section
-function addParallaxEffect() {
-  const hero = document.querySelector('.hero-section');
-  if (hero) {
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
-      hero.style.transform = `translate3d(0, ${rate}px, 0)`;
-    });
-  }
-}
-
-// Smooth scroll for anchor links
-function addSmoothScroll() {
-  const links = document.querySelectorAll('a[href^="#"]');
-  links.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
-  });
-}
-
-// Initialize all animations and effects
-document.addEventListener('DOMContentLoaded', function() {
-  // Initial check for elements in viewport
-  handleScrollAnimation();
-  
-  // Animate cards on load
-  setTimeout(animateCards, 500);
-  
-  // Add button effects
-  addButtonEffects();
-  
-  // Add parallax effect
-  addParallaxEffect();
-  
-  // Add smooth scroll
-  addSmoothScroll();
-  
-  // Add scroll event listener with throttling
-  let ticking = false;
-  window.addEventListener('scroll', function() {
-    if (!ticking) {
-      requestAnimationFrame(function() {
-        handleScrollAnimation();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-  
-  // Add loading animation to page
-  document.body.style.opacity = '0';
-  document.body.style.transition = 'opacity 0.5s ease-in-out';
-  setTimeout(() => {
-    document.body.style.opacity = '1';
-  }, 100);
-});
-
-// Add intersection observer for better performance
-if ('IntersectionObserver' in window) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  });
-
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.scroll-animate').forEach(el => {
-      observer.observe(el);
-    });
-  });
-}
-</script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // Update active nav link
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+          });
+          this.classList.add('active');
+        }
+      });
+    });
+
+    // Scroll animation
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+
+    function handleScrollAnimation() {
+      const elements = document.querySelectorAll('.scroll-animate');
+      elements.forEach(element => {
+        if (isInViewport(element) || element.getBoundingClientRect().top < window.innerHeight * 0.8) {
+          element.classList.add('animate');
+        }
+      });
+    }
+
+    // Initial check for elements in viewport
+    document.addEventListener('DOMContentLoaded', function() {
+      handleScrollAnimation();
+      
+      // Add scroll event listener with throttling
+      let ticking = false;
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(function() {
+            handleScrollAnimation();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    });
+
+    // Update active nav link based on scroll position
+    window.addEventListener('scroll', function() {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= (sectionTop - 100)) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
