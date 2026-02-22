@@ -63,10 +63,8 @@ if (isset($_SESSION['user_id'])) {
         .navbar-nav .nav-link.active::after {
             transform: scaleX(1);
         }
-    </style>
-</head>
-<style>
-    .hero-80vh {
+
+        .hero-80vh {
         height: 80vh !important;
         min-height: 400px;
         position: relative;
@@ -100,7 +98,8 @@ if (isset($_SESSION['user_id'])) {
     .top-shape::before{
       background: #000000;
     }
-</style>
+    </style>
+</head>
 
 <body>
     <!-- Spinner Start -->
@@ -173,27 +172,28 @@ if (isset($_SESSION['user_id'])) {
         <div id="header-carousel" class="carousel slide carousel-fade h-100 position-relative" data-bs-ride="carousel">
             <div class="carousel-inner h-100 w-100 position-relative">
                 <div class="carousel-item active">
-                    <img class="position-absolute top-0 start-0 w-100 h-100" style="object-fit:cover; z-index:1;" src="https://images.pexels.com/photos/4226122/pexels-photo-4226122.jpeg?auto=compress&w=1350&q=80" alt="Blood Bank Equipment">
-                    <div class="carousel-caption d-flex align-items-center justify-content-center h-100 w-100 p-0 m-0" style="z-index:2; position:relative; left:0; top:0; background:none !important;">
-                        <div class="container h-100 d-flex flex-column justify-content-center align-items-start" style="position:relative; z-index:2; background:none !important;">
-                            <div class="row">
-                                <div class="col-lg-8 col-md-10 col-12 py-5 ps-lg-4 ps-md-3 ps-2" style="background:none !important;">
-                                    <span class="badge bg-dark bg-opacity-75 text-white fs-6 fw-semibold px-4 py-2 mb-4 shadow-sm" style="font-size:1.05rem; letter-spacing:1px; border-radius:2em; background:none !important;"><i class="bi bi-patch-check-fill me-2 text-danger"></i>Trusted Since 2008</span>
-                                    <h1 class="fw-bold mb-3 text-white" style="font-size:3.5rem; line-height:1.05; text-shadow:0 2px 12px rgba(0,0,0,0.22); background:none !important;">
-                                        Precision Care for <span style="color:#e53935; border-radius:0.25em; padding:0 0.2em; background:none !important;">Blood Bank Equipment</span>
-                                    </h1>
-                                    <p class="text-white mb-4 fs-5" style="max-width:700px; text-shadow:0 1px 8px rgba(0,0,0,0.18); font-size:1.25rem; background:none !important;">Specialized maintenance, calibration, and service contracts for critical healthcare equipment. Ensuring reliability when it matters most.</p>
-                                    <div class="d-flex flex-wrap gap-3 mb-4" style="background:none !important;">
-                                        <span class="badge bg-white bg-opacity-75 text-danger fw-semibold px-3 py-2 border border-0" style="background:none !important;"><i class="bi bi-lightning-charge-fill me-1"></i>24/7 Emergency Service</span>
-                                        <span class="badge bg-white bg-opacity-75 text-danger fw-semibold px-3 py-2 border border-0" style="background:none !important;"><i class="bi bi-shield-check me-1"></i>Certified Technicians</span>
-                                    </div>
-                                    <div class="d-flex flex-wrap gap-3" style="background:none !important;">
-                                        <a href="#contact" class="btn btn-danger px-4 py-2 fw-semibold shadow">Contact Us</a>
-                                        <a href="#services" class="btn btn-outline-light px-4 py-2 fw-semibold">Our Services</a>
+                    <img class="position-absolute top-0 start-0 w-100 h-100" style="object-fit:cover; z-index:1;" src="https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Blood Bank Equipment">
+                        <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.5); z-index:2;"></div>
+                        <div class="carousel-caption d-flex align-items-center justify-content-center h-100 w-100 p-0 m-0" style="z-index:3; position:relative; left:0; top:0; background:none !important;">
+                            <div class="container h-100 d-flex flex-column justify-content-center align-items-start" style="position:relative; z-index:3; background:none !important;">
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-10 col-12 py-5 ps-lg-4 ps-md-3 ps-2 text-start" style="background:none !important;">
+                                        <span class="badge bg-dark bg-opacity-75 text-white fs-6 fw-semibold px-4 py-2 mb-4 shadow-sm" style="font-size:1.05rem; letter-spacing:1px; border-radius:2em; background:#fff !important; color: red !important;"><i class="bi bi-patch-check-fill me-2 text-danger"></i>Trusted Since 2008</span>
+                                        <h1 class="fw-bold mb-3 text-white text-start" style="font-size:3.5rem; line-height:1.05; text-shadow:0 2px 12px rgba(0,0,0,0.22); background:none !important;">
+                                            Precision Care for <span style="color:#e53935; border-radius:0.25em; padding:0 0.2em; background:none !important;">Blood Bank Equipment</span>
+                                        </h1>
+                                        <p class="text-white mb-4 fs-5 text-start" style="max-width:700px; text-shadow:0 1px 8px rgba(0,0,0,0.18); font-size:1.25rem; background:none !important;">Specialized maintenance, calibration, and service contracts for critical healthcare equipment. Ensuring reliability when it matters most.</p>
+                                        <div class="d-flex flex-wrap gap-3 mb-4" style="background:none !important;">
+                                            <span class="badge bg-white bg-opacity-75 text-danger fw-semibold px-3 py-2 border border-0" style="background:none !important;"><i class="bi bi-lightning-charge-fill me-1"></i>24/7 Emergency Service</span>
+                                            <span class="badge bg-white bg-opacity-75 text-danger fw-semibold px-3 py-2 border border-0" style="background: none !important;"><i class="bi bi-shield-check me-1"></i>Certified Technicians</span>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-3" style="background:none !important;">
+                                            <a href="products.php" class="btn btn-danger px-4 py-2 fw-semibold shadow">Check Products</a>
+                                            <a href="#services" class="btn btn-outline-light px-4 py-2 fw-semibold">Our Services</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
                 <!-- <div class="carousel-item">
