@@ -1,30 +1,42 @@
 
-    <!-- Top Bar -->
-    <div class="top-bar-custom">
-        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
-            <div class="d-flex align-items-center mb-2 mb-md-0">
-                <span class="me-4">
-                    <i class="bi bi-geo-alt-fill me-1"></i> Nashik, Maharashtra
-                </span>
-                <a href="tel:+919876543210" class="top-bar-link me-4">
-                    <i class="bi bi-telephone-fill me-1"></i> +91 98765 43210
-                </a>
-                <a href="mailto:service@ananyasales.com" class="top-bar-link">
-                    <i class="bi bi-envelope-fill me-1"></i> service@ananyasales.com
-                </a>
+        <!-- Custom Navbar (Image Style) -->
+        <nav class="navbar navbar-expand-lg navbar-custom py-3" style="background: #fff; border-bottom: 1px solid #eaeaea;">
+            <div class="container d-flex align-items-center justify-content-between">
+                <!-- Logo & Brand -->
+                <div class="d-flex align-items-center">
+                    <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service" style="height: 60px; width: auto; margin-right: 18px;">
+                    <div>
+                        <span style="font-size: 2rem; font-weight: 700; color: #1976d2; letter-spacing: 2px;">ANANYA</span><br>
+                        <span style="font-size: 0.95rem; color: #333; letter-spacing: 1px;">SALES & SERVICE</span><br>
+                        <span style="font-size: 0.8rem; color: #888; letter-spacing: 1px;">BEST FOR MEDICAL</span>
+                    </div>
+                </div>
+                <!-- Contact Info -->
+                <div class="d-flex align-items-center gap-4">
+                    <div class="d-flex align-items-center">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/icons/phone.svg" style="height: 24px; width: 24px; margin-right: 8px;">
+                        <div>
+                            <span style="font-size: 0.95rem; color: #888;">Number :</span><br>
+                            <span style="font-weight: 600; color: #212529;">+91 98765 43210</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/icons/envelope.svg" style="height: 24px; width: 24px; margin-right: 8px;">
+                        <div>
+                            <span style="font-size: 0.95rem; color: #888;">Email :</span><br>
+                            <span style="font-weight: 600; color: #212529;">service@ananyasales.com</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/icons/geo-alt.svg" style="height: 24px; width: 24px; margin-right: 8px;">
+                        <div>
+                            <span style="font-size: 0.95rem; color: #888;">Address :</span><br>
+                            <span style="font-weight: 600; color: #212529;">123 Medical Equipment Plaza, New Delhi 110001</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="d-flex align-items-center">
-                <span class="me-4">
-                    <i class="bi bi-clock-fill me-1"></i> Mon-Sat: 8AM-8PM | 
-                    <a href="/user-login.php" class="top-bar-link">
-                        <i class="bi bi-person-circle me-1"></i> Customer Login
-                    </a>
-                </span>      </span>
-                    </span>
-                
-            </div>
-        </div>
-    </div>
+        </nav>
     <style>
     .top-bar-custom {
         background: var(--gradient-primary);
@@ -76,47 +88,7 @@
     </style>
 
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-        <div class="container nav-container">
-            <a class="navbar-brand navbar-brand-custom" href="#">
-                <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service" class="navbar-logo">
-                <span class="brand-name">Ananya Sales & Service</span>
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom active" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="#">Services</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="#">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="#">Testimonials</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="#">Contact</a>
-                    </li>
-                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-                        <a class="btn emergency-btn text-white" href="tel:+919876543210">
-                            <i class="bi bi-telephone me-2"></i>Emergency Call
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- ...existing code... -->
 
     <style>
         :root {
