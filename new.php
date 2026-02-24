@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -8,6 +9,60 @@ if (isset($_SESSION['user_id'])) {
     } elseif ($_SESSION['user_role'] === 'user') {
         header("Location: user/user-dashboard.php");
         exit;
+    }
+}
+
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/includes/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/includes/PHPMailer/src/Exception.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Contact form processing
+$successMsg = $errorMsg = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
+    $name = trim($_POST['contact_name'] ?? '');
+    $phone = trim($_POST['contact_phone'] ?? '');
+    $subject = trim($_POST['contact_subject'] ?? '');
+    $message = trim($_POST['contact_message'] ?? '');
+
+    // Basic validation
+    if ($name && preg_match('/^[0-9]{10}$/', $phone) && $subject && $message) {
+        // Save to DB
+        $stmt = $conn->prepare("INSERT INTO contact_messages (name, phone, subject, message, created_at) VALUES (?, ?, ?, ?, NOW())");
+        $stmt->bind_param("ssss", $name, $phone, $subject, $message);
+        $dbSaved = $stmt->execute();
+        $stmt->close();
+
+        // Send Email
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.ananyasales.in';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'support@ananyasales.in';
+            $mail->Password   = 'Ananya#135';
+            $mail->Port       = 465;
+            $mail->SMTPSecure = 'ssl';
+            $mail->setFrom('support@ananyasales.in', 'Ananya Sales & Service');
+            $mail->addAddress('sumitkumar9012004@gmail.com');
+            $mail->Subject = 'New Contact Message: ' . ucfirst($subject);
+            $mail->isHTML(true);
+            $mail->Body = '<b>Name:</b> ' . htmlspecialchars($name) . '<br>' .
+                         '<b>Phone:</b> ' . htmlspecialchars($phone) . '<br>' .
+                         '<b>Subject:</b> ' . htmlspecialchars($subject) . '<br>' .
+                         '<b>Message:</b><br>' . nl2br(htmlspecialchars($message));
+            $mail->send();
+            $successMsg = 'Thank you! Your message has been sent. Our team will get back to you shortly.';
+        } catch (Exception $e) {
+            $errorMsg = 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+        }
+        if (!$dbSaved) {
+            $errorMsg = 'Message could not be saved to database.';
+        }
+    } else {
+        $errorMsg = 'Please fill all fields correctly.';
     }
 }
 ?>
@@ -194,6 +249,96 @@ if (isset($_SESSION['user_id'])) {
     .top-shape::before{
       background: #000000;
     }
+
+    
+    /* Footer */
+    .main-footer {
+      background: linear-gradient(135deg, #1a1a1a 0%, var(--dark-text) 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .main-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--gradient-primary);
+    }
+
+    .footer-column h5 {
+      position: relative;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .footer-column h5::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--primary-color);
+    }
+
+    .footer-link {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer-link:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      transition: all 0.3s;
+      margin-right: 10px;
+    }
+
+    .social-btn:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px);
+    }
+
+    /* Animations */
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .scroll-animate.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 6rem 0 4rem;
+        text-align: center;
+      }
+      
+      section {
+        padding: 3rem 0;
+      }
+    }
     </style>
 </head>
 
@@ -218,7 +363,7 @@ if (isset($_SESSION['user_id'])) {
         <div class="row gx-0">
             <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
                  <div class="d-inline-flex align-items-center">
-                    <small class="py-2"><i class="far fa-clock text-danger me-2"></i>Opening Hours: Mon - Tues : 6.00 am - 10.00 pm, Sunday Closed </small>
+                  <small class="py-2"><i class="far fa-clock text-danger me-2"></i>Opening Hours: Mon - Sat : 9.00 am - 8.00 pm, Sunday Closed </small>
                 </div>
             </div>
             <div class="col-md-6 text-center text-lg-end">
@@ -404,166 +549,339 @@ if (isset($_SESSION['user_id'])) {
     <!-- Service End -->
 
 
-    <!-- Team Start -->
-    <div class="container-fluid py-5">
+    <!-- Testimonials Start -->
+    <style>
+    .testimonial-section {
+        background: #fff;
+        padding: 60px 0;
+    }
+    .carousel-item {
+        min-height: 320px;
+    }
+    .testimonial-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        padding: 32px 24px 24px 24px;
+        max-width: 370px;
+        min-width: 320px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        transition: box-shadow 0.2s;
+        position: relative;
+    }
+    .testimonial-stars {
+        color: #ffb400;
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+    .testimonial-text {
+        font-size: 1.08rem;
+        color: #222;
+        margin-bottom: 24px;
+        min-height: 80px;
+    }
+    .testimonial-profile {
+        display: flex;
+        align-items: center;
+        margin-top: auto;
+    }
+    .testimonial-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 3px solid #e11d48;
+        margin-right: 16px;
+        object-fit: cover;
+    }
+    .testimonial-name {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #222;
+        margin-bottom: 2px;
+    }
+    .testimonial-title {
+        font-size: 1rem;
+        color: #888;
+    }
+    /* Carousel navigation button styles */
+    .carousel-control-prev, .carousel-control-next {
+        width: 48px;
+        height: 48px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #e30613;
+        border-radius: 50%;
+        opacity: 0.85;
+        border: none;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+        filter: none;
+        background-size: 60% 60%;
+        background-color: transparent;
+    }
+    .carousel-control-prev:hover, .carousel-control-next:hover {
+        opacity: 1;
+        background: #b9000e;
+    }
+    @media (max-width: 900px) {
+        .carousel-item {
+            min-height: 0;
+        }
+        .testimonial-card {
+            min-width: 0;
+            width: 100%;
+        }
+        .carousel-control-prev, .carousel-control-next {
+            width: 36px;
+            height: 36px;
+        }
+    }
+    </style>
+    <div class="testimonial-section" id="testimonials">
         <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.1s">
-                    <div class="section-title bg-light rounded h-100 p-5">
-                        <h5 class="position-relative d-inline-block text-primary text-uppercase">Our Dentist</h5>
-                        <h1 class="display-6 mb-4">Meet Our Certified & Experienced Dentist</h1>
-                        <a href="appointment.html" class="btn btn-primary py-3 px-5">Appointment</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                    <div class="team-item">
-                        <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="https://imgs.search.brave.com/iJHaHSSRqZ33zOmwvXR3UK41G3koFGq5FYNLjNVGNxQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/dmVjdG9yc3RvY2su/Y29tL2kvNTAwcC80/NS83OC9mZWJydWFy/eS1pcy1uYXRpb25h/bC1yYW5kb20tYWN0/cy1vZi1raW5kbmVz/cy13ZWVrLXZlY3Rv/ci01ODkwNDU3OC5q/cGc" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-instagram fw-normal"></i></a>
+            <div class="section-title mb-4 text-center">
+                <h5 class="position-relative d-inline-block text-primary text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">TESTIMONIALS</h5>
+                <span class="d-inline-block align-middle mx-2" style="border-top: 3px solid #e30613; width: 45px; position: relative; top: -8px;"></span>
+                <span class="d-inline-block align-middle mx-1" style="border-top: 3px solid #a9030d; width: 15px; position: relative; top: -8px;"></span>
+                <h1 class="display-5 mb-0 mt-2" style="font-weight:700;">What Our Clients Say</h1>
+            </div>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="d-flex justify-content-center align-items-center w-100">
+                            <div class="testimonial-card">
+                                <div class="testimonial-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="testimonial-text">"Ananya's technicians resolved our plasma freezer issue within 2 hours of calling. Their expertise is unmatched and their emergency service is truly reliable."</div>
+                                <div class="testimonial-profile">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Sharma" class="testimonial-avatar">
+                                    <div>
+                                        <div class="testimonial-name">Dr. Sharma</div>
+                                        <div class="testimonial-title">Delhi Blood Bank</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                            <h4 class="mb-2">Dr. John Doe</h4>
-                            <p class="text-primary mb-0">Implant Surgeon</p>
-                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
-                    <div class="team-item">
-                        <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="https://imgs.search.brave.com/iJHaHSSRqZ33zOmwvXR3UK41G3koFGq5FYNLjNVGNxQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/dmVjdG9yc3RvY2su/Y29tL2kvNTAwcC80/NS83OC9mZWJydWFy/eS1pcy1uYXRpb25h/bC1yYW5kb20tYWN0/cy1vZi1raW5kbmVz/cy13ZWVrLXZlY3Rv/ci01ODkwNDU3OC5q/cGc" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-instagram fw-normal"></i></a>
+                    <div class="carousel-item">
+                        <div class="d-flex justify-content-center align-items-center w-100">
+                            <div class="testimonial-card">
+                                <div class="testimonial-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="testimonial-text">"Their AMC program has saved us thousands in unexpected repair costs. The preventive maintenance approach ensures our equipment is always in optimal condition."</div>
+                                <div class="testimonial-profile">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Ms. Patel" class="testimonial-avatar">
+                                    <div>
+                                        <div class="testimonial-name">Ms. Patel</div>
+                                        <div class="testimonial-title">Mumbai Medical Center</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                            <h4 class="mb-2">Dr. John Doe</h4>
-                            <p class="text-primary mb-0">Implant Surgeon</p>
-                        </div>
                     </div>
-                </div>
-                <!-- <div class="col-lg-4 wow slideInUp" data-wow-delay="0.1s">
-                    <div class="team-item">
-                        <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="assets/images/team-3.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-instagram fw-normal"></i></a>
+                    <div class="carousel-item">
+                        <div class="d-flex justify-content-center align-items-center w-100">
+                            <div class="testimonial-card">
+                                <div class="testimonial-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <div class="testimonial-text">"The calibration certificates provided meet all NABH requirements. Their documentation is thorough and has made our regulatory compliance much easier."</div>
+                                <div class="testimonial-profile">
+                                    <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Mr. Kumar" class="testimonial-avatar">
+                                    <div>
+                                        <div class="testimonial-name">Mr. Kumar</div>
+                                        <div class="testimonial-title">Bangalore Hospital</div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                            <h4 class="mb-2">Dr. John Doe</h4>
-                            <p class="text-primary mb-0">Implant Surgeon</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                    <div class="team-item">
-                        <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="assets/images/team-4.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-instagram fw-normal"></i></a>
-                            </div>
-                        </div>
-                        <div class="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                            <h4 class="mb-2">Dr. John Doe</h4>
-                            <p class="text-primary mb-0">Implant Surgeon</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
-                    <div class="team-item">
-                        <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="images/team-5.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-instagram fw-normal"></i></a>
-                            </div>
-                        </div>
-                        <div class="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                            <h4 class="mb-2">Dr. John Doe</h4>
-                            <p class="text-primary mb-0">Implant Surgeon</p>
-                        </div>
-                    </div>
-                </div> -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
     </div>
-    <!-- Team End -->
-
+    <!-- Testimonials End -->
 
     <!-- Contact Start -->
     <div class="container-fluid py-5">
         <div class="container">
             <div class="row g-5">
                 <div class="col-xl-4 col-lg-6 wow slideInUp" data-wow-delay="0.1s">
-                    <div class="bg-light rounded h-100 p-5">
-                        <div class="section-title">
-                            <h5 class="position-relative d-inline-block text-primary text-uppercase">Contact Us</h5>
-                            <h1 class="display-6 mb-4">Feel Free To Contact Us</h1>
-                        </div>
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="bi bi-geo-alt fs-1 text-primary me-3"></i>
-                            <div class="text-start">
-                                <h5 class="mb-0">Our Office</h5>
-                                <span>123 Street, New York, USA</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="bi bi-envelope-open fs-1 text-primary me-3"></i>
-                            <div class="text-start">
-                                <h5 class="mb-0">Email Us</h5>
-                                <span>info@ananyasales.in</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-phone-vibrate fs-1 text-primary me-3"></i>
-                            <div class="text-start">
-                                <h5 class="mb-0">Call Us</h5>
-                                <span>+91 81042 93994</span>
-                            </div>
-                        </div>
-                    </div>
+                                        <!-- Improved Contact Card Design -->
+                                        <style>
+                                            .contact-card {
+                                                background: #fff;
+                                                border-radius: 18px;
+                                                box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+                                                padding: 2.5rem 2rem;
+                                                max-width: 340px;
+                                                margin: auto;
+                                            }
+                                            .contact-header {
+                                                display: flex;
+                                                align-items: center;
+                                                margin-bottom: 1.2rem;
+                                            }
+                                            .contact-title {
+                                                color: #2563eb;
+                                                font-weight: 700;
+                                                letter-spacing: 1px;
+                                                font-size: 1rem;
+                                                text-transform: uppercase;
+                                            }
+                                            .contact-divider {
+                                                flex: 1;
+                                                height: 2px;
+                                                background: linear-gradient(90deg, #e11d48 60%, transparent 100%);
+                                                margin-left: 1rem;
+                                                border-radius: 1px;
+                                            }
+                                            .contact-card h2 {
+                                                font-size: 2rem;
+                                                font-weight: 800;
+                                                margin: 0 0 2rem 0;
+                                                color: #22223b;
+                                                line-height: 1.2;
+                                            }
+                                            .contact-info {
+                                                display: flex;
+                                                flex-direction: column;
+                                                gap: 1.5rem;
+                                            }
+                                            .contact-item {
+                                                display: flex;
+                                                align-items: flex-start;
+                                                gap: 1rem;
+                                            }
+                                            .contact-icon {
+                                                color: #e11d48;
+                                                font-size: 1.7rem;
+                                                margin-top: 2px;
+                                                width: 2rem;
+                                                height: 2rem;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                            }
+                                            .contact-detail {
+                                                color: #6b7280;
+                                                font-size: 1rem;
+                                                font-weight: 400;
+                                            }
+                                            @media (max-width: 500px) {
+                                                .contact-card {
+                                                    padding: 1.2rem 0.7rem;
+                                                    max-width: 100%;
+                                                }
+                                                .contact-card h2 {
+                                                    font-size: 1.3rem;
+                                                }
+                                            }
+                                        </style>
+                                        <div class="contact-card">
+                                            <div class="contact-header">
+                                                <span class="contact-title">CONTACT US</span>
+                                                <span class="contact-divider"></span>
+                                            </div>
+                                            <h2>Feel Free To<br>Contact Us</h2>
+                                            <div class="contact-info">
+                                                <div class="contact-item">
+                                                    <span class="contact-icon">
+                                                        <!-- Location SVG -->
+                                                        <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C7.03 2 3 6.03 3 11c0 5.25 7.25 11 9 11s9-5.75 9-11c0-4.97-4.03-9-9-9zm0 13.5c-2.48 0-4.5-2.02-4.5-4.5S9.52 6.5 12 6.5s4.5 2.02 4.5 4.5-2.02 4.5-4.5 4.5z" fill="#e11d48"/></svg>
+                                                    </span>
+                                                    <div>
+                                                        <strong>Our Office</strong>
+                                                        <div class="contact-detail">Navde, Navi Mumbai</div>
+                                                    </div>
+                                                </div>
+                                                <div class="contact-item">
+                                                    <span class="contact-icon">
+                                                        <!-- Email SVG -->
+                                                        <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v.01L12 13 4 6.01V6h16zm-16 12V8l8 5 8-5v10H4z" fill="#e11d48"/></svg>
+                                                    </span>
+                                                    <div>
+                                                        <strong>Email Us</strong>
+                                                        <div class="contact-detail">info@ananyasales.in</div>
+                                                    </div>
+                                                </div>
+                                                <div class="contact-item">
+                                                    <span class="contact-icon">
+                                                        <!-- Phone SVG -->
+                                                        <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.21.49 2.53.76 3.88.76a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 10.5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.35.27 2.67.76 3.88a1 1 0 01-.27 1.11l-2.2 2.2z" fill="#e11d48"/></svg>
+                                                    </span>
+                                                    <div>
+                                                        <strong>Call Us</strong>
+                                                        <div class="contact-detail">+91 81042 93994</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 wow slideInUp" data-wow-delay="0.3s">
 
-                    <form>
+                    <?php if ($successMsg): ?>
+                        <div class="alert alert-success"> <?= $successMsg ?> </div>
+                    <?php elseif ($errorMsg): ?>
+                        <div class="alert alert-danger"> <?= $errorMsg ?> </div>
+                    <?php endif; ?>
+                    <form method="post" autocomplete="off">
                         <div class="row g-3">
                             <div class="col-12">
-                                <input type="text" class="form-control border-0 bg-light px-4" placeholder="Your Name" style="height: 55px;">
+                                <input type="text" name="contact_name" class="form-control border-0 bg-light px-4" placeholder="Your Name" style="height: 55px;" required value="<?= htmlspecialchars($_POST['contact_name'] ?? '') ?>">
                             </div>
                             <div class="col-12">
-                                <input type="email" class="form-control border-0 bg-light px-4" placeholder="Your Email" style="height: 55px;">
+                                <input type="tel" name="contact_phone" class="form-control border-0 bg-light px-4" placeholder="Your Phone Number" style="height: 55px;" pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)" required value="<?= htmlspecialchars($_POST['contact_phone'] ?? '') ?>">
                             </div>
                             <div class="col-12">
-                                <input type="text" class="form-control border-0 bg-light px-4" placeholder="Subject" style="height: 55px;">
+                                <select name="contact_subject" class="form-control border-0 bg-light px-4" style="height: 55px;" required>
+                                    <option value="" disabled <?= empty($_POST['contact_subject']) ? 'selected' : '' ?>>Select Subject</option>
+                                    <option value="service" <?= (($_POST['contact_subject'] ?? '') === 'service') ? 'selected' : '' ?>>Service Request</option>
+                                    <option value="purchase" <?= (($_POST['contact_subject'] ?? '') === 'purchase') ? 'selected' : '' ?>>Product Purchase</option>
+                                    <option value="complaint" <?= (($_POST['contact_subject'] ?? '') === 'complaint') ? 'selected' : '' ?>>Complaint</option>
+                                    <option value="consultation" <?= (($_POST['contact_subject'] ?? '') === 'consultation') ? 'selected' : '' ?>>Consultation</option>
+                                    <option value="other" <?= (($_POST['contact_subject'] ?? '') === 'other') ? 'selected' : '' ?>>Other</option>
+                                </select>
                             </div>
                             <div class="col-12">
-                                <textarea class="form-control border-0 bg-light px-4 py-3" rows="5" placeholder="Message"></textarea>
+                                <textarea name="contact_message" class="form-control border-0 bg-light px-4 py-3" rows="3" placeholder="Message" required><?= htmlspecialchars($_POST['contact_message'] ?? '') ?></textarea>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
+                                <button class="btn btn-danger w-100 py-3" type="submit" name="contact_submit">Send Message</button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="col-xl-4 col-lg-12 wow slideInUp" data-wow-delay="0.6s">
                     <iframe class="position-relative rounded w-100 h-100"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15084.844682350982!2d73.0912470366346!3d19.05445089646613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7e9f07164197b%3A0xcf882f74c583ad1a!2sNavde%2C%20Taloja%2C%20Navi%20Mumbai%2C%20Maharashtra%20410208!5e0!3m2!1sen!2sin!4v1771923820659!5m2!1sen!2sin"
                         frameborder="0" style="min-height: 400px; border:0;" allowfullscreen="" aria-hidden="false"
                         tabindex="0"></iframe>
                 </div>
@@ -572,15 +890,85 @@ if (isset($_SESSION['user_id'])) {
     </div>
     <!-- Contact End -->
 
-
-
-
-                </div>
-            </div>
+    
+  <!-- Footer -->
+  <footer class="main-footer pt-5" style="background: black !important; color: white; position: relative; overflow: hidden;">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Company Info -->
+        <div class="col-lg-4 col-md-6 footer-column">
+          <h5>Ananya Sales & Service</h5>
+          <p class="mt-3">Specialists in blood bank equipment maintenance, calibration, and service contracts with over 15 years of trusted service.</p>
+          <div class="d-flex mt-4">
+            <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+          </div>
         </div>
-    </div>
-    <!-- Footer End -->
 
+        <!-- Quick Links -->
+        <div class="col-lg-2 col-md-6 footer-column">
+          <h5>Quick Links</h5>
+          <a href="#home" class="footer-link">Home</a>
+          <a href="#about" class="footer-link">About Us</a>
+          <a href="#services" class="footer-link">Services</a>
+          <a href="#products" class="footer-link">Products</a>
+          <a href="#testimonials" class="footer-link">Testimonials</a>
+        </div>
+
+        <!-- Services -->
+        <div class="col-lg-3 col-md-6 footer-column">
+          <h5>Our Services</h5>
+          <a href="#" class="footer-link">Plasma Freezers</a>
+          <a href="#" class="footer-link">Blood Storage</a>
+          <a href="#" class="footer-link">Centrifuge Calibration</a>
+          <a href="#" class="footer-link">AMC Contracts</a>
+          <a href="#" class="footer-link">Emergency Repairs</a>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="col-lg-3 col-md-6 footer-column">
+          <h5>Contact Us</h5>
+          <div class="d-flex mb-3">
+            <i class="bi bi-geo-alt-fill text-primary me-3 mt-1"></i>
+            <span>123 Medical Equipment Plaza, New Delhi 110001, India</span>
+          </div>
+          <div class="d-flex mb-3">
+            <i class="bi bi-telephone-fill text-primary me-3 mt-1"></i>
+            <div>
+              <div>+91 98765 43210</div>
+              <div>+91 11 2345 6789</div>
+            </div>
+          </div>
+          <div class="d-flex mb-3">
+            <i class="bi bi-envelope-fill text-primary me-3 mt-1"></i>
+            <span>service@ananyasales.com</span>
+          </div>
+          <div class="d-flex">
+            <i class="bi bi-clock-fill text-primary me-3 mt-1"></i>
+            <div>
+              <div>Monday-Saturday: 8AM-8PM</div>
+              <div>Emergency: 24/7 Support</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4 border-secondary">
+
+      <div class="row align-items-center py-3">
+        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+          <p class="mb-0">&copy; <?php echo date('Y'); ?> Ananya Sales & Service. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <div class="d-flex justify-content-md-end justify-content-center">
+            <a href="https://www.meetsumit.xyz" class="footer-link">Developed by Sumit Kumar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-danger btn-lg-square rounded back-to-top"><i class="bi bi-arrow-up"></i></a>

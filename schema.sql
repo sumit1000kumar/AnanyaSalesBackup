@@ -115,4 +115,12 @@ CREATE TABLE users (
   UNIQUE KEY email (email)
 );
 
-
+-- for contact messages
+CREATE TABLE contact_messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    subject VARCHAR(50) NOT NULL,
+    message TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

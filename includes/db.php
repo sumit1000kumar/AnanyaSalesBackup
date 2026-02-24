@@ -7,7 +7,7 @@
 // $conn = new mysqli($host, $user, $password, $database);
 
 // for local testing
-$conn = new mysqli("localhost", "root", "", "ram_dada");
+$conn = new mysqli("localhost", "root", "", "ananyasales");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
