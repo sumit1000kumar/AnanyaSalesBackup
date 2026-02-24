@@ -42,6 +42,102 @@ if (isset($_SESSION['user_id'])) {
     <!-- Main Stylesheet (local, customized) -->
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
+    /* Attractive Support Section Styles */
+    .support-attractive-container {
+        width: 100%;
+        background: linear-gradient(90deg, #fff 60%, #e30613 100%);
+        border-radius: 18px;
+        box-shadow: 0 6px 32px rgba(229,9,20,0.10), 0 2px 8px rgba(0,0,0,0.06);
+        padding: 0;
+        margin: 0 auto 40px auto;
+        max-width: 900px;
+        transition: box-shadow 0.2s;
+    }
+    .support-attractive-content {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 170px;
+    }
+    .support-attractive-left {
+        flex: 1 1 60%;
+        background: transparent;
+        padding: 36px 32px 36px 38px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .support-attractive-left h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+    }
+    .support-attractive-left p {
+        font-size: 1.13rem;
+        color: #444;
+        margin-bottom: 0;
+    }
+    .support-attractive-right {
+        flex: 1 1 40%;
+        background: #e30613;
+        border-radius: 0 18px 18px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 260px;
+        padding: 0 32px;
+        position: relative;
+    }
+    .support-attractive-phone {
+        font-size: 2.3rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: 2px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    }
+    .support-attractive-phone i {
+        font-size: 2.1rem;
+        color: #fff;
+        background: #b9000e;
+        border-radius: 50%;
+        padding: 12px 14px;
+        margin-right: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .support-attractive-label {
+        font-size: 1.1rem;
+        color: #fff;
+        font-weight: 600;
+        letter-spacing: 1px;
+        background: rgba(255,255,255,0.13);
+        border-radius: 1em;
+        padding: 4px 18px;
+        margin-top: 2px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    @media (max-width: 700px) {
+        .support-attractive-content {
+            flex-direction: column;
+            min-height: unset;
+        }
+        .support-attractive-left, .support-attractive-right {
+            border-radius: 18px 18px 0 0;
+            padding: 28px 18px;
+            min-width: unset;
+            text-align: center;
+        }
+        .support-attractive-right {
+            border-radius: 0 0 18px 18px;
+            padding: 24px 18px;
+        }
+    }
         /* Navbar link hover underline effect */
         .navbar-nav .nav-link {
             position: relative;
@@ -189,7 +285,7 @@ if (isset($_SESSION['user_id'])) {
                                         </div>
                                         <div class="d-flex flex-wrap gap-3" style="background:none !important;">
                                             <a href="products.php" class="btn btn-danger px-4 py-2 fw-semibold shadow">Check Products</a>
-                                            <a href="#services" class="btn btn-outline-light px-4 py-2 fw-semibold">Our Services</a>
+                                            <a href="#contact" class="btn btn-outline-light px-4 py-2 fw-semibold">Schedule a Consultation</a>
                                         </div>
                                     </div>
                                 </div>
@@ -230,21 +326,21 @@ if (isset($_SESSION['user_id'])) {
                 <div class="col-lg-7">
                     <div class="section-title mb-4">
                         <h5 class="position-relative d-inline-block text-primary text-uppercase">About Us</h5>
-                        <h1 class="display-5 mb-0">The World's Best Dental Clinic That You Can Trust</h1>
+                        <h1 class="display-5 mb-0">Leading Blood Bank Equipment Supplier in India</h1>
                     </div>
-                    <h4 class="text-body fst-italic mb-4">Diam dolor diam ipsum sit. Clita erat ipsum et lorem stet no lorem sit clita duo justo magna dolore</h4>
-                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus clita duo justo et tempor eirmod magna dolore erat amet</p>
+                    <h4 class="text-body fst-italic mb-4">Advanced blood bank equipment, genuine spare parts, and certified technical services for hospitals & labs.</h4>
+                    <p class="mb-4">We supply high-performance blood bank refrigerators, plasma freezers, platelet incubators, and other critical storage systems for hospitals and laboratories. Along with equipment supply, we provide genuine spare parts, installation, calibration, and Annual Maintenance Contracts (AMC) to ensure reliable and compliant operations.</p>
                     <div class="row g-3">
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.3s">
-                            <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>Award Winning</h5>
-                            <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>Professional Staff</h5>
+                            <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>Certified Technical Engineers</h5>
+                            <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>Genuine Spare Parts</h5>
                         </div>
                         <div class="col-sm-6 wow zoomIn" data-wow-delay="0.6s">
-                            <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>24/7 Opened</h5>
+                            <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>Installation & AMC Services</h5>
                             <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>Fair Prices</h5>
                         </div>
                     </div>
-                    <a href="appointment.html" class="btn btn-danger py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">Make Appointment</a>
+                    <a href="appointment.html" class="btn btn-danger py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">Request a Quote</a>
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">
                     <div class="position-relative h-100">
@@ -260,63 +356,46 @@ if (isset($_SESSION['user_id'])) {
     <!-- Service Start -->
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container">
-            <div class="row g-5 mb-5">
-                <div class="col-lg-5 wow zoomIn" data-wow-delay="0.3s" style="min-height: 400px;">
-                    <div class="h-100 position-relative">
-                        <img class="position-absolute w-100 h-100" src="img/about.jpg" style="object-fit: cover;">
-                    </div>
+            <div class="section-title mb-4 text-center">
+                <h5 class="position-relative d-inline-block text-primary text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">OUR SERVICES</h5>
+                <span class="d-inline-block align-middle mx-2" style="border-top: 3px solid #e30613; width: 45px; position: relative; top: -8px;"></span>
+                <span class="d-inline-block align-middle mx-1" style="border-top: 3px solid #a9030d; width: 15px; position: relative; top: -8px;"></span>
+                <h1 class="display-5 mb-0 mt-2" style="font-weight:700;">Complete Blood Bank Equipment Solutions</h1>
+            </div>
+            <div class="d-flex justify-content-center gap-4 mb-4 flex-wrap">
+                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
+                    <img src="assets/images/blood-bank-supply-service-1.png" alt="Blood Bank Equipment Supply" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
+                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">Blood Bank Equipment Supply</h3>
+                    <p class="mb-0" style="font-size:16px;text-align:left;">Advanced refrigerators, plasma freezers, platelet incubators, and storages</p>
                 </div>
-                <div class="col-lg-7">
-                    <div class="section-title mb-5">
-                        <h5 class="position-relative d-inline-block text-primary text-uppercase">Our Services</h5>
-                        <h1 class="display-5 mb-0">We Offer The Best Quality Dental Services</h1>
-                    </div>
-                    <div class="row g-5">
-                        <div class="col-md-6 service-item wow zoomIn" data-wow-delay="0.6s">
-                            <div class="rounded-top overflow-hidden">
-                                <img class="img-fluid" src="assets/images/service-1.jpg" alt="">
-                            </div>
-                            <div class="position-relative bg-light rounded-bottom text-center p-4">
-                                <h5 class="m-0">Cosmetic Dentistry</h5>
-                            </div>
-                        </div>
-                        <div class="col-md-6 service-item wow zoomIn" data-wow-delay="0.9s">
-                            <div class="rounded-top overflow-hidden">
-                                <img class="img-fluid" src="assets/images/service-2.jpg" alt="">
-                            </div>
-                            <div class="position-relative bg-light rounded-bottom text-center p-4">
-                                <h5 class="m-0">Dental Implants</h5>
-                            </div>
-                        </div>
-                    </div>
+                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
+                    <img src="assets/images/installation-commissioning-service.png" alt="Installation & Commissioning" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
+                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">Installation & Commissioning</h3>
+                    <p class="mb-0" style="font-size:16px;text-align:left;">Professional setup, validation, and performance testing</p>
+                </div>
+                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
+                    <img src="assets/images/Genuine-spare-parts-supply-service.png" alt="Genuine Spare Parts Supply" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
+                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">Genuine Spare Parts Supply</h3>
+                    <p class="mb-0" style="font-size:16px;text-align:left;">Original components for reliable and compliant operation</p>
+                </div>
+                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
+                    <img src="assets/images/AMC-Breakdown-Service.png" alt="AMC & Breakdown Services" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
+                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">AMC & Breakdown Services</h3>
+                    <p class="mb-0" style="font-size:16px;text-align:left;">Annual Maintenance Contracts and rapid technical support</p>
                 </div>
             </div>
-            <div class="row g-5 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="col-lg-7">
-                    <div class="row g-5">
-                        <div class="col-md-6 service-item wow zoomIn" data-wow-delay="0.3s">
-                            <div class="rounded-top overflow-hidden">
-                                <img class="img-fluid" src="assets/images/service-3.jpg" alt="">
-                            </div>
-                            <div class="position-relative bg-light rounded-bottom text-center p-4">
-                                <h5 class="m-0">Dental Bridges</h5>
-                            </div>
-                        </div>
-                        <div class="col-md-6 service-item wow zoomIn" data-wow-delay="0.6s">
-                            <div class="rounded-top overflow-hidden">
-                                <img class="img-fluid" src="assets/images/service-4.jpg" alt="">
-                            </div>
-                            <div class="position-relative bg-light rounded-bottom text-center p-4">
-                                <h5 class="m-0">Teeth Whitening</h5>
-                            </div>
-                        </div>
+            <div class="support-attractive-container mb-5">
+                <div class="support-attractive-content">
+                    <div class="support-attractive-left">
+                        <h2>Need Immediate Technical Support?</h2>
+                        <p>Reliable blood bank equipment service and spare parts assistance across India.</p>
                     </div>
-                </div>
-                <div class="col-lg-5 service-item wow zoomIn" data-wow-delay="0.9s">
-                    <div class="position-relative bg-primary rounded h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
-                        <h3 class="text-white mb-3">Make Appointment</h3>
-                        <p class="text-white mb-3">Clita ipsum magna kasd rebum at ipsum amet dolor justo dolor est magna stet eirmod</p>
-                        <h2 class="text-white mb-0">+91 81042 93994</h2>
+                    <div class="support-attractive-right">
+                        <div class="support-attractive-phone">
+                            <!-- <i class="fa fa-phone-alt"></i> -->
+                             +91 81042 93994
+                        </div>
+                        <div class="support-attractive-label">Call Now</div>
                     </div>
                 </div>
             </div>
@@ -339,7 +418,7 @@ if (isset($_SESSION['user_id'])) {
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
                     <div class="team-item">
                         <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="assets/images/team-1.jpg" alt="">
+                            <img class="img-fluid rounded-top w-100" src="https://imgs.search.brave.com/iJHaHSSRqZ33zOmwvXR3UK41G3koFGq5FYNLjNVGNxQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/dmVjdG9yc3RvY2su/Y29tL2kvNTAwcC80/NS83OC9mZWJydWFy/eS1pcy1uYXRpb25h/bC1yYW5kb20tYWN0/cy1vZi1raW5kbmVz/cy13ZWVrLXZlY3Rv/ci01ODkwNDU3OC5q/cGc" alt="">
                             <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                                 <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
                                 <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
@@ -356,7 +435,7 @@ if (isset($_SESSION['user_id'])) {
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
                     <div class="team-item">
                         <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="assets/images/team-2.jpg" alt="">
+                            <img class="img-fluid rounded-top w-100" src="https://imgs.search.brave.com/iJHaHSSRqZ33zOmwvXR3UK41G3koFGq5FYNLjNVGNxQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/dmVjdG9yc3RvY2su/Y29tL2kvNTAwcC80/NS83OC9mZWJydWFy/eS1pcy1uYXRpb25h/bC1yYW5kb20tYWN0/cy1vZi1raW5kbmVz/cy13ZWVrLXZlY3Rv/ci01ODkwNDU3OC5q/cGc" alt="">
                             <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
                                 <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
                                 <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
@@ -370,7 +449,7 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.1s">
+                <!-- <div class="col-lg-4 wow slideInUp" data-wow-delay="0.1s">
                     <div class="team-item">
                         <div class="position-relative rounded-top" style="z-index: 1;">
                             <img class="img-fluid rounded-top w-100" src="assets/images/team-3.jpg" alt="">
@@ -420,7 +499,7 @@ if (isset($_SESSION['user_id'])) {
                             <p class="text-primary mb-0">Implant Surgeon</p>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -493,72 +572,6 @@ if (isset($_SESSION['user_id'])) {
     </div>
     <!-- Contact End -->
 
-
-    <!-- Newsletter Start -->
-    <div class="container-fluid position-relative pt-5 wow fadeInUp" data-wow-delay="0.1s" style="z-index: 1;">
-        <div class="container">
-            <div class="bg-primary p-5">
-                <form class="mx-auto" style="max-width: 600px;">
-                    <div class="input-group">
-                        <input type="text" class="form-control border-white p-3" placeholder="Your Email">
-                        <button class="btn btn-danger px-4">Sign Up</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Newsletter End -->
-    
-
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-light py-5 wow fadeInUp" data-wow-delay="0.3s" style="margin-top: -75px;">
-        <div class="container pt-5">
-            <div class="row g-5 pt-4">
-                <div class="col-lg-3 col-md-6">
-                    <h3 class="text-white mb-4">Quick Links</h3>
-                    <div class="d-flex flex-column justify-content-start">
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Home</a>
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>About Us</a>
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Our Services</a>
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Latest Blog</a>
-                        <a class="text-light" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Contact Us</a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h3 class="text-white mb-4">Popular Links</h3>
-                    <div class="d-flex flex-column justify-content-start">
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Home</a>
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>About Us</a>
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Our Services</a>
-                        <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Latest Blog</a>
-                        <a class="text-light" href="#"><i class="bi bi-arrow-right text-danger me-2"></i>Contact Us</a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h3 class="text-white mb-4">Get In Touch</h3>
-                    <p class="mb-2"><i class="bi bi-geo-alt text-danger me-2"></i>123 Street, New York, USA</p>
-                    <p class="mb-2"><i class="bi bi-envelope-open text-danger me-2"></i>info@ananyasales.in</p>
-                    <p class="mb-0"><i class="bi bi-telephone text-danger me-2"></i>+91 81042 939940</p>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h3 class="text-white mb-4">Follow Us</h3>
-                    <div class="d-flex">
-                        <a class="btn btn-lg btn-danger btn-lg-square rounded me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                        <a class="btn btn-lg btn-danger btn-lg-square rounded me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                        <a class="btn btn-lg btn-danger btn-lg-square rounded me-2" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                        <a class="btn btn-lg btn-danger btn-lg-square rounded" href="#"><i class="fab fa-instagram fw-normal"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid text-light py-4" style="background: #051225;">
-        <div class="container">
-            <div class="row g-0">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-md-0">&copy; <a class="text-white border-bottom" href="#">Your Site Name</a>. All Rights Reserved.</p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
 
 
 
