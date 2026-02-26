@@ -233,6 +233,17 @@
         .top-shape { padding-left: 0.5rem; padding-right: 0.5rem; }
         .top-shape p { margin: 0; font-size: 0.95rem; }
     }
+
+    /* Fix: mid-range screens where topbar was overflowing (766px - 902px) */
+    @media (min-width: 766px) and (max-width: 902px) {
+        /* keep both email and phone visible; tighten spacing and prevent wrapping */
+        .topbar-email { display: inline-block !important; }
+        .top-shape { padding-left: 0.35rem; padding-right: 0.35rem; gap: 0.35rem; flex-wrap: nowrap; }
+        .top-shape .me-3 { padding-right: 0.3rem; margin-right: 0.3rem; border-right: 1px solid rgba(255,255,255,0.18); }
+        .top-shape p, .top-shape a { font-size: 0.92rem; white-space: nowrap; }
+        .topbar-container { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .topbar-email a { display: inline-block; overflow: hidden; text-overflow: ellipsis; max-width: 220px; vertical-align: middle; }
+    }
     </style>
     <style>
     @media (max-width: 575.98px) {
