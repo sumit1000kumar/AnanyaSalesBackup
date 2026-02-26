@@ -210,6 +210,22 @@
         }
 
     </style>
+    <style>
+    @media (max-width: 575.98px) {
+        .modal-dialog {
+            margin: 1.2rem !important;
+            max-width: 98vw;
+        }
+        .modal-content {
+            border-radius: 0.7rem;
+        }
+    }
+    @media (max-width: 400px) {
+        .modal-dialog {
+            margin: 0.3rem !important;
+        }
+    }
+    </style>
 </head>
 <body>
     <!-- Spinner Start -->
@@ -277,12 +293,12 @@
     <!-- Navbar End -->
 
     <!-- Hero Section Start -->
-    <section class="hero-section position-relative" style="background: linear-gradient(120deg, #b31217 0%, #e52d27 100%); color: #fff; padding: 4.5rem 0 3.5rem; overflow: hidden;">
+    <section class="hero-section position-relative hero-bg-img" style="color: #fff; padding: 2.5rem 0 2rem; overflow: hidden;">
         <div class="container position-relative z-2">
             <div class="row align-items-center">
                 <div class="col-12">
                     <h6 class="mb-2" style="font-weight:600; letter-spacing:1px; opacity:0.85;">OUR PRODUCTS</h6>
-                    <h1 class="display-4 fw-bold mb-3" style="font-size:3rem;">Blood Bank Equipment & Service Solutions in India</h1>
+                    <h1 class="display-4 fw-bold mb-3" style="font-size:2.2rem;">Blood Bank Equipment & Service Solutions in India</h1>
                     <p class="mb-4" style="max-width:600px; opacity:0.92;">Reliable blood bank refrigerators, plasma freezers, platelet incubators, centrifuges, and component storage systems for hospitals and diagnostic laboratories.</p>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb bg-transparent p-0 mb-0" style="--bs-breadcrumb-divider: '›';">
@@ -782,6 +798,12 @@
         }
     </style>
     <style>
+    .hero-bg-img {
+        background: linear-gradient(120deg, rgba(179,18,23,0.70) 0%, rgba(229,45,39,0.55) 100%), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat;
+        position: relative;
+    }
+    </style>
+    <style>
     .product-img-fixed {
         height: 220px;
         object-fit: cover;
@@ -790,6 +812,22 @@
         border-radius: 0.5rem 0.5rem 0 0;
         transition: none;
         display: block;
+    }
+    @media (max-width: 991.98px) {
+        .col-md-4.col-sm-6 { flex: 0 0 50%; max-width: 50%; }
+    }
+    @media (max-width: 767.98px) {
+        .col-md-4.col-sm-6 { flex: 0 0 100%; max-width: 100%; }
+        .card.h-100 { min-height: unset; }
+        .product-img-fixed { height: 180px; }
+    }
+    @media (max-width: 575.98px) {
+        .product-img-fixed { height: 140px; }
+        .card-body { padding: 1rem; }
+        .card-title { font-size: 1.1rem; }
+        .card-text { font-size: 0.95rem; }
+        .d-flex.gap-2.mt-2 { flex-direction: column; gap: 0.5rem !important; }
+        .btn.w-50 { width: 100% !important; }
     }
     </style>
     <div class="floating-contact">
