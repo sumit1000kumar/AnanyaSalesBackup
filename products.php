@@ -244,6 +244,13 @@
         .topbar-container { padding-left: 0.5rem; padding-right: 0.5rem; }
         .topbar-email a { display: inline-block; overflow: hidden; text-overflow: ellipsis; max-width: 220px; vertical-align: middle; }
     }
+    /* Ensure contact band sits flush right between 765px and 992px */
+    @media (min-width: 765px) and (max-width: 992px) {
+        .topbar-container { position: relative; }
+        .topbar-container .row { min-height: 48px; }
+        .top-shape { position: absolute !important; right: 0; top: 0; padding-left: 0.5rem; padding-right: 0.5rem; }
+        .top-shape p, .top-shape a { white-space: nowrap; font-size: 0.93rem; }
+    }
     </style>
     <style>
     @media (max-width: 575.98px) {
@@ -262,6 +269,13 @@
     }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+    /* Desktop-only hero height increase */
+    @media (min-width: 992px) {
+        .hero-section { padding: 4rem 0 4rem !important; min-height: 160px; }
+        .hero-section .display-4 { font-size: 3.25rem; }
+    }
+    </style>
 </head>
 <body>
     <!-- Spinner Start -->
@@ -318,7 +332,7 @@
         aria-expanded="false"
         aria-label="Toggle navigation">
 
-    <i class="fa-solid fa-bars-staggered fs-3 text-danger"></i>
+    <i class="fa-solid fa-bars-staggered fs-3 text-danger" style="color: #000;"></i>
 
 </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -518,7 +532,7 @@
                         <img src="assets/images/products/Blood-Bank-Refrigerator.webp" class="card-img-top product-img-fixed" alt="Blood Bank Refrigerator" onerror="this.onerror=null;this.src='assets/images/products/placeholder.png';">
                         <div class="card-body">
                             <h5 class="card-title">Blood Bank Refrigerator</h5>
-                            <p class="card-text">Designed for safe storage of blood, red cells, and biological products at 2°C–6°C. Microprocessor temperature control, alarms, and chart recorder.</p>
+                            <p class="card-text">Designed for safe storage of blood, red cells, and biological products at 2°C–6°C. Microprocessor temperature control, alarms.</p>
                             <div class="d-flex gap-2 mt-2">
                                 <button class="btn btn-outline-secondary w-50 view-details-btn" data-product="Blood Bank Refrigerator">View Details</button>
                                 <button class="btn btn-outline-danger w-50 get-quote-btn" data-product="Blood Bank Refrigerator">Get Quote</button>
@@ -670,41 +684,41 @@
                 <!-- Quick Links -->
                 <div class="col-lg-2 col-md-6 footer-column">
                     <h5>Quick Links</h5>
-                    <a href="#home" class="footer-link">Home</a>
-                    <a href="#about" class="footer-link">About Us</a>
-                    <a href="#services" class="footer-link">Services</a>
-                    <a href="#products" class="footer-link">Products</a>
-                    <a href="#testimonials" class="footer-link">Testimonials</a>
+                    <a href="index.php#home" class="footer-link">Home</a>
+                    <a href="index.php#about" class="footer-link">About Us</a>
+                    <a href="index.php#services" class="footer-link">Services</a>
+                    <a href="products.php" class="footer-link">Products</a>
+                    <a href="index.php#testimonials" class="footer-link">Testimonials</a>
                 </div>
                 <!-- Services -->
                 <div class="col-lg-3 col-md-6 footer-column">
                     <h5>Our Services</h5>
-                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Plasma Freezers</a>
                     <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Blood Storage</a>
                     <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Centrifuge Calibration</a>
                     <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> AMC Contracts</a>
                     <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Emergency Repairs</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Equipments</a>
                 </div>
                 <!-- Contact Info -->
                 <div class="col-lg-3 col-md-6 footer-column">
                     <h5>Contact Us</h5>
                     <div class="d-flex mb-3">
-                        <i class="bi bi-geo-alt-fill text-primary me-3 mt-1"></i>
+                        <i class="bi bi-geo-alt-fill me-3 mt-1" style="color: #FFFFFF;"></i>
                         <span>Flat No. 702, The Gold Crest Society, Navde Colony, Navde, Navi Mumbai - 410208</span>
                     </div>
                     <div class="d-flex mb-3">
-                        <i class="bi bi-telephone-fill text-primary me-3 mt-1"></i>
+                        <i class="bi bi-telephone-fill  me-3 mt-1"  style="color: #FFFFFF;"></i>
                         <div>
                             <!-- <div>+91 98765 43210</div> -->
                             <div>+91 81042 93994</div>
                         </div>
                     </div>
                     <div class="d-flex mb-3">
-                        <i class="bi bi-envelope-fill text-primary me-3 mt-1"></i>
+                        <i class="bi bi-envelope-fill me-3 mt-1"  style="color: #FFFFFF;"></i>
                         <span>support@ananyasales.in</span>
                     </div>
                     <div class="d-flex">
-                        <i class="bi bi-clock-fill text-primary me-3 mt-1"></i>
+                        <i class="bi bi-clock-fill me-3 mt-1"  style="color: #FFFFFF;"></i>
                         <div>
                             <div>Monday-Saturday: 8AM-8PM</div>
                             <div>Emergency: 24/7 Support</div>
@@ -845,7 +859,11 @@
     </style>
     <style>
     .hero-bg-img {
-        background: linear-gradient(120deg, rgba(179,18,23,0.70) 0%, rgba(229,45,39,0.55) 100%), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat;
+        /* Hero background pulled from Unsplash (product/medical related) */
+        background-image: linear-gradient(120deg, rgba(179,18,23,0.70) 0%, rgba(229,45,39,0.55) 100%), url('https://images.unsplash.com/photo-1522753071498-f3137a65aee3?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
         position: relative;
     }
     </style>
