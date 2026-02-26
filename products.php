@@ -9,7 +9,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="assets/images/favicon.ico" rel="icon">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome (use single, modern version) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/lib/animate.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -197,7 +197,7 @@
             display: block;
             position: absolute;
             left: 0;
-            bottom: 20px;
+            bottom: 10px;
             width: 100%;
             height: 3px;
             background: #e53935;
@@ -209,6 +209,30 @@
             transform: scaleX(1);
         }
 
+    </style>
+    <style>
+    /* Topbar responsive: hide opening hours on small screens but keep contact visible */
+    .topbar-hours { display: inline-block; }
+    .topbar-email { display: inline-block; }
+
+    /* Container and top-shape spacing/positioning */
+    /* remove any default page top gap and keep topbar flush */
+    body { margin: 0; }
+    .topbar-container { padding-top: 0; padding-bottom: 0; position: relative; margin-top: 0 !important; }
+    .top-shape { margin-top: 0 !important; margin-left: auto; display: inline-flex; }
+
+    @media (max-width: 767.98px) {
+        .topbar-hours { display: none !important; }
+        .top-shape { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .top-shape .me-3 { padding-right: 0.5rem; margin-right: 0.5rem; border-right: none; }
+    }
+
+    /* If space is very limited, hide the email and show only phone */
+    @media (max-width: 480px) {
+        .topbar-email { display: none !important; }
+        .top-shape { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .top-shape p { margin: 0; font-size: 0.95rem; }
+    }
     </style>
     <style>
     @media (max-width: 575.98px) {
@@ -226,6 +250,7 @@
         }
     }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <!-- Spinner Start -->
@@ -245,16 +270,16 @@
     <!-- Vertical Download Catalog Button End -->
 
     <!-- Topbar Start -->
-    <div class="container-fluid bg-light ps-5 pe-0 d-none d-lg-block">
+    <div class="container-fluid bg-light ps-3 pe-0 py-0 topbar-container">
         <div class="row gx-0">
-            <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
-                 <div class="d-inline-flex align-items-center">
-                  <small class="py-2"><i class="far fa-clock text-danger me-2"></i>Opening Hours: Mon - Sat : 9.00 am - 8.00 pm, Sunday Closed </small>
-                </div>
+            <div class="col-md-6 text-start mb-2 mb-lg-0 d-none d-lg-block">
+                                 <div class="d-inline-flex align-items-center">
+                                    <small class="py-2 topbar-hours"><i class="far fa-clock text-danger me-2"></i>Mon - Sat : 9.00 am - 8.00 pm | <span style="text-transform: uppercase; font-weight: 550;">24*7 Emergency Support Available</span></small>
+                                </div>
             </div>
-            <div class="col-md-6 text-center text-lg-end">
+            <div class="col-md-6 text-end">
                 <div class="position-relative d-inline-flex align-items-center bg-danger text-white top-shape px-5">
-                    <div class="me-3 pe-3 border-end py-2">
+                    <div class="me-3 pe-3 border-end py-2 topbar-email">
                         <p class="m-0"><i class="fa fa-envelope-open me-2"></i><a href="mailto:info@ananyasales.in" class="text-white text-decoration-none">info@ananyasales.in</a></p>
                     </div>
                     <div class="py-2">
@@ -267,14 +292,24 @@
     <!-- Topbar End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-5 py-3 py-lg-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-5 py-3 sticky-top" style="z-index:1030;">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" style="height: 50px; width: auto; margin-right: 10px;">
             <span class="fw-bold text-danger">Ananya Sales & Service</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
-        </button>
+        </button> -->
+        <button class="navbar-toggler border-0" type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarCollapse"
+        aria-controls="navbarCollapse"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+
+    <i class="fa-solid fa-bars-staggered fs-3 text-danger"></i>
+
+</button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="index.php" class="nav-item nav-link">Home</a>
@@ -332,7 +367,7 @@
                         <img src="assets/images/products/Blood-Collection-Monitor.jpg" class="card-img-top product-img-fixed" alt="Blood Collection Monitor" onerror="this.onerror=null;this.src='assets/images/products/placeholder.png';">
                         <div class="card-body">
                             <h5 class="card-title">Blood Collection Monitor</h5>
-                            <p class="card-text">Compact, microprocessor-based device for smooth and gentle blood mixing. 3D mixing prevents clot formation.</p>
+                            <p class="card-text">Compact, microprocessor-based device for smooth and gentle blood mixing.</p>
                             <div class="d-flex gap-2 mt-2">
                                 <button class="btn btn-outline-secondary w-50 view-details-btn" data-product="Blood Collection Monitor">View Details</button>
                                 <button class="btn btn-outline-danger w-50 get-quote-btn" data-product="Blood Collection Monitor">Get Quote</button>
