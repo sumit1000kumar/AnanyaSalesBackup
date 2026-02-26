@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -65,6 +64,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         $errorMsg = 'Please fill all fields correctly.';
     }
 }
+
+// Quote Modal AJAX Handler
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    isset($_POST['quote_name'], $_POST['quote_phone'], $_POST['quote_product']) &&
+    !isset($_POST['contact_submit']) 
+) {
+    header('Content-Type: application/json');
+    $name = trim($_POST['quote_name']);
+    $phone = trim($_POST['quote_phone']);
+    $product = trim($_POST['quote_product']);
+
+    // Validate
+    if (!$name || !preg_match('/^[0-9]{10}$/', $phone) || !$product) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Please fill all fields correctly.'
+        ]);
+        exit;
+    }
+
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.ananyasales.in';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'support@ananyasales.in';
+        $mail->Password   = 'Ananya#135';
+        $mail->Port       = 465;
+        $mail->SMTPSecure = 'ssl';
+        $mail->setFrom('support@ananyasales.in', 'Ananya Sales & Service');
+        $mail->addAddress('sumitkumar9012004@gmail.com');
+        $mail->Subject = 'Quote Request: ' . $product;
+        $mail->isHTML(true);
+        $mail->Body = '<b>Product:</b> ' . htmlspecialchars($product) . '<br>' .
+                 '<b>Name:</b> ' . htmlspecialchars($name) . '<br>' .
+                 '<b>Phone:</b> ' . htmlspecialchars($phone) . '<br>' .
+                 '<b>Date:</b> ' . date('F j, Y, g:i a') . '<br>' .
+                 '<b>Submitted from:</b> ananyasales.in website';
+        $mail->send();
+        echo json_encode([
+            'success' => true,
+            'message' => 'Thank you! Your quote request has been sent.'
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo
+        ]);
+    }
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -98,246 +149,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
     /* Attractive Support Section Styles */
-    .support-attractive-container {
-        width: 100%;
-        background: linear-gradient(90deg, #fff 60%, #e30613 100%);
+    ...existing code...
+    /* FAQ Section Styles */
+        /* Remove Bootstrap default accordion arrow */
+        .faq-accordion .accordion-button::after {
+            background-image: none !important;
+            box-shadow: none !important;
+        }
+    #faq {
+        background: #fff;
         border-radius: 18px;
-        box-shadow: 0 6px 32px rgba(229,9,20,0.10), 0 2px 8px rgba(0,0,0,0.06);
-        padding: 0;
-        margin: 0 auto 40px auto;
-        max-width: 900px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        margin-bottom: 40px;
+        padding-top: 0;
+    }
+    #faq .section-title {
+        margin-bottom: 32px;
+    }
+    .faq-accordion .accordion-item {
+        border: none;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(229,9,20,0.07);
+        background: #fafbfc;
         transition: box-shadow 0.2s;
     }
-    .support-attractive-content {
-        display: flex;
-        align-items: stretch;
-        justify-content: space-between;
-        width: 100%;
-        min-height: 170px;
+    .faq-accordion .accordion-item.active,
+    .faq-accordion .accordion-item:hover {
+        box-shadow: 0 4px 24px rgba(229,9,20,0.13);
     }
-    .support-attractive-left {
-        flex: 1 1 60%;
-        background: transparent;
-        padding: 36px 32px 36px 38px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+    .faq-accordion .accordion-header {
+        background: none;
     }
-    .support-attractive-left h2 {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #1a1a1a;
-        margin-bottom: 12px;
-    }
-    .support-attractive-left p {
+    .faq-accordion .accordion-button {
         font-size: 1.13rem;
-        color: #444;
-        margin-bottom: 0;
-    }
-    .support-attractive-right {
-        flex: 1 1 40%;
-        background: #e30613;
-        border-radius: 0 18px 18px 0;
+        font-weight: 600;
+        color: #e30613;
+        background: #fff;
+        border: none;
+        box-shadow: none;
+        padding: 18px 24px;
+        border-radius: 0;
+        transition: background 0.2s, color 0.2s;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    .faq-accordion .accordion-button.collapsed {
+        color: #222;
+        background: #fafbfc;
+    }
+    .faq-accordion .accordion-button:after {
+        content: '+';
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #e30613;
+        margin-left: auto;
+        transition: color 0.2s;
+        display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 260px;
-        padding: 0 32px;
-        position: relative;
     }
-    .support-attractive-phone {
-        font-size: 2.3rem;
-        font-weight: 900;
-        color: #fff;
-        letter-spacing: 2px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 10px;
-        text-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    .faq-accordion .accordion-button:not(.collapsed):after {
+        color: #a9030d;
     }
-    .support-attractive-phone i {
-        font-size: 2.1rem;
-        color: #fff;
-        background: #b9000e;
-        border-radius: 50%;
-        padding: 12px 14px;
-        margin-right: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    }
-    .support-attractive-label {
-        font-size: 1.1rem;
-        color: #fff;
-        font-weight: 600;
-        letter-spacing: 1px;
-        background: rgba(255,255,255,0.13);
-        border-radius: 1em;
-        padding: 4px 18px;
-        margin-top: 2px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    .faq-accordion .accordion-body {
+        background: #fff;
+        color: #444;
+        font-size: 1.05rem;
+        padding: 18px 24px 16px 24px;
+        border-top: 1px solid #eee;
     }
     @media (max-width: 700px) {
-        .support-attractive-content {
-            flex-direction: column;
-            min-height: unset;
+        #faq {
+            border-radius: 0;
+            box-shadow: none;
+            margin-bottom: 24px;
         }
-        .support-attractive-left, .support-attractive-right {
-            border-radius: 18px 18px 0 0;
-            padding: 28px 18px;
-            min-width: unset;
-            text-align: center;
+        .faq-accordion .accordion-button,
+        .faq-accordion .accordion-body {
+            padding: 14px 12px;
         }
-        .support-attractive-right {
-            border-radius: 0 0 18px 18px;
-            padding: 24px 18px;
-        }
-    }
-        /* Navbar link hover underline effect */
-        .navbar-nav .nav-link {
-            position: relative;
-            transition: color 0.2s;
-        }
-        .navbar-nav .nav-link::after {
-            content: "";
-            display: block;
-            position: absolute;
-            left: 0;
-            bottom: 20px;
-            width: 100%;
-            height: 3px;
-            background: #e53935;
-            transform: scaleX(0);
-            transition: transform 0.3s;
-        }
-        .navbar-nav .nav-link:hover::after,
-        .navbar-nav .nav-link.active::after {
-            transform: scaleX(1);
-        }
-
-        .hero-80vh {
-        height: 80vh !important;
-        min-height: 400px;
-        position: relative;
-    }
-    .hero-80vh .carousel-inner,
-    .hero-80vh .carousel-item,
-    .hero-80vh .carousel-caption {
-        height: 100% !important;
-    }
-    .hero-80vh .carousel-item {
-        position: relative;
-    }
-    .hero-80vh .carousel-item > img {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover;
-        z-index: 1;
-    }
-    .hero-80vh .carousel-caption {
-        z-index: 2;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-    }
-
-    .top-shape::before{
-      background: #000000;
-    }
-
-    
-    /* Footer */
-    .main-footer {
-      background: linear-gradient(135deg, #1a1a1a 0%, var(--dark-text) 100%);
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .main-footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: var(--gradient-primary);
-    }
-
-    .footer-column h5 {
-      position: relative;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-
-    .footer-column h5::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 40px;
-      height: 2px;
-      background: var(--primary-color);
-    }
-
-    .footer-link {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      transition: all 0.3s;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .footer-link:hover {
-      color: white;
-      transform: translateX(5px);
-    }
-
-    .social-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      transition: all 0.3s;
-      margin-right: 10px;
-    }
-
-    .social-btn:hover {
-      background: var(--primary-color);
-      transform: translateY(-3px);
-    }
-
-    /* Animations */
-    .scroll-animate {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s ease;
-    }
-
-    .scroll-animate.animate {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero-section {
-        padding: 6rem 0 4rem;
-        text-align: center;
-      }
-      
-      section {
-        padding: 3rem 0;
-      }
     }
     </style>
 </head>
@@ -356,6 +249,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         </div>
     </div>
     <!-- Spinner End -->
+
+     <!-- Vertical Download Catalog Button Start -->
+    <!-- <a href="/path/to/catalog.pdf" class="vertical-download-catalog" title="Download Catalog" target="_blank">
+        DOWNLOAD CATALOG
+    </a> -->
+    <!-- Vertical Download Catalog Button End -->
 
 
     <!-- Topbar Start -->
@@ -393,10 +292,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="index.php" class="nav-item nav-link active">Home</a>
-                <a href="#about" class="nav-item nav-link">About</a>
-                <a href="#services" class="nav-item nav-link">Services</a>
+                <a href="index.php#about" class="nav-item nav-link">About</a>
+                <a href="index.php#services" class="nav-item nav-link">Services</a>
                 <a href="products.php" class="nav-item nav-link">Products</a>
-                <a href="#contact" class="nav-item nav-link">Contact</a>
+                <a href="index.php#contact" class="nav-item nav-link">Contact</a>
             </div>
             <div class="d-flex align-items-center ms-lg-4">
                 <a href="auth/login.php" class="btn btn-outline-danger">
@@ -449,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
                     </div>
                 </div> -->
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
+            <!-- <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
                 data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -458,7 +357,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
                 data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
-            </button>
+            </button> -->
         </div>
     </div>
     <!-- Carousel End -->
@@ -485,7 +384,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
                             <h5 class="mb-3"><i class="fa fa-check-circle text-danger me-3"></i>Fair Prices</h5>
                         </div>
                     </div>
-                    <a href="appointment.html" class="btn btn-danger py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s">Request a Quote</a>
+                    <a href="https://wa.me/918104293994" class="btn btn-danger py-3 px-5 mt-4 wow zoomIn" data-wow-delay="0.6s" target="_blank">Contact Now</a>
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">
                     <div class="position-relative h-100">
@@ -547,6 +446,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         </div>
     </div>
     <!-- Service End -->
+
+    <!-- Products Start -->
+    <div class="container-fluid py-5 bg-light" id="products">
+        <div class="container">
+            <div class="section-title mb-4 text-center">
+                <h5 class="position-relative d-inline-block text-primary text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">OUR PRODUCTS</h5>
+                <span class="d-inline-block align-middle mx-2" style="border-top: 3px solid #e30613; width: 45px; position: relative; top: -8px;"></span>
+                <span class="d-inline-block align-middle mx-1" style="border-top: 3px solid #a9030d; width: 15px; position: relative; top: -8px;"></span>
+                <h1 class="display-5 mb-0 mt-2" style="font-weight:700;">Featured Blood Bank Equipment</h1>
+            </div>
+            <div class="row justify-content-center g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="https://imgs.search.brave.com/GROsIjxqupcRPvHvZAGmOoOOhatzInuALqpGQnLI5A0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly81Lmlt/aW1nLmNvbS9kYXRh/NS9TRUxMRVIvRGVm/YXVsdC8yMDIyLzUv/SEQvSkMvUFcvMjEy/NDQxMi9yZW1pLWJy/LTEyMC1ibG9vZC1i/YW5rLXJlZnJpZ2Vy/YXRvci0yNTB4MjUw/LmpwZw" class="card-img-top" alt="Blood Bank Refrigerator">
+                        <div class="card-body">
+                            <h5 class="card-title">Blood Bank Refrigerator</h5>
+                            <p class="card-text">High-precision temperature control for safe blood storage. Available in multiple capacities.</p>
+                            <button class="btn btn-outline-danger mt-2 w-100 get-quote-btn" data-product="Blood Bank Refrigerator">Get Quote</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="assets/images/products/plasma-freezer.jpg" class="card-img-top" alt="Plasma Freezer">
+                        <div class="card-body">
+                            <h5 class="card-title">Plasma Freezer</h5>
+                            <p class="card-text">Rapid freezing and stable storage for plasma and blood components. NABH compliant.</p>
+                            <button class="btn btn-outline-danger mt-2 w-100 get-quote-btn" data-product="Plasma Freezer">Get Quote</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="assets/images/products/platelet-incubator.jpg" class="card-img-top" alt="Platelet Incubator">
+                        <div class="card-body">
+                            <h5 class="card-title">Platelet Incubator</h5>
+                            <p class="card-text">Ensures optimal temperature and agitation for platelet storage. Reliable and energy efficient.</p>
+                            <button class="btn btn-outline-danger mt-2 w-100 get-quote-btn" data-product="Platelet Incubator">Get Quote</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="products.php" class="btn btn-danger px-4 py-2 fw-semibold">View All Products</a>
+            </div>
+        </div>
+    </div>
+
+        <!-- Quote Modal -->
+        <div class="modal fade" id="quoteModal" tabindex="-1" aria-labelledby="quoteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="quoteForm" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="quoteModalLabel">Request a Quote</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="quoteProduct" class="form-label">Product</label>
+                                <input type="text" class="form-control" id="quoteProduct" name="quote_product" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quoteName" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="quoteName" name="quote_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quotePhone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="quotePhone" name="quote_phone" pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric" required>
+                
+                            </div>
+                            <div id="quoteMsg" class="alert d-none"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Products End -->
 
 
     <!-- Testimonials Start -->
@@ -729,6 +710,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
     </div>
     <!-- Testimonials End -->
 
+    <!-- FAQ Start -->
+    <div class="container-fluid py-5 bg-white" id="faq">
+        <div class="container">
+            <div class="section-title mb-4 text-center">
+                <h5 class="position-relative d-inline-block text-primary text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">FREQUENTLY ASKED QUESTIONS</h5>
+                <span class="d-inline-block align-middle mx-2" style="border-top: 3px solid #e30613; width: 45px; position: relative; top: -8px;"></span>
+                <span class="d-inline-block align-middle mx-1" style="border-top: 3px solid #a9030d; width: 15px; position: relative; top: -8px;"></span>
+                <h1 class="display-5 mb-0 mt-2" style="font-weight:700;">FAQ</h1>
+            </div>
+                <div class="faq-accordion accordion accordion-flush" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq1">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="false" aria-controls="faqCollapse1">
+                            What is included in a blood bank equipment AMC?
+                        </button>
+                    </h2>
+                    <div id="faqCollapse1" class="accordion-collapse collapse" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">An Annual Maintenance Contract (AMC) generally includes preventive maintenance visits, calibration, performance validation, breakdown support, and replacement of minor components as required.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                            How can I request a quote or service?
+                        </button>
+                    </h2>
+                    <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">You can use the quote request modal on our homepage or contact us directly via phone or email for personalized assistance.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                            Do you provide support outside of India?
+                        </button>
+                    </h2>
+                    <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">Currently, our services are focused within India. For international inquiries, please contact us directly.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                            What is AMC/CMC?
+                        </button>
+                    </h2>
+                    <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">AMC stands for Annual Maintenance Contract and CMC stands for Comprehensive Maintenance Contract. Both ensure your equipment is regularly serviced and maintained.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq5">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                            How quickly can you respond to service requests?
+                        </button>
+                    </h2>
+                    <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">We strive to respond within 24 hours for urgent requests. For regular maintenance, appointments are scheduled as per your convenience.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FAQ End -->
     <!-- Contact Start -->
     <div class="container-fluid py-5">
         <div class="container">
@@ -810,7 +855,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
                                                 <span class="contact-title">CONTACT US</span>
                                                 <span class="contact-divider"></span>
                                             </div>
-                                            <h2>Feel Free To<br>Contact Us</h2>
+                                            <h2 style="margin-bottom: 0.5rem;">Contact Our Equipment Experts</h2>
+                                            <p class="text-muted mb-3" style="font-size: 0.95rem; line-height: 1.5;">For blood bank equipment supply, spare parts, AMC services, or emergency technical support, our team is ready to assist.</p>
                                             <div class="contact-info">
                                                 <div class="contact-item">
                                                     <span class="contact-icon">
@@ -845,7 +891,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
                                             </div>
                                         </div>
                 </div>
-                <div class="col-xl-4 col-lg-6 wow slideInUp" data-wow-delay="0.3s">
+                <div class="col-xl-4 col-lg-6 wow slideInUp pt-5" data-wow-delay="0.3s">
 
                     <?php if ($successMsg): ?>
                         <div class="alert alert-success"> <?= $successMsg ?> </div>
@@ -863,25 +909,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
                             <div class="col-12">
                                 <select name="contact_subject" class="form-control border-0 bg-light px-4" style="height: 55px;" required>
                                     <option value="" disabled <?= empty($_POST['contact_subject']) ? 'selected' : '' ?>>Select Subject</option>
-                                    <option value="service" <?= (($_POST['contact_subject'] ?? '') === 'service') ? 'selected' : '' ?>>Service Request</option>
-                                    <option value="purchase" <?= (($_POST['contact_subject'] ?? '') === 'purchase') ? 'selected' : '' ?>>Product Purchase</option>
-                                    <option value="complaint" <?= (($_POST['contact_subject'] ?? '') === 'complaint') ? 'selected' : '' ?>>Complaint</option>
-                                    <option value="consultation" <?= (($_POST['contact_subject'] ?? '') === 'consultation') ? 'selected' : '' ?>>Consultation</option>
-                                    <option value="other" <?= (($_POST['contact_subject'] ?? '') === 'other') ? 'selected' : '' ?>>Other</option>
+                                    <option value="equipment_inquiry" <?= (($_POST['contact_subject'] ?? '') === 'equipment_inquiry') ? 'selected' : '' ?>>Blood Bank Equipment Inquiry</option>
+                                    <option value="spare_parts" <?= (($_POST['contact_subject'] ?? '') === 'spare_parts') ? 'selected' : '' ?>>Spare Parts Request</option>
+                                    <option value="amc_contract" <?= (($_POST['contact_subject'] ?? '') === 'amc_contract') ? 'selected' : '' ?>>AMC / Maintenance Contract</option>
+                                    <option value="installation_calibration" <?= (($_POST['contact_subject'] ?? '') === 'installation_calibration') ? 'selected' : '' ?>>Installation & Calibration</option>
+                                    <option value="emergency_service" <?= (($_POST['contact_subject'] ?? '') === 'emergency_service') ? 'selected' : '' ?>>Emergency Service Support</option>
                                 </select>
                             </div>
                             <div class="col-12">
-                                <textarea name="contact_message" class="form-control border-0 bg-light px-4 py-3" rows="3" placeholder="Message" required><?= htmlspecialchars($_POST['contact_message'] ?? '') ?></textarea>
+                                <textarea name="contact_message" class="form-control border-0 bg-light px-4 py-3" rows="5" placeholder="Message" required><?= htmlspecialchars($_POST['contact_message'] ?? '') ?></textarea>
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-danger w-100 py-3" type="submit" name="contact_submit">Send Message</button>
+                                <button class="btn btn-danger w-100 py-3" type="submit" name="contact_submit">Submit Inquiry</button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="col-xl-4 col-lg-12 wow slideInUp" data-wow-delay="0.6s">
                     <iframe class="position-relative rounded w-100 h-100"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15084.844682350982!2d73.0912470366346!3d19.05445089646613!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7e9f07164197b%3A0xcf882f74c583ad1a!2sNavde%2C%20Taloja%2C%20Navi%20Mumbai%2C%20Maharashtra%20410208!5e0!3m2!1sen!2sin!4v1771923820659!5m2!1sen!2sin"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.2430975912953!2d73.09966487400607!3d19.053046452695074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7e9d872fef37d%3A0x489ed8db73deba28!2sGold%20Crest!5e0!3m2!1sen!2sin!4v1772044776838!5m2!1sen!2sin"
                         frameborder="0" style="min-height: 400px; border:0;" allowfullscreen="" aria-hidden="false"
                         tabindex="0"></iframe>
                 </div>
@@ -898,7 +944,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         <!-- Company Info -->
         <div class="col-lg-4 col-md-6 footer-column">
           <h5>Ananya Sales & Service</h5>
-          <p class="mt-3">Specialists in blood bank equipment maintenance, calibration, and service contracts with over 15 years of trusted service.</p>
+          <p class="mt-3">Leading supplier and service provider of blood bank equipment, spare parts, calibration, and AMC solutions for hospitals and laboratories across India.</p>
           <div class="d-flex mt-4">
             <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
             <a href="#" class="social-btn"><i class="bi bi-twitter"></i></a>
@@ -919,41 +965,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
 
         <!-- Services -->
         <div class="col-lg-3 col-md-6 footer-column">
-          <h5>Our Services</h5>
-          <a href="#" class="footer-link">Plasma Freezers</a>
-          <a href="#" class="footer-link">Blood Storage</a>
-          <a href="#" class="footer-link">Centrifuge Calibration</a>
-          <a href="#" class="footer-link">AMC Contracts</a>
-          <a href="#" class="footer-link">Emergency Repairs</a>
-        </div>
+                    <h5>Our Services</h5>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Plasma Freezers</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Blood Storage</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Centrifuge Calibration</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> AMC Contracts</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Emergency Repairs</a>
+                </div>
 
         <!-- Contact Info -->
         <div class="col-lg-3 col-md-6 footer-column">
-          <h5>Contact Us</h5>
-          <div class="d-flex mb-3">
-            <i class="bi bi-geo-alt-fill text-primary me-3 mt-1"></i>
-            <span>123 Medical Equipment Plaza, New Delhi 110001, India</span>
-          </div>
-          <div class="d-flex mb-3">
-            <i class="bi bi-telephone-fill text-primary me-3 mt-1"></i>
-            <div>
-              <div>+91 98765 43210</div>
-              <div>+91 11 2345 6789</div>
-            </div>
-          </div>
-          <div class="d-flex mb-3">
-            <i class="bi bi-envelope-fill text-primary me-3 mt-1"></i>
-            <span>service@ananyasales.com</span>
-          </div>
-          <div class="d-flex">
-            <i class="bi bi-clock-fill text-primary me-3 mt-1"></i>
-            <div>
-              <div>Monday-Saturday: 8AM-8PM</div>
-              <div>Emergency: 24/7 Support</div>
-            </div>
-          </div>
-        </div>
-      </div>
+                    <h5>Contact Us</h5>
+                    <div class="d-flex mb-3">
+                        <i class="bi bi-geo-alt-fill text-primary me-3 mt-1"></i>
+                        <span>Flat No. 702, The Gold Crest Society, Navde Colony, Navde, Navi Mumbai - 410208</span>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <i class="bi bi-telephone-fill text-primary me-3 mt-1"></i>
+                        <div>
+                            <!-- <div>+91 98765 43210</div> -->
+                            <div>+91 81042 93994</div>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <i class="bi bi-envelope-fill text-primary me-3 mt-1"></i>
+                        <span>support@ananyasales.in</span>
+                    </div>
+                    <div class="d-flex">
+                        <i class="bi bi-clock-fill text-primary me-3 mt-1"></i>
+                        <div>
+                            <div>Monday-Saturday: 8AM-8PM</div>
+                            <div>Emergency: 24/7 Support</div>
+                        </div>
+                    </div>
+                </div>
 
       <hr class="my-4 border-secondary">
 
@@ -963,7 +1008,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         </div>
         <div class="col-md-6 text-center text-md-end">
           <div class="d-flex justify-content-md-end justify-content-center">
-            <a href="https://www.meetsumit.xyz" class="footer-link">Developed by Sumit Kumar</a>
+            <a href="https://www.knowsumit.in" class="footer-link">Developed by Sumit Kumar</a>
           </div>
         </div>
       </div>
@@ -981,8 +1026,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
     <script src="assets/lib/easing.min.js"></script>
     <script src="assets/lib/waypoints.min.js"></script>
 
-    <!-- Main Javascript -->
-    <script src="assets/js/main.js"></script>
-</body>
-
-</html>
+        <!-- Main Javascript -->
+        <script src="assets/js/main.js"></script>
+        <script>
+        // Quote Modal logic
+        document.addEventListener('DOMContentLoaded', function() {
+            var quoteModal = new bootstrap.Modal(document.getElementById('quoteModal'));
+            var quoteProductInput = document.getElementById('quoteProduct');
+            var quoteForm = document.getElementById('quoteForm');
+            var quoteMsg = document.getElementById('quoteMsg');
+            var quotePhone = document.getElementById('quotePhone');
+            document.querySelectorAll('.get-quote-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    quoteProductInput.value = btn.getAttribute('data-product');
+                    quoteMsg.classList.add('d-none');
+                    quoteForm.reset();
+                    quoteProductInput.value = btn.getAttribute('data-product');
+                    quoteModal.show();
+                });
+            });
+            quoteForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Enforce 10-digit phone number
+                var phone = quotePhone.value.trim();
+                if (!/^\d{10}$/.test(phone)) {
+                    quoteMsg.classList.remove('d-none', 'alert-success');
+                    quoteMsg.classList.add('alert-danger');
+                    quoteMsg.textContent = 'Please enter a valid 10-digit phone number.';
+                    quotePhone.focus();
+                    return;
+                }
+                var formData = new FormData(quoteForm);
+                // Show loading spinner overlay and disable screen
+                var overlay = document.createElement('div');
+                overlay.id = 'quoteSpinnerOverlay';
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.background = 'rgba(0,0,0,0.25)';
+                overlay.style.zIndex = '9999';
+                overlay.style.display = 'flex';
+                overlay.style.alignItems = 'center';
+                overlay.style.justifyContent = 'center';
+                overlay.innerHTML = '<div class="spinner-border text-danger" role="status" style="width:3rem;height:3rem;"><span class="visually-hidden">Sending...</span></div>';
+                document.body.appendChild(overlay);
+                fetch('', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Hide overlay
+                    var overlayElem = document.getElementById('quoteSpinnerOverlay');
+                    if (overlayElem) overlayElem.remove();
+                    quoteMsg.classList.remove('d-none', 'alert-danger', 'alert-success');
+                    if (data.success) {
+                        quoteMsg.classList.add('alert-success');
+                        quoteMsg.textContent = data.message;
+                        setTimeout(() => { quoteModal.hide(); }, 1800);
+                    } else {
+                        quoteMsg.classList.add('alert-danger');
+                        quoteMsg.textContent = data.message;
+                    }
+                })
+                .catch(() => {
+                    var overlayElem = document.getElementById('quoteSpinnerOverlay');
+                    if (overlayElem) overlayElem.remove();
+                    quoteMsg.classList.remove('d-none', 'alert-success');
+                    quoteMsg.classList.add('alert-danger');
+                    quoteMsg.textContent = 'Something went wrong. Please try again.';
+                });
+            });
+        });
+        </script>
