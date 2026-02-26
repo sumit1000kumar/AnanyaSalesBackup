@@ -292,7 +292,7 @@
     <!-- Topbar End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-5 py-3 sticky-top" style="z-index:1030;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-4 sticky-top flex-nowrap align-items-center justify-content-between" style="z-index:1030;">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" style="height: 50px; width: auto; margin-right: 10px;">
             <span class="fw-bold text-danger">Ananya Sales & Service</span>
