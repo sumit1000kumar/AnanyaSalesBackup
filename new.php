@@ -586,8 +586,8 @@ if (
     }
     @media (max-width: 576px) {
         .hero-80vh { height: 86vh; min-height: 320px; }
-        .carousel-caption h1 { font-size: clamp(1.4rem, 6.5vw, 2rem); }
-        .carousel-caption p { font-size: 0.95rem; }
+        .carousel-caption h1 { font-size: clamp(1.9rem, 8.0vw, 2.4rem) !important; }
+        .carousel-caption p { font-size: clamp(1rem, 1.6vw, 0.95rem) !important; }
         .carousel-caption .d-flex { justify-content: center; }
         .carousel-caption .badge { display: inline-block; }
         /* Ensure hero buttons sit side-by-side on very small screens and override other utility rules */
@@ -738,6 +738,60 @@ if (
         </div>
     </div>
     <!-- Service End -->
+     
+    <!-- Featured Start -->
+    <div class="container-fluid py-5 featured-section" id="featured" style="background: linear-gradient(90deg,#e30613 0%, #a9030d 100%);">
+        <div class="container text-center text-white">
+            <style>
+            /* Featured section responsive styles */
+            .featured-section .section-title h1 { font-size: 1.6rem; }
+            .featured-section .stat-chips { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:0.5rem; }
+            .featured-section .stat-chip { background:rgba(255,255,255,0.12); color:#fff; padding:8px 14px; border-radius:12px; font-weight:700; }
+            .featured-section .featured-row { display:flex; gap:16px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:1rem; }
+            .featured-section .featured-card { flex:0 0 240px; width:240px; height:110px; box-shadow:0 6px 20px rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; padding:16px; border-radius:8px; background:#fff; }
+            .featured-section .featured-card img { max-height:70px; max-width:100%; object-fit:contain; }
+
+            @media (max-width: 992px) {
+                .featured-section .section-title h1 { font-size:1.35rem; }
+                .featured-section .featured-card { flex: 0 0 calc(45% - 12px); width: calc(45% - 12px); height:100px; padding:12px; }
+                .featured-section .featured-card img { max-height:60px; }
+            }
+            @media (max-width: 576px) {
+                .featured-section { padding-top:2.5rem; padding-bottom:2.5rem; }
+                .featured-section .section-title h1 { font-size:1.5rem; }
+                .featured-section .section-title p { font-size:0.95rem; }
+                .featured-section .featured-card { flex: 0 0 92%; width:92%; height:80px; padding:10px; }
+                .featured-section .featured-card img { max-height:56px; }
+                .featured-section .stat-chip { padding:6px 10px; font-size:0.95rem; }
+            }
+            </style>
+            <div class="section-title mb-2">
+                <h5 class="position-relative d-inline-block text-white text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">Proudly Featured In</h5>
+                <h1 class="display-6 mb-1 mt-2" style="font-weight:700;color:#fff;">Trusted by 850+ Hospitals & Labs</h1>
+                <p class="lead mb-3" style="color:rgba(255,255,255,0.95); font-size:1.05rem;">We've helped 150+ hospitals keep critical blood bank equipment running — with 24/7 emergency support and certified technicians.</p>
+                <div class="stat-chips">
+                    <div class="stat-chip">150+ Hospitals Served</div>
+                    <div class="stat-chip">10k+ Repairs</div>
+                    <div class="stat-chip">24/7 Emergency Support</div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap mt-4">
+                <div class="featured-card bg-white rounded p-3 d-flex align-items-center justify-content-center" style="width:240px;height:110px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                    <img src="https://theprint.in/wp-content/uploads/2018/11/theprint-logo.png" alt="ThePrint" style="max-height:70px; max-width:100%;">
+                </div>
+                <div class="featured-card bg-white rounded p-3 d-flex align-items-center justify-content-center" style="width:240px;height:110px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                    <img src="https://static.aninews.in/images/default/ani_logo.png" alt="ANI" style="max-height:60px; max-width:100%;">
+                </div>
+                <div class="featured-card bg-white rounded p-3 d-flex align-items-center justify-content-center" style="width:240px;height:110px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                    <img src="https://seeklogo.com/images/Z/zee5-logo-2018-F3D3A3FA3A-seeklogo.com.png" alt="ZEE5" style="max-height:70px; max-width:100%;">
+                </div>
+                <div class="featured-card bg-white rounded p-3 d-flex align-items-center justify-content-center" style="width:240px;height:110px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/7/7d/Latestly_logo.png" alt="LatestLY" style="max-height:70px; max-width:100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Featured End -->
 
     <!-- Products Start -->
     <div class="container-fluid py-5 bg-light" id="products">
