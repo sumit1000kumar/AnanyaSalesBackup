@@ -116,6 +116,50 @@ if (
     }
     exit;
 }
+
+// Consult Modal AJAX Handler
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    isset($_POST['consult_name'], $_POST['consult_phone']) &&
+    !isset($_POST['contact_submit'])
+) {
+    header('Content-Type: application/json');
+    $name = trim($_POST['consult_name']);
+    $phone = trim($_POST['consult_phone']);
+    $time = trim($_POST['consult_time'] ?? '');
+    $message = trim($_POST['consult_message'] ?? '');
+
+    if (!$name || !preg_match('/^[0-9]{10}$/', $phone)) {
+        echo json_encode(['success' => false, 'message' => 'Please provide a valid name and 10-digit phone number.']);
+        exit;
+    }
+
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.ananyasales.in';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'support@ananyasales.in';
+        $mail->Password   = 'Ananya#135';
+        $mail->Port       = 465;
+        $mail->SMTPSecure = 'ssl';
+        $mail->setFrom('support@ananyasales.in', 'Ananya Sales & Service');
+        $mail->addAddress('sumitkumar9012004@gmail.com');
+        $mail->Subject = 'Free Consultation Request';
+        $mail->isHTML(true);
+        $body  = '<b>Name:</b> ' . htmlspecialchars($name) . '<br>';
+        $body .= '<b>Phone:</b> ' . htmlspecialchars($phone) . '<br>';
+        if ($time) $body .= '<b>Preferred Time:</b> ' . htmlspecialchars($time) . '<br>';
+        if ($message) $body .= '<b>Message:</b><br>' . nl2br(htmlspecialchars($message)) . '<br>';
+        $body .= '<b>Submitted from:</b> ananyasales.in website<br>' . date('F j, Y, g:i a');
+        $mail->Body = $body;
+        $mail->send();
+        echo json_encode(['success' => true, 'message' => 'Thank you! Your consultation request has been sent. We will contact you soon.']);
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo]);
+    }
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -229,7 +273,10 @@ if (
         }
         .faq-accordion .accordion-button,
         .faq-accordion .accordion-body {
-            padding: 14px 12px;
+        .carousel-caption .d-flex .btn { flex: 1 1 48%; min-width: 0; }
+        /* Target hero buttons specifically and override any width rules */
+        .hero-btns { width: 100%; }
+        .hero-btns .btn { flex: 1 1 48% !important; width: auto !important; }
         }
     }
 
@@ -381,7 +428,7 @@ if (
     <!-- Topbar End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-4 sticky-top flex-nowrap align-items-center justify-content-between" style="z-index:1030;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-3 sticky-top flex-nowrap align-items-center justify-content-between" style="z-index:1030;">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" style="height: 50px; width: auto; margin-right: 10px;">
             <span class="fw-bold text-danger">Ananya Sales & Service</span>
@@ -522,6 +569,34 @@ if (
 
 
     <!-- Carousel Start -->
+    <style>
+    /* Responsive Hero Styles */
+    .hero-80vh { height: 80vh; min-height: 420px; max-height: 920px; overflow: hidden; }
+    .hero-80vh .carousel-item img { object-fit: cover; object-position: center center; }
+    .hero-overlay { background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.35)); }
+    .carousel-caption { padding: 0 1rem; }
+    .carousel-caption h1 { font-size: clamp(1.8rem, 4.8vw, 3.5rem); line-height: 1.05; }
+    .carousel-caption p { font-size: clamp(0.95rem, 1.6vw, 1.25rem); max-width: 100%; }
+    .carousel-caption .badge { font-size: clamp(0.8rem, 1.6vw, 1.05rem); }
+    @media (max-width: 992px) {
+        .hero-80vh { height: 90vh; min-height: 360px; }
+        .carousel-caption { align-items: center; text-align: center; }
+        .carousel-caption .col-lg-8 { margin: 0 auto; padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+        .carousel-caption h1, .carousel-caption p { text-align: center; }
+    }
+    @media (max-width: 576px) {
+        .hero-80vh { height: 86vh; min-height: 320px; }
+        .carousel-caption h1 { font-size: clamp(1.4rem, 6.5vw, 2rem); }
+        .carousel-caption p { font-size: 0.95rem; }
+        .carousel-caption .d-flex { justify-content: center; }
+        .carousel-caption .badge { display: inline-block; }
+        /* Ensure hero buttons sit side-by-side on very small screens and override other utility rules */
+        .hero-btns { display: flex !important; flex-wrap: nowrap !important; gap: 0.5rem !important; width: 100% !important; }
+        .hero-btns .btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 1 1 calc(50% - 0.5rem) !important; max-width: calc(50% - 0.5rem) !important; width: auto !important; white-space: nowrap !important; }
+        /* Defensive overrides if some rules force full width */
+        .hero-btns .btn.w-100, .hero-btns .btn.btn-block { width: auto !important; }
+    }
+    </style>
     <div class="container-fluid p-0 mb-5 hero-80vh">
         <div id="header-carousel" class="carousel slide carousel-fade h-100 position-relative" data-bs-ride="carousel">
             <div class="carousel-inner h-100 w-100 position-relative">
@@ -533,17 +608,20 @@ if (
                                 <div class="row">
                                     <div class="col-lg-8 col-md-10 col-12 py-5 ps-lg-4 ps-md-3 ps-2 text-start" style="background:none !important;">
                                         <span class="badge bg-dark bg-opacity-75 text-white fs-6 fw-semibold px-4 py-2 mb-4 shadow-sm" style="font-size:1.05rem; letter-spacing:1px; border-radius:2em; background:#fff !important; color: red !important;"><i class="bi bi-patch-check-fill me-2 text-danger"></i>Trusted Since 2008</span>
-                                        <h1 class="fw-bold mb-3 text-white text-start" style="font-size:3.5rem; line-height:1.05; text-shadow:0 2px 12px rgba(0,0,0,0.22); background:none !important;">
+                                        <h1 class="fw-bold mb-3 text-white text-start" style="line-height:1.05; text-shadow:0 2px 12px rgba(0,0,0,0.22); background:none !important;">
                                             Precision Care for <span style="color:#e53935; border-radius:0.25em; padding:0 0.2em; background:none !important;">Blood Bank Equipment</span>
                                         </h1>
-                                        <p class="text-white mb-4 fs-5 text-start" style="max-width:700px; text-shadow:0 1px 8px rgba(0,0,0,0.18); font-size:1.25rem; background:none !important;">Specialized maintenance, calibration, and service contracts for critical healthcare equipment. Ensuring reliability when it matters most.</p>
+                                        <p class="text-white mb-4 fs-5 text-start" style="max-width:700px; text-shadow:0 1px 8px rgba(0,0,0,0.18); background:none !important;">Specialized maintenance, calibration, and service contracts for critical healthcare equipment. Ensuring reliability when it matters most.</p>
                                         <div class="d-flex flex-wrap gap-3 mb-4" style="background:none !important;">
                                             <span class="badge bg-white bg-opacity-75 text-danger fw-semibold px-3 py-2 border border-0" style="background:none !important;"><i class="bi bi-lightning-charge-fill me-1"></i>24/7 Emergency Service</span>
                                             <span class="badge bg-white bg-opacity-75 text-danger fw-semibold px-3 py-2 border border-0" style="background: none !important;"><i class="bi bi-shield-check me-1"></i>Certified Technicians</span>
                                         </div>
-                                        <div class="d-flex flex-wrap gap-3" style="background:none !important;">
+                                        <div class="d-flex flex-wrap gap-3 hero-btns" style="background:none !important;">
                                             <a href="products.php" class="btn btn-danger px-4 py-2 fw-semibold shadow">Check Products</a>
-                                            <a href="#contact" class="btn btn-outline-light px-4 py-2 fw-semibold">Schedule a Consultation</a>
+                                            <a href="#" id="consultBtn" class="btn btn-outline-light px-4 py-2 fw-semibold">
+                                                <span class="d-none d-sm-inline">Schedule a Consultation</span>
+                                                <span class="d-inline d-sm-none">Free Consultation</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -736,6 +814,42 @@ if (
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-danger">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Consultation Modal -->
+        <div class="modal fade" id="consultModal" tabindex="-1" aria-labelledby="consultModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="consultForm" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="consultModalLabel">Free Consultation Request</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="consultName" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="consultName" name="consult_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="consultPhone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="consultPhone" name="consult_phone" pattern="[0-9]{10}" maxlength="10" minlength="10" inputmode="numeric" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="consultTime" class="form-label">Suitable Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="consultTime" name="consult_time">
+                            </div>
+                            <div class="mb-3">
+                                <label for="consultMessage" class="form-label">Message</label>
+                                <textarea class="form-control" id="consultMessage" name="consult_message" rows="4" placeholder="Briefly tell us what you need"></textarea>
+                            </div>
+                            <div id="consultMsg" class="alert d-none"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Send Request</button>
                         </div>
                     </form>
                 </div>
@@ -1306,6 +1420,67 @@ if (
                     quoteMsg.classList.remove('d-none', 'alert-success');
                     quoteMsg.classList.add('alert-danger');
                     quoteMsg.textContent = 'Something went wrong. Please try again.';
+                });
+            });
+            // Consult Modal logic
+            var consultModal = new bootstrap.Modal(document.getElementById('consultModal'));
+            var consultBtn = document.getElementById('consultBtn');
+            var consultForm = document.getElementById('consultForm');
+            var consultMsg = document.getElementById('consultMsg');
+            var consultPhone = document.getElementById('consultPhone');
+            if (consultBtn) {
+                consultBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    consultForm.reset();
+                    consultMsg.classList.add('d-none');
+                    consultModal.show();
+                });
+            }
+            consultForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var phone = consultPhone.value.trim();
+                if (!/^[0-9]{10}$/.test(phone)) {
+                    consultMsg.classList.remove('d-none', 'alert-success');
+                    consultMsg.classList.add('alert-danger');
+                    consultMsg.textContent = 'Please enter a valid 10-digit phone number.';
+                    consultPhone.focus();
+                    return;
+                }
+                var formData = new FormData(consultForm);
+                // loading overlay
+                var overlay = document.createElement('div');
+                overlay.id = 'consultSpinnerOverlay';
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.background = 'rgba(0,0,0,0.25)';
+                overlay.style.zIndex = '9999';
+                overlay.style.display = 'flex';
+                overlay.style.alignItems = 'center';
+                overlay.style.justifyContent = 'center';
+                overlay.innerHTML = '<div class="spinner-border text-danger" role="status" style="width:3rem;height:3rem;"><span class="visually-hidden">Sending...</span></div>';
+                document.body.appendChild(overlay);
+                fetch('', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    var overlayElem = document.getElementById('consultSpinnerOverlay'); if (overlayElem) overlayElem.remove();
+                    consultMsg.classList.remove('d-none', 'alert-danger', 'alert-success');
+                    if (data.success) {
+                        consultMsg.classList.add('alert-success');
+                        consultMsg.textContent = data.message;
+                        setTimeout(() => { consultModal.hide(); }, 1400);
+                    } else {
+                        consultMsg.classList.add('alert-danger');
+                        consultMsg.textContent = data.message;
+                    }
+                })
+                .catch(() => {
+                    var overlayElem = document.getElementById('consultSpinnerOverlay'); if (overlayElem) overlayElem.remove();
+                    consultMsg.classList.remove('d-none', 'alert-success');
+                    consultMsg.classList.add('alert-danger');
+                    consultMsg.textContent = 'Something went wrong. Please try again.';
                 });
             });
         });
