@@ -291,8 +291,50 @@ if (
         .navbar-nav .nav-link.active::after {
             transform: scaleX(1);
         }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        </style>
+        <style>
+        /* Footer */
+        .main-footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, var(--dark-text) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .main-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--gradient-primary);
+        }
+        .footer-column h5 {
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .footer-column h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .footer-link:hover { color: white; transform: translateX(5px); }
+        .social-btn { width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); color: white; transition: all .3s; margin-right:10px; }
+        .social-btn:hover { background: var(--primary-color); transform: translateY(-3px); }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
@@ -1108,6 +1150,79 @@ if (
     </div>
     <!-- Contact End -->
 
+
+    <!-- Footer -->
+    <footer class="main-footer pt-5" style="background: black !important; color: white; position: relative; overflow: hidden;">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Company Info -->
+                <div class="col-lg-4 col-md-6 footer-column">
+                    <h5>Ananya Sales & Service</h5>
+                    <p class="mt-3">Leading supplier and service provider of blood bank equipment, spare parts, calibration, and AMC solutions for hospitals and laboratories across India.</p>
+                    <div class="d-flex mt-4">
+                        <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 footer-column">
+                    <h5>Quick Links</h5>
+                    <a href="index.php#home" class="footer-link">Home</a>
+                    <a href="index.php#about" class="footer-link">About Us</a>
+                    <a href="index.php#services" class="footer-link">Services</a>
+                    <a href="products.php" class="footer-link">Products</a>
+                    <a href="index.php#testimonials" class="footer-link">Testimonials</a>
+                </div>
+                <!-- Services -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h5>Our Services</h5>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Blood Storage</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Centrifuge Calibration</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> AMC Contracts</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Emergency Repairs</a>
+                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Equipments</a>
+                </div>
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h5>Contact Us</h5>
+                    <div class="d-flex mb-3">
+                        <i class="bi bi-geo-alt-fill me-3 mt-1" style="color: #FFFFFF;"></i>
+                        <span>Flat No. 702, The Gold Crest Society, Navde Colony, Navde, Navi Mumbai - 410208</span>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <i class="bi bi-telephone-fill  me-3 mt-1"  style="color: #FFFFFF;"></i>
+                        <div>
+                            <div>+91 81042 93994</div>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <i class="bi bi-envelope-fill me-3 mt-1"  style="color: #FFFFFF;"></i>
+                        <span>support@ananyasales.in</span>
+                    </div>
+                    <div class="d-flex">
+                        <i class="bi bi-clock-fill me-3 mt-1"  style="color: #FFFFFF;"></i>
+                        <div>
+                            <div>Monday-Saturday: 8AM-8PM</div>
+                            <div>Emergency: 24/7 Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="row align-items-center py-3">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">&copy; <?php echo date('Y'); ?> Ananya Sales & Service. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-md-end justify-content-center">
+                        <a href="https://www.knowsumit.in" class="footer-link">Developed by Sumit Kumar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-danger btn-lg-square rounded back-to-top"><i class="bi bi-arrow-up"></i></a>
