@@ -232,7 +232,67 @@ if (
             padding: 14px 12px;
         }
     }
+
+    .topbar-hours { display: inline-block; }
+    .topbar-email { display: inline-block; }
+
+    body { margin: 0; }
+    .topbar-container { padding-top: 0; padding-bottom: 0; position: relative; margin-top: 0 !important; }
+    .top-shape { margin-top: 0 !important; margin-left: auto; display: inline-flex; }
+
+    @media (max-width: 767.98px) {
+        .topbar-hours { display: none !important; }
+        .top-shape { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .top-shape .me-3 { padding-right: 0.5rem; margin-right: 0.5rem; border-right: none; }
+    }
+
+    /* If space is very limited, hide the email and show only phone */
+    @media (max-width: 480px) {
+        .topbar-email { display: none !important; }
+        .top-shape { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .top-shape p { margin: 0; font-size: 0.95rem; }
+    }
+
+    /* Fix: mid-range screens where topbar was overflowing (766px - 902px) */
+    @media (min-width: 766px) and (max-width: 902px) {
+        /* keep both email and phone visible; tighten spacing and prevent wrapping */
+        .topbar-email { display: inline-block !important; }
+        .top-shape { padding-left: 0.35rem; padding-right: 0.35rem; gap: 0.35rem; flex-wrap: nowrap; }
+        .top-shape .me-3 { padding-right: 0.3rem; margin-right: 0.3rem; border-right: 1px solid rgba(255,255,255,0.18); }
+        .top-shape p, .top-shape a { font-size: 0.92rem; white-space: nowrap; }
+        .topbar-container { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .topbar-email a { display: inline-block; overflow: hidden; text-overflow: ellipsis; max-width: 220px; vertical-align: middle; }
+    }
+    /* Ensure contact band sits flush right between 765px and 992px */
+    @media (min-width: 765px) and (max-width: 992px) {
+        .topbar-container { position: relative; }
+        .topbar-container .row { min-height: 48px; }
+        .top-shape { position: absolute !important; right: 0; top: 0; padding-left: 0.5rem; padding-right: 0.5rem; }
+        .top-shape p, .top-shape a { white-space: nowrap; font-size: 0.93rem; }
+    }
+
+    .navbar-nav .nav-link {
+            position: relative;
+            transition: color 0.2s;
+        }
+        .navbar-nav .nav-link::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: 10px;
+            width: 100%;
+            height: 3px;
+            background: #e53935;
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            transform: scaleX(1);
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
@@ -256,18 +316,17 @@ if (
     </a> -->
     <!-- Vertical Download Catalog Button End -->
 
-
     <!-- Topbar Start -->
-    <div class="container-fluid bg-light ps-5 pe-0 d-none d-lg-block">
+    <div class="container-fluid bg-light ps-3 pe-0 py-0 topbar-container">
         <div class="row gx-0">
-            <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
-                 <div class="d-inline-flex align-items-center">
-                  <small class="py-2"><i class="far fa-clock text-danger me-2"></i>Opening Hours: Mon - Sat : 9.00 am - 8.00 pm, Sunday Closed </small>
-                </div>
+            <div class="col-md-6 text-start mb-2 mb-lg-0 d-none d-lg-block">
+                                 <div class="d-inline-flex align-items-center">
+                                    <small class="py-2 topbar-hours"><i class="far fa-clock text-danger me-2"></i>Mon - Sat : 9.00 am - 8.00 pm | <span style="text-transform: uppercase; font-weight: 550;">24*7 Emergency Support Available</span></small>
+                                </div>
             </div>
-            <div class="col-md-6 text-center text-lg-end">
+            <div class="col-md-6 text-end">
                 <div class="position-relative d-inline-flex align-items-center bg-danger text-white top-shape px-5">
-                    <div class="me-3 pe-3 border-end py-2">
+                    <div class="me-3 pe-3 border-end py-2 topbar-email">
                         <p class="m-0"><i class="fa fa-envelope-open me-2"></i><a href="mailto:info@ananyasales.in" class="text-white text-decoration-none">info@ananyasales.in</a></p>
                     </div>
                     <div class="py-2">
@@ -279,15 +338,14 @@ if (
     </div>
     <!-- Topbar End -->
 
-
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-5 py-3 py-lg-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-4 sticky-top flex-nowrap align-items-center justify-content-between" style="z-index:1030;">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" style="height: 50px; width: auto; margin-right: 10px;">
             <span class="fw-bold text-danger">Ananya Sales & Service</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0" type="button" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars-staggered fs-3 text-danger" style="color: #000;"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
@@ -305,6 +363,120 @@ if (
         </div>
     </nav>
     <!-- Navbar End -->
+
+    <!-- Slide-in Nav Overlay -->
+    <div id="nav-overlay" class="nav-overlay" aria-hidden="true">
+        <div class="nav-overlay-content">
+            <div class="nav-overlay-header" style="display:flex; justify-content:flex-end;">
+                <button id="nav-overlay-close" class="nav-overlay-close" aria-label="Close">&times;</button>
+            </div>
+            <nav class="nav-overlay-links">
+                <a href="index.php">Home</a>
+                <a href="index.php#about">About Us</a>
+                <a href="products.php">Products</a>
+                <a href="index.php#services">Services</a>
+                <a href="index.php#contact">Contact Us</a>
+            </nav>
+
+            <div class="nav-overlay-portal">
+                <a href="auth/login.php" class="btn btn-outline-danger portal-btn d-inline-flex align-items-center justify-content-center"><i class="bi bi-box-arrow-in-right me-2"></i> Portal Login</a>
+            </div>
+
+            <div class="nav-overlay-emergency">
+                <h4>Emergency Contacts</h4>
+                <p><strong>Phone:</strong> +91 81042 93994</p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .nav-overlay { position: fixed; inset:0; transform: translateX(100%); transition: transform .35s ease-in-out; background: rgba(0,0,0,.25); z-index:2000; display:flex; justify-content:flex-end; backdrop-filter: blur(2px);} 
+        .nav-overlay.open { transform: translateX(0); }
+        .nav-overlay-content { position: relative; width:100%; max-width:360px; height:100%; background:#fff; padding:16px 18px; display:flex; flex-direction:column; box-shadow: -20px 0 40px rgba(0,0,0,0.15); overflow-y:auto; -webkit-overflow-scrolling:touch; } 
+        .nav-overlay-close { position:relative; background:#fff; border:1px solid rgba(0,0,0,0.04); font-size:26px; cursor:pointer; width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; color:#222; border-radius:8px; box-shadow:0 6px 14px rgba(0,0,0,0.08); margin:4px 0; }
+        .nav-overlay-close:hover { background: #fafafa; }
+        .nav-overlay-header { padding-bottom:2px; }
+        .nav-overlay-links { margin-top:18px; display:flex; flex-direction:column; gap:6px; }
+        .nav-overlay-links a { font-size:1.05rem; padding:10px 8px; color:#212529; text-decoration:none; font-weight:700; border-radius:0; position:relative; display:block; transition: color .18s ease; }
+        .nav-overlay-links a::after { content: ""; position: absolute; left: 0; bottom: 8px; width: 100%; height: 3px; background: #e30613; transform: scaleX(0); transform-origin: left; transition: transform .22s ease; }
+        .nav-overlay-links a:hover::after, .nav-overlay-links a.active::after { transform: scaleX(1); }
+        .nav-overlay-links a:hover { color: #e30613; background: transparent; }
+        .portal-btn { display:inline-block; padding:10px 16px; border-radius:8px; text-decoration:none; font-weight:700; width:160px; }
+        .portal-btn i { font-size:1.05rem; }
+        .nav-overlay-emergency { margin-top:auto; padding-top:18px; border-top:1px solid #eee; color:#444; font-size:.95rem; }
+        @media (max-width:768px){ .nav-overlay-content { max-width:100%; padding:20px; } .nav-overlay-links a{ font-size:1.1rem; padding:16px 12px; } .portal-btn { width:100%; } }
+        @media (min-width:1200px){ .nav-overlay-content { max-width:420px; } }
+        @media (max-width:480px){ .nav-overlay-links a{ font-size:1.05rem; } }
+    </style>
+
+    <script>
+        (function(){
+            let overlay = document.getElementById('nav-overlay');
+            const closeBtn = document.getElementById('nav-overlay-close');
+            const navbar = document.querySelector('.navbar');
+            const toggler = document.querySelector('.navbar-toggler');
+
+            // Ensure overlay is a direct child of <body> to avoid stacking-context issues
+            if (overlay && overlay.parentElement !== document.body) {
+                document.body.appendChild(overlay);
+                overlay = document.getElementById('nav-overlay');
+            }
+
+            if (overlay) {
+                overlay.style.zIndex = '99999';
+                overlay.style.background = 'rgba(0,0,0,0.45)';
+            }
+
+            function getScrollbarWidth(){ return window.innerWidth - document.documentElement.clientWidth; }
+            function openOverlay(){
+                if(!overlay) return;
+                // avoid layout shift when removing scrollbar by adding equivalent padding
+                const sb = getScrollbarWidth();
+                if (sb > 0) document.body.style.paddingRight = sb + 'px';
+                overlay.classList.add('open');
+                overlay.setAttribute('aria-hidden','false');
+                document.body.style.overflow='hidden';
+                // Ensure any Bootstrap collapse (if present) is hidden to avoid duplicate navs
+                try {
+                    var navbarCollapse = document.getElementById('navbarCollapse');
+                    if (navbarCollapse) {
+                        var bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+                        bsCollapse.hide();
+                    }
+                } catch (err) {
+                    // ignore if bootstrap API not available
+                }
+            }
+            function closeOverlay(){
+                if(!overlay) return;
+                overlay.classList.remove('open');
+                overlay.setAttribute('aria-hidden','true');
+                document.body.style.overflow='';
+                document.body.style.paddingRight = '';
+                // Also ensure Bootstrap collapse is closed and toggler aria state reset
+                try {
+                    var navbarCollapse = document.getElementById('navbarCollapse');
+                    if (navbarCollapse) {
+                        var bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+                        bsCollapse.hide();
+                    }
+                    if (toggler) toggler.setAttribute('aria-expanded','false');
+                } catch (err) {
+                    // ignore
+                }
+            }
+
+            // Open when clicking navbar background (but not links/buttons)
+            if(navbar) navbar.addEventListener('click', function(e){ if(e.target.closest('a')||e.target.closest('button')||e.target.closest('input')) return; openOverlay(); });
+
+            // Also open when toggler (hamburger) is clicked — common mobile pattern
+            if(toggler) toggler.addEventListener('click', function(e){ e.preventDefault(); openOverlay(); });
+
+            if(closeBtn) closeBtn.addEventListener('click', closeOverlay);
+            if(overlay) overlay.addEventListener('click', function(e){ if(e.target===overlay) closeOverlay(); });
+            document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&overlay&&overlay.classList.contains('open')) closeOverlay(); });
+        })();
+    </script>
 
 
     <!-- Carousel Start -->
@@ -936,84 +1108,6 @@ if (
     </div>
     <!-- Contact End -->
 
-    
-  <!-- Footer -->
-  <footer class="main-footer pt-5" style="background: black !important; color: white; position: relative; overflow: hidden;">
-    <div class="container">
-      <div class="row g-4">
-        <!-- Company Info -->
-        <div class="col-lg-4 col-md-6 footer-column">
-          <h5>Ananya Sales & Service</h5>
-          <p class="mt-3">Leading supplier and service provider of blood bank equipment, spare parts, calibration, and AMC solutions for hospitals and laboratories across India.</p>
-          <div class="d-flex mt-4">
-            <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="social-btn"><i class="bi bi-twitter"></i></a>
-            <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
-            <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
-          </div>
-        </div>
-
-        <!-- Quick Links -->
-        <div class="col-lg-2 col-md-6 footer-column">
-          <h5>Quick Links</h5>
-          <a href="#home" class="footer-link">Home</a>
-          <a href="#about" class="footer-link">About Us</a>
-          <a href="#services" class="footer-link">Services</a>
-          <a href="#products" class="footer-link">Products</a>
-          <a href="#testimonials" class="footer-link">Testimonials</a>
-        </div>
-
-        <!-- Services -->
-        <div class="col-lg-3 col-md-6 footer-column">
-                    <h5>Our Services</h5>
-                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Plasma Freezers</a>
-                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Blood Storage</a>
-                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Centrifuge Calibration</a>
-                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> AMC Contracts</a>
-                    <a href="#" class="footer-link"><i class="bi bi-chevron-double-right"></i> Emergency Repairs</a>
-                </div>
-
-        <!-- Contact Info -->
-        <div class="col-lg-3 col-md-6 footer-column">
-                    <h5>Contact Us</h5>
-                    <div class="d-flex mb-3">
-                        <i class="bi bi-geo-alt-fill text-primary me-3 mt-1"></i>
-                        <span>Flat No. 702, The Gold Crest Society, Navde Colony, Navde, Navi Mumbai - 410208</span>
-                    </div>
-                    <div class="d-flex mb-3">
-                        <i class="bi bi-telephone-fill text-primary me-3 mt-1"></i>
-                        <div>
-                            <!-- <div>+91 98765 43210</div> -->
-                            <div>+91 81042 93994</div>
-                        </div>
-                    </div>
-                    <div class="d-flex mb-3">
-                        <i class="bi bi-envelope-fill text-primary me-3 mt-1"></i>
-                        <span>support@ananyasales.in</span>
-                    </div>
-                    <div class="d-flex">
-                        <i class="bi bi-clock-fill text-primary me-3 mt-1"></i>
-                        <div>
-                            <div>Monday-Saturday: 8AM-8PM</div>
-                            <div>Emergency: 24/7 Support</div>
-                        </div>
-                    </div>
-                </div>
-
-      <hr class="my-4 border-secondary">
-
-      <div class="row align-items-center py-3">
-        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-          <p class="mb-0">&copy; <?php echo date('Y'); ?> Ananya Sales & Service. All rights reserved.</p>
-        </div>
-        <div class="col-md-6 text-center text-md-end">
-          <div class="d-flex justify-content-md-end justify-content-center">
-            <a href="https://www.knowsumit.in" class="footer-link">Developed by Sumit Kumar</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-danger btn-lg-square rounded back-to-top"><i class="bi bi-arrow-up"></i></a>

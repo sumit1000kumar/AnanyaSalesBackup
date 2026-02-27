@@ -209,13 +209,11 @@
             transform: scaleX(1);
         }
 
-        /* Improve selected text appearance site-wide */
         ::selection { background: #e30613; color: #fff; text-shadow: none; }
         ::-moz-selection { background: #e30613; color: #fff; text-shadow: none; }
 
     </style>
     <style>
-    /* Topbar responsive: hide opening hours on small screens but keep contact visible */
     .topbar-hours { display: inline-block; }
     .topbar-email { display: inline-block; }
 
@@ -356,8 +354,8 @@
             <nav class="nav-overlay-links">
                 <a href="index.php">Home</a>
                 <a href="index.php#about">About Us</a>
-                <a href="products.php">Our Products</a>
-                <a href="index.php#services">Our Services</a>
+                <a href="products.php">Products</a>
+                <a href="index.php#services">Services</a>
                 <a href="index.php#contact">Contact Us</a>
             </nav>
 
