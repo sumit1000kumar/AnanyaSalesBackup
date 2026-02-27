@@ -209,14 +209,16 @@
             transform: scaleX(1);
         }
 
+        /* Improve selected text appearance site-wide */
+        ::selection { background: #e30613; color: #fff; text-shadow: none; }
+        ::-moz-selection { background: #e30613; color: #fff; text-shadow: none; }
+
     </style>
     <style>
     /* Topbar responsive: hide opening hours on small screens but keep contact visible */
     .topbar-hours { display: inline-block; }
     .topbar-email { display: inline-block; }
 
-    /* Container and top-shape spacing/positioning */
-    /* remove any default page top gap and keep topbar flush */
     body { margin: 0; }
     .topbar-container { padding-top: 0; padding-bottom: 0; position: relative; margin-top: 0 !important; }
     .top-shape { margin-top: 0 !important; margin-left: auto; display: inline-flex; }
@@ -325,16 +327,9 @@
         <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button> -->
-        <button class="navbar-toggler border-0" type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarCollapse"
-        aria-controls="navbarCollapse"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-
-    <i class="fa-solid fa-bars-staggered fs-3 text-danger" style="color: #000;"></i>
-
-</button>
+        <button class="navbar-toggler border-0" type="button" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars-staggered fs-3 text-danger" style="color: #000;"></i>
+        </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="index.php" class="nav-item nav-link">Home</a>
@@ -351,6 +346,122 @@
         </div>
     </nav>
     <!-- Navbar End -->
+
+    <!-- Slide-in Nav Overlay (page-local copy) -->
+    <div id="nav-overlay" class="nav-overlay" aria-hidden="true">
+        <div class="nav-overlay-content">
+            <div class="nav-overlay-header" style="display:flex; justify-content:flex-end;">
+                <button id="nav-overlay-close" class="nav-overlay-close" aria-label="Close">&times;</button>
+            </div>
+            <nav class="nav-overlay-links">
+                <a href="index.php">Home</a>
+                <a href="index.php#about">About Us</a>
+                <a href="products.php">Our Products</a>
+                <a href="index.php#services">Our Services</a>
+                <a href="index.php#contact">Contact Us</a>
+            </nav>
+
+            <div class="nav-overlay-portal">
+                <a href="auth/login.php" class="btn btn-outline-danger portal-btn d-inline-flex align-items-center justify-content-center"><i class="bi bi-box-arrow-in-right me-2"></i> Portal Login</a>
+            </div>
+
+            <div class="nav-overlay-emergency">
+                <h4>Emergency Contacts</h4>
+                <p><strong>Phone:</strong> +91 81042 93994</p>
+                <!-- <p><strong>Email:</strong> info@ananyasales.in</p>
+                <p><strong>Address:</strong> 123 Medical Equipment Plaza, New Delhi 110001</p> -->
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .nav-overlay { position: fixed; inset:0; transform: translateX(100%); transition: transform .35s ease-in-out; background: rgba(0,0,0,.25); z-index:2000; display:flex; justify-content:flex-end; backdrop-filter: blur(2px);} 
+        .nav-overlay.open { transform: translateX(0); }
+        .nav-overlay-content { position: relative; width:100%; max-width:360px; height:100%; background:#fff; padding:16px 18px; display:flex; flex-direction:column; box-shadow: -20px 0 40px rgba(0,0,0,0.15); overflow-y:auto; -webkit-overflow-scrolling:touch; } 
+        .nav-overlay-close { position:relative; background:#fff; border:1px solid rgba(0,0,0,0.04); font-size:26px; cursor:pointer; width:44px; height:44px; display:inline-flex; align-items:center; justify-content:center; color:#222; border-radius:8px; box-shadow:0 6px 14px rgba(0,0,0,0.08); margin:4px 0; }
+        .nav-overlay-close:hover { background: #fafafa; }
+        .nav-overlay-header { padding-bottom:2px; }
+        .nav-overlay-links { margin-top:18px; display:flex; flex-direction:column; gap:6px; }
+        .nav-overlay-links a { font-size:1.05rem; padding:10px 8px; color:#212529; text-decoration:none; font-weight:700; border-radius:0; position:relative; display:block; transition: color .18s ease; }
+        .nav-overlay-links a::after { content: ""; position: absolute; left: 0; bottom: 8px; width: 100%; height: 3px; background: #e30613; transform: scaleX(0); transform-origin: left; transition: transform .22s ease; }
+        .nav-overlay-links a:hover::after, .nav-overlay-links a.active::after { transform: scaleX(1); }
+        .nav-overlay-links a:hover { color: #e30613; background: transparent; }
+        .portal-btn { display:inline-block; padding:10px 16px; border-radius:8px; text-decoration:none; font-weight:700; width:160px; }
+        .portal-btn i { font-size:1.05rem; }
+        .nav-overlay-emergency { margin-top:auto; padding-top:18px; border-top:1px solid #eee; color:#444; font-size:.95rem; }
+        @media (max-width:768px){ .nav-overlay-content { max-width:100%; padding:20px; } .nav-overlay-links a{ font-size:1.1rem; padding:16px 12px; } .portal-btn { width:100%; } }
+        @media (min-width:1200px){ .nav-overlay-content { max-width:420px; } }
+        @media (max-width:480px){ .nav-overlay-links a{ font-size:1.05rem; } }
+    </style>
+
+    <script>
+        (function(){
+            let overlay = document.getElementById('nav-overlay');
+            const closeBtn = document.getElementById('nav-overlay-close');
+            const navbar = document.querySelector('.navbar');
+            const toggler = document.querySelector('.navbar-toggler');
+
+            // Ensure overlay is a direct child of <body> to avoid stacking-context issues
+            if (overlay && overlay.parentElement !== document.body) {
+                document.body.appendChild(overlay);
+                overlay = document.getElementById('nav-overlay');
+            }
+
+            if (overlay) {
+                overlay.style.zIndex = '99999';
+                overlay.style.background = 'rgba(0,0,0,0.45)';
+            }
+
+            function getScrollbarWidth(){ return window.innerWidth - document.documentElement.clientWidth; }
+            function openOverlay(){
+                if(!overlay) return;
+                // avoid layout shift when removing scrollbar by adding equivalent padding
+                const sb = getScrollbarWidth();
+                if (sb > 0) document.body.style.paddingRight = sb + 'px';
+                overlay.classList.add('open');
+                overlay.setAttribute('aria-hidden','false');
+                document.body.style.overflow='hidden';
+                // Ensure any Bootstrap collapse (if present) is hidden to avoid duplicate navs
+                try {
+                    var navbarCollapse = document.getElementById('navbarCollapse');
+                    if (navbarCollapse) {
+                        var bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+                        bsCollapse.hide();
+                    }
+                } catch (err) {
+                    // ignore if bootstrap API not available
+                }
+            }
+            function closeOverlay(){
+                if(!overlay) return;
+                overlay.classList.remove('open');
+                overlay.setAttribute('aria-hidden','true');
+                document.body.style.overflow='';
+                document.body.style.paddingRight = '';
+                // Also ensure Bootstrap collapse is closed and toggler aria state reset
+                try {
+                    var navbarCollapse = document.getElementById('navbarCollapse');
+                    if (navbarCollapse) {
+                        var bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse);
+                        bsCollapse.hide();
+                    }
+                    if (toggler) toggler.setAttribute('aria-expanded','false');
+                } catch (err) {
+                    // ignore
+                }
+            }
+
+            // Open when clicking navbar background (but not links/buttons)
+            if(navbar) navbar.addEventListener('click', function(e){ if(e.target.closest('a')||e.target.closest('button')||e.target.closest('input')) return; openOverlay(); });
+
+            // Also open when toggler (hamburger) is clicked — common mobile pattern
+            if(toggler) toggler.addEventListener('click', function(e){ e.preventDefault(); openOverlay(); });
+
+            if(closeBtn) closeBtn.addEventListener('click', closeOverlay);
+            if(overlay) overlay.addEventListener('click', function(e){ if(e.target===overlay) closeOverlay(); });
+            document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&overlay&&overlay.classList.contains('open')) closeOverlay(); });
+        })();
+    </script>
 
     <!-- Hero Section Start -->
     <section class="hero-section position-relative hero-bg-img" style="color: #fff; padding: 2.5rem 0 2rem; overflow: hidden;">

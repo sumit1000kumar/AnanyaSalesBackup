@@ -274,3 +274,171 @@
             });
         });
     </script>
+
+    <!-- Slide-in Nav Overlay -->
+    <div id="nav-overlay" class="nav-overlay" aria-hidden="true">
+        <button id="nav-overlay-close" class="nav-overlay-close" aria-label="Close">&times;</button>
+        <div class="nav-overlay-content">
+            <nav class="nav-overlay-links">
+                <a href="index.php">Home</a>
+                <a href="products.php">Products</a>
+                <a href="design/service.html">Services</a>
+                <a href="design/about.html">About</a>
+                <a href="design/contact.html">Contact</a>
+            </nav>
+
+            <div class="nav-overlay-portal">
+                <a href="auth/login.php" class="btn portal-btn">Portal Login</a>
+            </div>
+
+            <div class="nav-overlay-emergency">
+                <h4>Emergency Contacts</h4>
+                <p><strong>Phone:</strong> +91 98765 43210</p>
+                <p><strong>Email:</strong> service@ananyasales.com</p>
+                <p><strong>Address:</strong> 123 Medical Equipment Plaza, New Delhi 110001</p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Nav overlay styles */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            transform: translateX(100%);
+            transition: transform 0.35s ease-in-out;
+            background: rgba(0,0,0,0.25);
+            z-index: 2000;
+            display: flex;
+            justify-content: flex-end;
+            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px);
+        }
+
+        .nav-overlay.open {
+            transform: translateX(0);
+        }
+
+        .nav-overlay-content {
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            background: #fff;
+            box-shadow: -20px 0 40px rgba(0,0,0,0.15);
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-overlay-close {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: transparent;
+            border: none;
+            font-size: 32px;
+            line-height: 1;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .nav-overlay-links {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-overlay-links a {
+            display: block;
+            font-size: 1.25rem;
+            padding: 12px 6px;
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 6px;
+        }
+
+        .nav-overlay-links a:hover {
+            background: rgba(229, 6, 19, 0.06);
+            color: var(--primary-color);
+        }
+
+        .nav-overlay-portal {
+            margin-top: 18px;
+        }
+
+        .portal-btn {
+            display: inline-block;
+            padding: 12px 18px;
+            background: var(--gradient-primary);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .nav-overlay-emergency {
+            margin-top: auto;
+            padding-top: 18px;
+            border-top: 1px solid #eee;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .nav-overlay-emergency h4 {
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .nav-overlay-content { max-width: 100%; }
+            .nav-overlay-links a { font-size: 1.05rem; }
+        }
+    </style>
+
+    <script>
+        // Slide-in overlay open/close
+        (function(){
+            const overlay = document.getElementById('nav-overlay');
+            const closeBtn = document.getElementById('nav-overlay-close');
+            const navbar = document.querySelector('.navbar-custom');
+
+            function openOverlay() {
+                overlay.classList.add('open');
+                overlay.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeOverlay() {
+                overlay.classList.remove('open');
+                overlay.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+
+            // Open overlay when navbar background (non-link/button) is clicked
+            navbar.addEventListener('click', function(e){
+                // Ignore clicks on links, buttons, or form controls inside navbar
+                if (e.target.closest('a') || e.target.closest('button') || e.target.closest('input')) return;
+                openOverlay();
+            });
+
+            // Close action
+            closeBtn.addEventListener('click', closeOverlay);
+
+            // Close when clicking outside content (on overlay backdrop)
+            overlay.addEventListener('click', function(e){
+                if (e.target === overlay) closeOverlay();
+            });
+
+            // Close on Escape
+            document.addEventListener('keydown', function(e){
+                if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay();
+            });
+        })();
+    </script>
