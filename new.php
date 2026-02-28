@@ -286,8 +286,18 @@ if (
     body { margin: 0; }
     .topbar-container { padding-top: 0; padding-bottom: 0; position: relative; margin-top: 0 !important; }
     .top-shape { margin-top: 0 !important; margin-left: auto; display: inline-flex; }
-    /* Override default red (bg-danger) to dark site color */
-    .top-shape { background: #0f1113 !important; }
+    /* Override default red (bg-danger) and any decorative accents to dark site color */
+    .top-shape,
+    .top-shape::before,
+    .top-shape::after,
+    .topbar-container::before,
+    .topbar-container::after {
+        background: #0f1113 !important;
+        background-image: none !important;
+        box-shadow: none !important;
+    }
+    /* Ensure any border used as divider inside the top-shape is subtle on dark background */
+    .top-shape .border-end { border-right-color: rgba(255,255,255,0.12) !important; }
 
     @media (max-width: 767.98px) {
         .topbar-hours { display: none !important; }
