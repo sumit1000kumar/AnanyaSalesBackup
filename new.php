@@ -286,18 +286,8 @@ if (
     body { margin: 0; }
     .topbar-container { padding-top: 0; padding-bottom: 0; position: relative; margin-top: 0 !important; }
     .top-shape { margin-top: 0 !important; margin-left: auto; display: inline-flex; }
-    /* Override default red (bg-danger) and any decorative accents to dark site color */
-    .top-shape,
-    .top-shape::before,
-    .top-shape::after,
-    .topbar-container::before,
-    .topbar-container::after {
-        background: #0f1113 !important;
-        background-image: none !important;
-        box-shadow: none !important;
-    }
-    /* Ensure any border used as divider inside the top-shape is subtle on dark background */
-    .top-shape .border-end { border-right-color: rgba(255,255,255,0.12) !important; }
+    /* Override default red (bg-danger) to dark site color */
+    .top-shape { background: #0f1113 !important; }
 
     @media (max-width: 767.98px) {
         .topbar-hours { display: none !important; }
@@ -585,6 +575,8 @@ if (
     /* Responsive Hero Styles */
     .hero-80vh { height: 80vh; min-height: 420px; max-height: 920px; overflow: hidden; }
     .hero-80vh .carousel-item img { object-fit: cover; object-position: center center; }
+    /* Make hero video cover the area like background-image */
+    .hero-80vh .carousel-item .hero-video { object-fit: cover; object-position: center center; z-index:1; }
     .hero-overlay { background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.35)); }
     .carousel-caption { padding: 0 1rem; }
     .carousel-caption h1 { font-size: clamp(1.8rem, 4.8vw, 3.5rem); line-height: 1.05; }
@@ -613,8 +605,11 @@ if (
         <div id="header-carousel" class="carousel slide carousel-fade h-100 position-relative" data-bs-ride="carousel">
             <div class="carousel-inner h-100 w-100 position-relative">
                 <div class="carousel-item active">
-                    <img class="position-absolute top-0 start-0 w-100 h-100" style="object-fit:cover; z-index:1;" src="https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Blood Bank Equipment">
-                        <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.5); z-index:2;"></div>
+                    <video class="position-absolute top-0 start-0 w-100 h-100 hero-video" autoplay muted loop playsinline poster="https://plus.unsplash.com/premium_photo-1661779739047-c5c27cf8ebac?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                        <source src="assets/images/ananysales-hero-video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.45); z-index:2;"></div>
                         <div class="carousel-caption d-flex align-items-center justify-content-center h-100 w-100 p-0 m-0" style="z-index:3; position:relative; left:0; top:0; background:none !important;">
                             <div class="container h-100 d-flex flex-column justify-content-center align-items-start" style="position:relative; z-index:3; background:none !important;">
                                 <div class="row">
@@ -746,7 +741,7 @@ if (
             }
             </style>
 
-            <div class="row g-4 align-items-center">
+            <div class="row g-4 align-items-center" id="services">
                 <div class="col-lg-6">
                     <div class="service-panel">
                         <style>
@@ -1350,7 +1345,7 @@ if (
     </div>
     <!-- FAQ End -->
     <!-- Contact Start -->
-    <div class="container-fluid py-5">
+    <div class="container-fluid py-5" id="contact">
         <div class="container">
             <div class="row g-5">
                 <div class="col-xl-4 col-lg-6 wow slideInUp" data-wow-delay="0.1s">
