@@ -286,6 +286,8 @@ if (
     body { margin: 0; }
     .topbar-container { padding-top: 0; padding-bottom: 0; position: relative; margin-top: 0 !important; }
     .top-shape { margin-top: 0 !important; margin-left: auto; display: inline-flex; }
+    /* Override default red (bg-danger) to dark site color */
+    .top-shape { background: #0f1113 !important; }
 
     @media (max-width: 767.98px) {
         .topbar-hours { display: none !important; }
@@ -415,7 +417,7 @@ if (
             </div>
             <div class="col-md-6 text-end">
                 <div class="position-relative d-inline-flex align-items-center bg-danger text-white top-shape px-5">
-                    <div class="me-3 pe-3 border-end py-2 topbar-email">
+                    <div class="me-3 pe-3 border-end py-2 topbar-email" >
                         <p class="m-0"><i class="fa fa-envelope-open me-2"></i><a href="mailto:info@ananyasales.in" class="text-white text-decoration-none">info@ananyasales.in</a></p>
                     </div>
                     <div class="py-2">
@@ -680,7 +682,7 @@ if (
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="https://images.unsplash.com/photo-1581093450021-4a7360e9a7b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Blood Bank Equipment" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="https://images.unsplash.com/photo-1581093450021-4a7360e9a7b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Blood Bank Equipment Installation and Service for Hospitals in India" style="object-fit: cover;">
                     </div>
                 </div>
             </div>
