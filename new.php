@@ -776,8 +776,8 @@ if (
                         }
                         </style>
 
-                        <h2 class="heading-large">Blood Bank Equipment Solutions We Provide</h2>
-                        <p class="lead" style="margin-bottom:24px; font-size:1rem;">Reliable equipment supply, certified installation, and technical support services designed to ensure safe blood storage and uninterrupted laboratory operations.</p>
+                        <h2 class="heading-large" style="font-size:clamp(1.8rem,3.2vw,2.6rem);">Blood Bank Equipment Solutions We Provide</h2>
+                        <p class="lead" style="margin-bottom:24px; font-size:1rem;">Reliable equipment supply, installation, and technical support for safe blood storage and lab operations.</p>
 
                         <div class="service-grid">
                             <div class="service-box active" tabindex="0" role="button" data-image="assets/images/blood-bank-supply-service-1.png" data-title="Blood Bank Equipment Supply">
@@ -881,12 +881,13 @@ if (
             }
             </style>
             <div class="section-title mb-2">
-                <h5 class="position-relative d-inline-block text-white text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">Proudly Featured In</h5>
-                <h1 class="display-6 mb-1 mt-2" style="font-weight:700;color:#fff;">Trusted by 850+ Hospitals & Labs</h1>
-                <p class="lead mb-3" style="color:rgba(255,255,255,0.95); font-size:1.05rem;">We've helped 150+ hospitals keep critical blood bank equipment running — with 24/7 emergency support and certified technicians.</p>
+                <h5 class="position-relative d-inline-block text-white text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">OUR IMPACT IN HEALTHCARE</h5>
+                <h1 class="display-6 mb-1 mt-2" style="font-weight:700;color:#fff;font-size:clamp(1.8rem,3.2vw,2.6rem);">Trusted by Hospitals & Blood Banks Across India</h1>
+                <p class="lead mb-3" style="color:rgba(255,255,255,0.95); font-size:1.05rem;">Supporting hospitals and laboratories with reliable blood bank equipment and maintenance services.</p>
                 <div class="stat-chips">
                     <div class="stat-chip">150+ Hospitals Served</div>
-                    <div class="stat-chip">10k+ Repairs</div>
+                    <div class="stat-chip">10,000+ Services Completed</div>
+                    <div class="stat-chip">15+ Years Experience</div>
                     <div class="stat-chip">24/7 Emergency Support</div>
                 </div>
             </div>
@@ -909,48 +910,113 @@ if (
     <!-- Featured End -->
 
     <!-- Products Start -->
-    <div class="container-fluid py-5 bg-light" id="products">
+    <div class="container-fluid py-5" id="products" style="background:#080909;color:#fff;">
         <div class="container">
             <div class="section-title mb-4 text-center">
-                <h5 class="position-relative d-inline-block text-primary text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">OUR PRODUCTS</h5>
-                <span class="d-inline-block align-middle mx-2" style="border-top: 3px solid #e30613; width: 45px; position: relative; top: -8px;"></span>
-                <span class="d-inline-block align-middle mx-1" style="border-top: 3px solid #a9030d; width: 15px; position: relative; top: -8px;"></span>
-                <h1 class="display-5 mb-0 mt-2" style="font-weight:700;">Featured Blood Bank Equipment</h1>
+                <h5 class="position-relative d-inline-block text-white text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">POPULAR PRODUCTS</h5>
+                <h1 class="display-5 mb-0 mt-2" style="font-weight:700;color:#fff;font-size:clamp(1.8rem,3.2vw,2.6rem);">Blood Bank Equipment Range</h1>
+                <p class="lead" style="color:rgba(255,255,255,0.75);max-width:820px;margin:8px auto 0;font-size:1rem;line-height:1.45;">Comprehensive blood bank equipment including refrigerators, plasma freezers, centrifuges, platelet incubators, and related laboratory systems.</p>
             </div>
-            <div class="row justify-content-center g-4">
-                <div class="col-md-4 col-sm-6">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="https://imgs.search.brave.com/GROsIjxqupcRPvHvZAGmOoOOhatzInuALqpGQnLI5A0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly81Lmlt/aW1nLmNvbS9kYXRh/NS9TRUxMRVIvRGVm/YXVsdC8yMDIyLzUv/SEQvSkMvUFcvMjEy/NDQxMi9yZW1pLWJy/LTEyMC1ibG9vZC1i/YW5rLXJlZnJpZ2Vy/YXRvci0yNTB4MjUw/LmpwZw" class="card-img-top" alt="Blood Bank Refrigerator">
-                        <div class="card-body">
-                            <h5 class="card-title">Blood Bank Refrigerator</h5>
-                            <p class="card-text">High-precision temperature control for safe blood storage. Available in multiple capacities.</p>
-                            <button class="btn btn-outline-danger mt-2 w-100 get-quote-btn" data-product="Blood Bank Refrigerator">Get Quote</button>
+
+            <style>
+            /* Product grid: dark cards with large overlapping square images */
+            .product-grid { display:flex; gap:28px; justify-content:center; align-items:stretch; flex-wrap:wrap; }
+            /* keep images contained within card to prevent them appearing outside */
+            .product-card { background: linear-gradient(180deg, #0f1113 0%, #1c1c1f 100%); border:1px solid rgba(255,255,255,0.1); width:320px; border-radius:8px; padding:18px; position:relative; overflow:hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); display:flex; flex-direction:column; }
+            /* Reserve a fixed square area for the image so layout doesn't rely on absolute offsets */
+            .product-card .img-wrap { width:100%; height:220px; display:block; position:relative; border-radius:8px; overflow:hidden; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02)); }
+            .product-card img { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:100%; height:100%; object-fit:cover; border-radius:6px; box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+            .product-card .card-body { margin-top:12px; padding-top:0; color:rgba(255,255,255,0.94); display:flex; flex-direction:column; gap:8px; }
+            .product-card h5 { font-size:1.05rem; margin:0; font-weight:700; }
+            .product-card .price { color:#ff416c; font-weight:800; font-size:1.02rem; }
+            .product-card .rating { color:#ffc107; font-size:0.95rem; }
+            .product-card p.desc { color:rgba(255,255,255,0.72); font-size:0.95rem; margin:0 0 8px 0; min-height:44px; }
+            .product-card .card-footer { margin-top:auto; display:flex; gap:10px; }
+            .product-card .btn { flex:1 1 50%; border-radius:6px; }
+            .product-card .btn-outline { background:transparent; border:1px solid rgba(255,255,255,0.08); color:#fff; }
+            .product-card .btn-primary-outline { background:transparent; border:1px solid rgba(255,255,255,0.08); color:#fff; }
+            .product-card .btn-buy { background:#111; color:#fff; border:1px solid rgba(255,255,255,0.06); }
+
+            /* small screens */
+            @media (max-width: 991px) {
+                .product-card { width:280px; }
+                .product-card .img-wrap { height:200px; }
+            }
+            @media (max-width: 576px) {
+                .product-grid { gap:18px; }
+                .product-card { width:92%; max-width:420px; margin:0 auto; }
+                .product-card .img-wrap { height:180px; }
+                .product-card .btn { padding:10px 12px; }
+            }
+            </style>
+
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="img-wrap"><img src="https://imgs.search.brave.com/GROsIjxqupcRPvHvZAGmOoOOhatzInuALqpGQnLI5A0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly81Lmlt/aW1nLmNvbS9kYXRh/NS9TRUxMRVIvRGVm/YXVsdC8yMDIyLzUv/SEQvSkMvUFcvMjEy/NDQxMi9yZW1pLWJy/LTEyMC1ibG9vZC1i/YW5rLXJlZnJpZ2Vy/YXRvci0yNTB4MjUw/LmpwZw" alt="Blood Bank Refrigerator"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5>Blood Bank Refrigerator</h5>
+                            <!-- <div class="price">65,000/-</div> -->
+                        </div>
+                        <div class="rating">★★★★☆ <small style="color:rgba(255,255,255,0.6);">(132 reviews)</small></div>
+                        <p class="desc">High-precision temperature control for safe blood storage. Available in multiple capacities.</p>
+                        <div class="card-footer">
+                            <button class="btn btn-outline btn-primary-outline view-details-btn" data-product="Blood Bank Refrigerator">More Details</button>
+                            <button class="btn btn-outline btn-primary-outline get-quote-btn" data-bs-toggle="modal" data-bs-target="#quoteModal" data-product="Blood Bank Refrigerator">Get Quote</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="assets/images/products/plasma-freezer.jpg" class="card-img-top" alt="Plasma Freezer">
-                        <div class="card-body">
-                            <h5 class="card-title">Plasma Freezer</h5>
-                            <p class="card-text">Rapid freezing and stable storage for plasma and blood components. NABH compliant.</p>
-                            <button class="btn btn-outline-danger mt-2 w-100 get-quote-btn" data-product="Plasma Freezer">Get Quote</button>
+
+                <div class="product-card">
+                    <div class="img-wrap"><img src="assets/images/products/plasma-freezer.jpg" alt="Plasma Freezer"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5>Plasma Freezer</h5>
+                            <!-- <div class="price">65,000/-</div> -->
+                        </div>
+                        <div class="rating">★★★★★ <small style="color:rgba(255,255,255,0.6);">(204 reviews)</small></div>
+                        <p class="desc">Rapid freezing and stable storage for plasma and blood components. NABH compliant.</p>
+                        <div class="card-footer">
+                            <button class="btn btn-outline btn-primary-outline view-details-btn" data-product="Plasma Freezer">More Details</button>
+                            <button class="btn btn-outline btn-primary-outline get-quote-btn" data-bs-toggle="modal" data-bs-target="#quoteModal" data-product="Plasma Freezer">Get Quote</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="assets/images/products/platelet-incubator.jpg" class="card-img-top" alt="Platelet Incubator">
-                        <div class="card-body">
-                            <h5 class="card-title">Platelet Incubator</h5>
-                            <p class="card-text">Ensures optimal temperature and agitation for platelet storage. Reliable and energy efficient.</p>
-                            <button class="btn btn-outline-danger mt-2 w-100 get-quote-btn" data-product="Platelet Incubator">Get Quote</button>
+
+                <div class="product-card">
+                    <div class="img-wrap"><img src="assets/images/products/platelet-incubator.jpg" alt="Platelet Incubator"></div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5>Platelet Incubator</h5>
+                            <!-- <div class="price">65,000/-</div> -->
+                        </div>
+                        <div class="rating">★★★★☆ <small style="color:rgba(255,255,255,0.6);">(97 reviews)</small></div>
+                        <p class="desc">Ensures optimal temperature and agitation for platelet storage. Reliable and energy efficient.</p>
+                        <div class="card-footer">
+                            <button class="btn btn-outline btn-primary-outline view-details-btn" data-product="Platelet Incubator">More Details</button>
+                            <button class="btn btn-outline btn-primary-outline get-quote-btn" data-bs-toggle="modal" data-bs-target="#quoteModal" data-product="Platelet Incubator">Get Quote</button>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="text-center mt-4">
-                <a href="products.php" class="btn btn-danger px-4 py-2 fw-semibold">View All Products</a>
+                <a href="products.php" class="btn btn-outline-danger px-4 py-2 fw-semibold">View All Products</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div class="modal fade" id="productDetailsModal" tabindex="-1" aria-labelledby="productDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productDetailsModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="productDetailsContent">
+                    <!-- Product info will be injected here -->
+                </div>
             </div>
         </div>
     </div>
@@ -1528,6 +1594,51 @@ if (
             var quoteForm = document.getElementById('quoteForm');
             var quoteMsg = document.getElementById('quoteMsg');
             var quotePhone = document.getElementById('quotePhone');
+            // Product Details data and handler (for More Details buttons)
+            const productDetailsData = {
+                'Blood Bank Refrigerator': `
+                    <h6>Blood Bank Refrigerator</h6>
+                    <p>High-precision temperature control for safe blood storage. Available in multiple capacities, energy-efficient compressors, and alarm systems for temperature deviation.</p>
+                    <strong>Features:</strong>
+                    <ul>
+                        <li>Accurate digital thermostat with locking</li>
+                        <li>Multiple shelf configurations</li>
+                        <li>Door alarm and temperature logging options</li>
+                    </ul>
+                `,
+                'Plasma Freezer': `
+                    <h6>Plasma Freezer</h6>
+                    <p>Rapid freezing and stable storage for plasma and blood components. NABH compliant models with uniform cooling and defrost control.</p>
+                    <strong>Features:</strong>
+                    <ul>
+                        <li>Fast pull-down refrigeration system</li>
+                        <li>Temperature uniformity and alarms</li>
+                        <li>Storage racks for standard plasma bags</li>
+                    </ul>
+                `,
+                'Platelet Incubator': `
+                    <h6>Platelet Incubator</h6>
+                    <p>Ensures optimal temperature and gentle agitation for platelet storage. Reliable, low-noise motors and easy-to-clean interiors.</p>
+                    <strong>Features:</strong>
+                    <ul>
+                        <li>Adjustable agitation settings</li>
+                        <li>Precise temperature control</li>
+                        <li>Transparent lid for easy inspection</li>
+                    </ul>
+                `
+            };
+            document.querySelectorAll('.view-details-btn').forEach(function(btn){
+                btn.addEventListener('click', function(){
+                    var product = btn.getAttribute('data-product');
+                    var details = productDetailsData[product] || '<p>No details available.</p>';
+                    var label = document.getElementById('productDetailsModalLabel');
+                    var content = document.getElementById('productDetailsContent');
+                    if(label) label.textContent = product;
+                    if(content) content.innerHTML = details;
+                    var modalEl = document.getElementById('productDetailsModal');
+                    if(modalEl){ var modal = new bootstrap.Modal(modalEl); modal.show(); }
+                });
+            });
             document.querySelectorAll('.get-quote-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
                     quoteProductInput.value = btn.getAttribute('data-product');
