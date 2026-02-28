@@ -408,7 +408,7 @@ if (
     <!-- Vertical Download Catalog Button End -->
 
     <!-- Topbar Start -->
-    <div class="container-fluid bg-light ps-3 pe-0 py-0 topbar-container">
+    <div class="container-fluid ps-3 pe-0 py-0 topbar-container" style="background: transparent !important;">
         <div class="row gx-0">
             <div class="col-md-6 text-start mb-2 mb-lg-0 d-none d-lg-block">
                                  <div class="d-inline-flex align-items-center">
@@ -430,13 +430,13 @@ if (
     <!-- Topbar End -->
 
     <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-3 sticky-top flex-nowrap align-items-center justify-content-between" style="z-index:1030;">
+    <nav class="navbar navbar-expand-lg navbar-light px-3 py-3 sticky-top flex-nowrap align-items-center justify-content-between" style="z-index:1030; background: transparent !important; box-shadow: none !important;">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="assets/images/logo/logo-noBg.png" alt="Ananya Sales & Service Logo" style="height: 50px; width: auto; margin-right: 10px;">
             <span class="fw-bold text-danger">Ananya Sales & Service</span>
         </a>
         <button class="navbar-toggler border-0" type="button" aria-label="Toggle navigation">
-            <i class="fa-solid fa-bars-staggered fs-3 text-danger" style="color: #000;"></i>
+            <i class="fa-solid fa-bars-staggered fs-3 text-white"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
@@ -454,6 +454,25 @@ if (
         </div>
     </nav>
     <!-- Navbar End -->
+
+    <style>
+        /* Make navbar transparent on top of hero/video */
+        .navbar { position: absolute !important; top: 48px !important; left: 0; width: 100%; background: transparent !important; box-shadow: none !important; z-index: 1060 !important; }
+        .navbar .nav-link { color: rgba(255,255,255,0.95) !important; }
+        .navbar .nav-link.active { color: #fff !important; }
+        .navbar .navbar-brand .fw-bold { color: #e53935 !important; }
+        .navbar .btn-outline-danger { color: #fff !important; border-color: rgba(255,255,255,0.18) !important; }
+        .navbar-toggler i { color: #fff !important; }
+        /* Ensure dropdowns or collapse use white text when over video */
+        .navbar .navbar-collapse, .navbar .navbar-collapse .nav-link { color: #fff !important; }
+        /* Space navbar lower so it doesn't overlap the topbar content */
+        @media (max-width: 991.98px) {
+            .navbar { top: 56px !important; }
+        }
+        @media (max-width: 575.98px) {
+            .navbar { top: 64px !important; }
+        }
+    </style>
 
     <!-- Slide-in Nav Overlay -->
     <div id="nav-overlay" class="nav-overlay" aria-hidden="true">
@@ -573,10 +592,25 @@ if (
     <!-- Carousel Start -->
     <style>
     /* Responsive Hero Styles */
-    .hero-80vh { height: 80vh; min-height: 420px; max-height: 920px; overflow: hidden; }
+    .hero-80vh { height: 92vh; min-height: 520px; max-height: 1100px; overflow: hidden; }
+    /* Prevent brief white strip behind hero/video by giving a dark fallback background */
+    .hero-80vh, .carousel-item { background: #0f1113 !important; }
     .hero-80vh .carousel-item img { object-fit: cover; object-position: center center; }
     /* Make hero video cover the area like background-image */
     .hero-80vh .carousel-item .hero-video { object-fit: cover; object-position: center center; z-index:1; }
+    .hero-80vh .carousel-caption .container { padding-top: 96px; }
+    @media (max-width: 991.98px) {
+        .hero-80vh .carousel-caption .container { padding-top: 120px; }
+    }
+    @media (max-width: 575.98px) {
+        .hero-80vh .carousel-caption .container { padding-top: 140px; }
+    }
+
+    /* Make the 'Trusted Since' badge smaller on small screens */
+    @media (max-width: 576px) {
+        .hero-trusted-badge { font-size: 0.82rem !important; padding-left: 0.6rem !important; padding-right: 0.6rem !important; padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; border-radius: 1.2rem !important; }
+        .hero-trusted-badge i { font-size: 0.9rem !important; margin-right: 0.4rem !important; }
+    }
     .hero-overlay { background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.35)); }
     .carousel-caption { padding: 0 1rem; }
     .carousel-caption h1 { font-size: clamp(1.8rem, 4.8vw, 3.5rem); line-height: 1.05; }
@@ -614,7 +648,7 @@ if (
                             <div class="container h-100 d-flex flex-column justify-content-center align-items-start" style="position:relative; z-index:3; background:none !important;">
                                 <div class="row">
                                     <div class="col-lg-8 col-md-10 col-12 py-5 ps-lg-4 ps-md-3 ps-2 text-start" style="background:none !important;">
-                                        <span class="badge bg-dark bg-opacity-75 text-white fs-6 fw-semibold px-4 py-2 mb-4 shadow-sm" style="font-size:1.05rem; letter-spacing:1px; border-radius:2em; background:#fff !important; color: red !important;"><i class="bi bi-patch-check-fill me-2 text-danger"></i>Trusted Since 2008</span>
+                                        <span class="badge hero-trusted-badge bg-dark bg-opacity-75 text-white fs-6 fw-semibold px-4 py-2 mb-4 shadow-sm" style="font-size:1.05rem; letter-spacing:1px; border-radius:2em; background:#fff !important; color: red !important;"><i class="bi bi-patch-check-fill me-2 text-danger"></i>Trusted Since 2008</span>
                                         <h1 class="fw-bold mb-3 text-white text-start" style="line-height:1.05; text-shadow:0 2px 12px rgba(0,0,0,0.22); background:none !important;">
                                             Precision Care for <span style="color:#e53935; border-radius:0.25em; padding:0 0.2em; background:none !important;">Blood Bank Equipment</span>
                                         </h1>
