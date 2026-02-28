@@ -690,48 +690,126 @@ if (
 
 
     <!-- Service Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container-fluid py-5 service-section" id="services">
         <div class="container">
-            <div class="section-title mb-4 text-center">
-                <h5 class="position-relative d-inline-block text-primary text-uppercase mb-2" style="font-size: 22px; letter-spacing: 0.5px;">OUR SERVICES</h5>
-                <span class="d-inline-block align-middle mx-2" style="border-top: 3px solid #e30613; width: 45px; position: relative; top: -8px;"></span>
-                <span class="d-inline-block align-middle mx-1" style="border-top: 3px solid #a9030d; width: 15px; position: relative; top: -8px;"></span>
-                <h1 class="display-5 mb-0 mt-2" style="font-weight:700;">Complete Blood Bank Equipment Solutions</h1>
-            </div>
-            <div class="d-flex justify-content-center gap-4 mb-4 flex-wrap">
-                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
-                    <img src="assets/images/blood-bank-supply-service-1.png" alt="Blood Bank Equipment Supply" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
-                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">Blood Bank Equipment Supply</h3>
-                    <p class="mb-0" style="font-size:16px;text-align:left;">Advanced refrigerators, plasma freezers, platelet incubators, and storages</p>
-                </div>
-                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
-                    <img src="assets/images/installation-commissioning-service.png" alt="Installation & Commissioning" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
-                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">Installation & Commissioning</h3>
-                    <p class="mb-0" style="font-size:16px;text-align:left;">Professional setup, validation, and performance testing</p>
-                </div>
-                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
-                    <img src="assets/images/Genuine-spare-parts-supply-service.png" alt="Genuine Spare Parts Supply" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
-                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">Genuine Spare Parts Supply</h3>
-                    <p class="mb-0" style="font-size:16px;text-align:left;">Original components for reliable and compliant operation</p>
-                </div>
-                <div class="service-card text-left bg-white rounded shadow-sm p-3" style="width:260px;">
-                    <img src="assets/images/AMC-Breakdown-Service.png" alt="AMC & Breakdown Services" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
-                    <h3 class="mt-3 mb-1" style="font-size:22px;font-weight:600;text-align:left;">AMC & Breakdown Services</h3>
-                    <p class="mb-0" style="font-size:16px;text-align:left;">Annual Maintenance Contracts and rapid technical support</p>
-                </div>
-            </div>
-            <div class="support-attractive-container mb-5">
-                <div class="support-attractive-content">
-                    <div class="support-attractive-left">
-                        <h2>Need Immediate Technical Support?</h2>
-                        <p>Reliable blood bank equipment service and spare parts assistance across India.</p>
-                    </div>
-                    <div class="support-attractive-right">
-                        <div class="support-attractive-phone">
-                            <!-- <i class="fa fa-phone-alt"></i> -->
-                             +91 81042 93994
+            <style>
+            /* Redesigned services section (dark two-column layout) */
+            .service-section { padding-top: 3rem; padding-bottom: 3rem; background: #000; }
+            .service-panel { background: linear-gradient(180deg, #0f1724 0%, #0b1220 100%); color: #fff; border-radius: 12px; padding: 28px; }
+            .service-panel h5 { color: #f8f9fa; letter-spacing: 1px; font-weight:700; }
+            .service-panel h2 { font-size: 1.9rem; font-weight:800; margin-top:8px; color: #fff; }
+            .service-panel p.lead { color: rgba(255,255,255,0.85); }
+            .service-list { margin-top: 1.25rem; display:flex; flex-direction:column; gap:14px; }
+            .service-item { display:flex; gap:14px; align-items:flex-start; background: rgba(255,255,255,0.03); padding:14px; border-radius:10px; }
+            .service-item .icon { width:44px; height:44px; background: rgba(227,6,19,0.12); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#e30613; font-size:18px; }
+            .service-item h5 { margin:0; font-size:1.02rem; font-weight:700; color:#fff; }
+            .service-item p { margin:0; color: rgba(255,255,255,0.75); font-size:0.95rem; }
+            .service-cta { margin-top:18px; }
+            .service-right { display:flex; align-items:center; justify-content:center; }
+            .service-right .image-frame { width:100%; display:flex; align-items:center; justify-content:center; height:100%; }
+            /* Make right-side image square and slightly shorter than left column */
+            .service-right img {
+                aspect-ratio: 1 / 1; /* force square */
+                width: auto;
+                max-width: 92%;      /* allow some breathing room */
+                max-height: 92%;     /* slightly less than full height of the column */
+                object-fit: cover;
+                border-radius:12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+                transition: opacity .28s ease, transform .18s ease;
+            }
+
+            /* Slightly larger square on wide screens but never exceed 520px */
+            @media (min-width: 992px) {
+                .service-right img { max-width: 520px; }
+            }
+
+            @media (max-width: 991px) {
+                .service-panel { padding:20px; }
+                .service-panel h2 { font-size:1.6rem; }
+            }
+            @media (max-width: 576px) {
+                .service-item { flex-direction:row; padding:12px; }
+                .service-panel { padding:16px; }
+            }
+            </style>
+
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-6">
+                    <div class="service-panel">
+                        <style>
+                        /* Exact-match styles for the image sample */
+                        .service-panel { background: transparent; color:#fff; border-radius:8px; padding:28px; }
+                        .service-panel h2.heading-large { font-size:2.2rem; font-weight:800; line-height:1.05; margin:0 0 8px 0; }
+                        .service-panel p.lead { color: rgba(255,255,255,0.78); max-width:520px; margin-bottom:20px; }
+
+                        .service-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+                        .service-box { background: #0f1113; padding:18px; border-radius:8px; transition:transform .18s, box-shadow .18s, border-color .18s; border:1px solid rgba(255,255,255,0.03); }
+                        .service-box:hover{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
+                        .service-box.active, .service-box.active:hover { border:2px solid #6c5ce7; box-shadow: 0 12px 34px rgba(108,92,231,0.12); }
+                        .service-box h6 { margin:0; font-size:1rem; font-weight:700; color:#fff; }
+                        .service-box p { margin:6px 0 0 0; color: rgba(255,255,255,0.65); font-size:0.92rem; }
+
+                        .service-cta { margin-top:18px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+
+                        /* responsive tweaks */
+                        @media (max-width: 1200px) {
+                            .service-panel h2.heading-large { font-size:1.9rem; }
+                        }
+                        @media (max-width: 992px) {
+                            .service-panel{ padding:20px; }
+                            .service-grid{ gap:12px; }
+                        }
+                        @media (max-width: 768px) {
+                            .service-panel h2.heading-large { font-size:1.6rem; }
+                            .service-panel p.lead { max-width:100%; }
+                            .service-grid{ grid-template-columns:1fr; }
+                            .service-box { padding:14px; }
+                        }
+                        @media (max-width: 576px) {
+                            .service-panel{ padding:16px; }
+                            .service-box { padding:12px; }
+                            .service-box h6 { font-size:0.98rem; }
+                            .service-cta{ flex-direction:column; align-items:flex-start; }
+                            .image-frame { display:block; margin:18px auto 0; }
+                            .image-frame img { width:100%; height:auto; }
+                        }
+                        </style>
+
+                        <h2 class="heading-large">Blood Bank Equipment Solutions We Provide</h2>
+                        <p class="lead" style="margin-bottom:24px; font-size:1rem;">Reliable equipment supply, certified installation, and technical support services designed to ensure safe blood storage and uninterrupted laboratory operations.</p>
+
+                        <div class="service-grid">
+                            <div class="service-box active" tabindex="0" role="button" data-image="assets/images/blood-bank-supply-service-1.png" data-title="Blood Bank Equipment Supply">
+                                <h6>Blood Bank Equipment Supply</h6>
+                                <p>Advanced refrigerators, plasma freezers, platelet incubators, and storages.</p>
+                            </div>
+                            <div class="service-box" tabindex="0" role="button" data-image="assets/images/installation-commissioning-service.png" data-title="Installation & Commissioning">
+                                <h6>Installation & Commissioning</h6>
+                                <p>Professional setup, validation, and performance testing.</p>
+                            </div>
+                            <div class="service-box" tabindex="0" role="button" data-image="assets/images/Genuine-spare-parts-supply-service.png" data-title="Genuine Spare Parts Supply">
+                                <h6>Genuine Spare Parts Supply</h6>
+                                <p>Original components for reliable and compliant operation.</p>
+                            </div>
+                            <div class="service-box" tabindex="0" role="button" data-image="assets/images/AMC-Breakdown-Service.png" data-title="AMC & Breakdown Services">
+                                <h6>AMC & Breakdown Services</h6>
+                                <p>Annual Maintenance Contracts and rapid technical support.</p>
+                            </div>
                         </div>
-                        <div class="support-attractive-label">Call Now</div>
+
+                        <!-- <div class="service-cta">
+                            <a href="https://wa.me/918104293994" class="btn btn-danger btn-lg">Contact Now</a>
+                            <span style="color:rgba(255,255,255,0.75);">24/7 Emergency Support: <strong style="color:#fff;">+91 81042 93994</strong></span>
+                        </div> -->
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="service-right">
+                        <div class="image-frame">
+                            <img id="serviceRightImage" src="assets/images/blood-bank-supply-service-1.png" alt="Service Illustration" style="transition: opacity .28s ease;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -739,6 +817,43 @@ if (
     </div>
     <!-- Service End -->
      
+    <script>
+    (function(){
+        // Image swap for service boxes
+        const boxes = document.querySelectorAll('.service-box');
+        const img = document.getElementById('serviceRightImage');
+        if (!boxes.length || !img) return;
+
+        // Click and keyboard handler
+        boxes.forEach(box=>{
+            box.style.cursor = 'pointer';
+            function activate(){
+                // update active state
+                boxes.forEach(b=>b.classList.remove('active'));
+                box.classList.add('active');
+
+                const src = box.getAttribute('data-image');
+                const title = box.getAttribute('data-title') || img.getAttribute('alt');
+                if (!src) return;
+                // Fade-out, swap, fade-in
+                img.style.opacity = 0;
+                const newImg = new Image();
+                newImg.onload = function(){
+                    img.src = src;
+                    img.alt = title;
+                    img.style.opacity = 1;
+                };
+                newImg.src = src;
+            }
+            box.addEventListener('click', activate);
+            box.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); } });
+        });
+
+        // Initialize first active
+        const first = document.querySelector('.service-box');
+        if (first) first.click();
+    })();
+    </script>
     <!-- Featured Start -->
     <div class="container-fluid py-5 featured-section" id="featured" style="background: linear-gradient(90deg,#e30613 0%, #a9030d 100%);">
         <div class="container text-center text-white">
